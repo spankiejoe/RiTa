@@ -16,7 +16,7 @@ import rita.support.*;
  *
  * @example RiTextMoveTo
  */
-public class RiText implements RiTextIF, Constants
+public class RiText implements RiTextIF
 {
   public static final Defaults defaults = new Defaults();
   
@@ -237,6 +237,35 @@ public class RiText implements RiTextIF, Constants
     defaults.fontSize = size; 
   }
   
+  public static float[] defaultColor()
+  {
+    return defaults.rgba;
+  }
+  
+  public static void defaultColor(float r, float g, float b, float alpha)
+  {
+    defaults.rgba[0] = r;
+    defaults.rgba[1] = g;
+    defaults.rgba[2] = b;
+    defaults.rgba[3] = alpha;
+  }
+
+  public static void defaultColor(float gray)
+  {
+    defaultColor(gray, gray, gray, 255);
+  }
+
+  public static void defaultColor(float gray, float alpha)
+  {
+    defaultColor(gray, gray, gray, alpha);
+  }
+
+  public static void defaultColor(float r, float g, float b)
+  {
+    defaultColor(r, g, b, 255);
+  }
+  
+  
 /*  // remove this or ?
   public static final void defaultFont(String name, int size, float leading) {
     defaults.fontFamily = name;
@@ -271,58 +300,13 @@ public class RiText implements RiTextIF, Constants
   }
 
   // ------------------------- Colors -----------------------------
-  /**
-   * Set the text fill for this object (same as color())
-   * 
-   * @param r
-   *          red component (0-255)
-   * @param g
-   *          green component (0-255)
-   * @param b
-   *          blue component (0-255)
-   * @param alpha
-   *          transparency (0-255)
-   */
-  public RiTextIF fill(float r, float g, float b, float alpha)
-  {
-    this.color(r, g, b, alpha);
-    return this;
-  }
-
-  public RiTextIF fill(float gray)
-  {
-    this.color(gray, gray, gray, 255);
-    return this;
-
-  }
-
-  public RiTextIF fill(float gray, float alpha)
-  {
-    this.color(gray, gray, gray, alpha);
-    return this;
-
-  }
-
-  public RiTextIF fill(float r, float g, float b)
-  {
-    this.color(r, g, b, 255);
-    return this;
-
-  }
-
-  public RiTextIF fill(float[] color)
-  {
-    this.color(color);
-    return this;
-
-  }
-
+  
   /**
    * Sets the text fill color according to a single hex number.
    */
   public RiTextIF fillHex(int hexColor)
   {
-    this.color(unhex(hexColor));
+    this.fill(unhex(hexColor));
     return this;
 
   }
@@ -336,6 +320,7 @@ public class RiText implements RiTextIF, Constants
     return new float[]{r,g,b,255};
   }
   
+
   /**
    * Set the text color for this object
    * 
@@ -345,40 +330,34 @@ public class RiText implements RiTextIF, Constants
    *          green component (0-255)
    * @param b
    *          blue component (0-255)
-   * @param alpha
-   *          transparency (0-255)
+   * @param a
+   *          alpha component (0-255)
    */
-  public RiTextIF color(float r, float g, float b, float alpha)
+  public RiTextIF fill(float r, float g, float b, float alpha)
   {
     this.fillR = r;
     this.fillG = g;
     this.fillB = b;
     this.fillA = alpha;
+    
     return this;
-
   }
-  
-  /**
-   * Set the text color for this object
-   */
-  public RiTextIF color(float g)
+
+  public RiTextIF fill(float g)
   {
     this.fillR = g;
     this.fillG = g;
     this.fillB = g;
+    
     return this;
   }
-  /**
-   * Set the text color for this object
-   * 
-   * @param r
-   *          red component (0-255)
-   * @param g
-   *          green component (0-255)
-   * @param b
-   *          blue component (0-255)
-   */
-  public RiTextIF color(float r, float g, float b)
+  
+  public RiTextIF fill(float g, float a)
+  {
+    return this.fill(g, g, g, a);
+  }
+
+  public RiTextIF fill(float r, float g, float b)
   {
     this.fillR = r;
     this.fillG = g;
@@ -389,7 +368,7 @@ public class RiText implements RiTextIF, Constants
   /**
    * Set the text color for this object (r,g,b,a) from 0-255
    */
-  public RiTextIF color(float[] color)
+  public RiTextIF fill(float[] color)
   {
     float r = color[0], g = 0, b = 0, a = fillA;
     switch (color.length)
@@ -409,7 +388,7 @@ public class RiText implements RiTextIF, Constants
         a = color[1];
         break;
     }
-    return this.color(r, g, b, a);
+    return this.fill(r, g, b, a);
   }
 
   /**
@@ -505,18 +484,14 @@ public class RiText implements RiTextIF, Constants
 
   /**
    * Returns the current text color for this object
-   * 
-
    */
-  public float[] color()
+  public float[] fill()
   { // yuck
     return new float[] { fillR, fillG, fillB, fillA };
   }
 
   /**
    * Returns the current bounding box fill color for this object
-   * 
-
    */
   public float[] boundingBoxFill()
   { // yuck
@@ -550,7 +525,6 @@ public class RiText implements RiTextIF, Constants
 
   /**
    * Set the current alpha trasnparency for this object (0-255))
-   * 
    * @param alpha
    */
   public RiTextIF alpha(float alpha)
@@ -561,8 +535,6 @@ public class RiText implements RiTextIF, Constants
 
   /**
    * Returns the fill alpha value (transparency)
-   * 
-
    */
   public float alpha()
   {
@@ -3007,5 +2979,6 @@ public class RiText implements RiTextIF, Constants
     this.font = (PFont) pf;
     return this;
   }
+
   
 }// end
