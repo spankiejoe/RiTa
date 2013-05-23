@@ -185,6 +185,15 @@ public class RiTa implements Constants
     return join(full, SP);
   }
   
+  public static String join(List input)
+  {    
+    return join(input, SP);
+  }
+  
+  public static float elapsed(long start) {
+    return ((System.currentTimeMillis()-start)/1000f);
+  } 
+  
   /**
    * Joins Array of String into delimited String.
    * @param full - Array of Strings to be joined
@@ -791,7 +800,7 @@ public class RiTa implements Constants
   }
   
   /**
-   * Concatenates the list 'input' into a single String, spearated by 'delim'
+   * Concatenates the list 'input' into a single String, separated by 'delim'
    */
   public static String join(List input, String delim)
   {    
@@ -1192,6 +1201,13 @@ public class RiTa implements Constants
     while (it.hasNext())
       tmp.add(((String) it.next()).toLowerCase());
     abbreviations.addAll(tmp);
+  }
+  
+  public static String stackToString(Throwable aThrowable) {
+    final Writer result = new StringWriter();
+    final PrintWriter printWriter = new PrintWriter(result);
+    aThrowable.printStackTrace(printWriter);
+    return result.toString();
   }
   
   /**

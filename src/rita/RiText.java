@@ -148,9 +148,9 @@ public class RiText implements RiTextIF
   {
     this.alignment = defaults.alignment;
     this.motionType = defaults.motionType;
-    this.boundingBoxVisible = defaults.boundingBoxVisible;
-    this.bbStrokeWeight = defaults.boundingBoxStrokeWeight;
-    this.boundingBoxStroke(defaults.boundingBoxStroke);
+    this.boundingBoxVisible = defaults.showBounds;
+    this.bbStrokeWeight = defaults.boundingStrokeWeight;
+    this.boundingBoxStroke(defaults.boundingStroke);
     this.fontSize = defaults.fontSize;
   }
 
@@ -2341,13 +2341,13 @@ public class RiText implements RiTextIF
   }  
   
 
-  public RiTextIF showBoundingBox(boolean b)
+  public RiTextIF showBounds(boolean b)
   {
     this.boundingBoxVisible = b;
     return this;
   }
 
-  public boolean showBoundingBox()
+  public boolean showBounds()
   {
     return boundingBoxVisible;
   } 
