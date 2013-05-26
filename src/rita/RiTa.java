@@ -31,7 +31,8 @@ public class RiTa implements Constants
   // METHODS ///////////////////////////////////////////////////////////
   
   public static String stem(String s)                 { return Stemmer.getInstance().stem(s); }
-  public static String stem(String s, int stemmerType){ return Stemmer.getInstance(stemmerType).stem(s); }
+  public static String stem(String s, String stemmerType){ return Stemmer.getInstance(stemmerType).stem(s); }
+
   public static String conjugate(String s, Map args)  { return getConjugator().handleArgs(args).conjugate(s); }
   public static String getPastParticiple(String s)    { return getConjugator().getPastParticiple(s); }
   public static String getPresentParticiple(String s) { return getConjugator().getPresentParticiple(s); }
@@ -325,7 +326,7 @@ public class RiTa implements Constants
   }  
   
   public static String singularize(String s)          { 
-    return Stemmer.getInstance(Stemmer.PLING_STEMMER).stem(s);
+    return Stemmer.getInstance(StemmerType.Pling).stem(s);
   }
   
   public static String stripPunctuation(String phrase) {

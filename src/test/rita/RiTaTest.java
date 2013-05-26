@@ -11,6 +11,8 @@ import java.util.Map;
 import org.junit.Test;
 
 import rita.*;
+import rita.support.Constants;
+import rita.support.Constants.StemmerType;
 
 public class RiTaTest
 {  
@@ -1225,7 +1227,7 @@ public class RiTaTest
   @Test
   public void testStemStringInt()
   {
-    int type = RiTa.PORTER_STEMMER;
+    String type = RiTa.PORTER;
 
     // --------- Porter ---------------
 
@@ -1250,7 +1252,7 @@ public class RiTaTest
     
     // --------- Pling ---------------
 
-    type = RiTa.PLING_STEMMER;
+    type = RiTa.PLING;
 
     equal(RiTa.stem("cakes", type), "cake");
 
@@ -1271,7 +1273,7 @@ public class RiTaTest
     
     // --------- Lancaster ---------------
     
-    type = RiTa.LANCASTER_STEMMER;
+    type = RiTa.LANCASTER;
 
 
     tests = new String[] {"run", "runs", "running" };
