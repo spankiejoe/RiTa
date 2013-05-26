@@ -999,6 +999,7 @@ public class Conjugator implements Constants
     if (args == null || args.size() < 1) return this;
     
     // ------------------ handle arguments ------------------
+    
     Object anumber = args.get("number");
     this.number =  (anumber!=null) ? (Integer)(anumber) : SINGULAR;
     

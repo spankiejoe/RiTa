@@ -237,12 +237,12 @@ public class RiText implements RiTextIF
     defaults.fontSize = size; 
   }
   
-  public static float[] defaultColor()
+  public static float[] defaultFill()
   {
     return defaults.rgba;
   }
   
-  public static void defaultColor(float r, float g, float b, float alpha)
+  public static void defaultFill(float r, float g, float b, float alpha)
   {
     defaults.rgba[0] = r;
     defaults.rgba[1] = g;
@@ -250,28 +250,20 @@ public class RiText implements RiTextIF
     defaults.rgba[3] = alpha;
   }
 
-  public static void defaultColor(float gray)
+  public static void defaultFill(float gray)
   {
-    defaultColor(gray, gray, gray, 255);
+    defaultFill(gray, gray, gray, 255);
   }
 
-  public static void defaultColor(float gray, float alpha)
+  public static void defaultFill(float gray, float alpha)
   {
-    defaultColor(gray, gray, gray, alpha);
+    defaultFill(gray, gray, gray, alpha);
   }
 
-  public static void defaultColor(float r, float g, float b)
+  public static void defaultFill(float r, float g, float b)
   {
-    defaultColor(r, g, b, 255);
+    defaultFill(r, g, b, 255);
   }
-  
-  
-/*  // remove this or ?
-  public static final void defaultFont(String name, int size, float leading) {
-    defaults.fontFamily = name;
-    defaults.fontSize = size; 
-    defaults.fontLeading = leading; 
-  } */
 
   private float screenCenterX()
   {
@@ -604,6 +596,7 @@ public class RiText implements RiTextIF
       textToCopy.draw();
 
     // translate & draw at 0,0
+    p.pushStyle();
     p.pushMatrix(); // --------------
 
     doAffineTransforms(p);
@@ -624,6 +617,7 @@ public class RiText implements RiTextIF
     p.text(text.text(), 0, 0);
 
     p.popMatrix(); // --------------
+    p.popStyle();
   }
 
   protected void doAffineTransforms(PGraphics p)
