@@ -62,26 +62,26 @@ public class RiTextTest
   {
     RiText rs = new RiText(null, "The dog was white");
 
-    char result = rs.charAt(0);
-    equal(result, 'T');
+    String result = rs.charAt(0);
+    equal(result, "T");
 
     result = rs.charAt(5);
-    notEqual(result, 'O');
+    notEqual(result, "O");
 
     result = rs.charAt(5);
-    notEqual(result, '*');
+    notEqual(result, "*");
 
     result = rs.charAt(-12); // out of range character
     //System.out.println("charAt :" + result);
-    equal(result, 'o');
+    equal(result, "o");
     
     result = rs.charAt(200); // out of range character
-    equal(result, 'e');
+    equal(result, "e");
     
   }
 
   @Test
-  public void testConcatString() // returs RiText
+  public void testConcatString()
   {
     RiText rs = new RiText(null, "The dog was white");
     String rs2 = "The dog was not white";
@@ -898,7 +898,7 @@ public class RiTextTest
     equal(result, "#$%^&");
   }
 
-  @Test
+  /*@Test
   public void testToCharArray()
   {
     RiText rs = new RiText(null, "The Australian Pavilion.");
@@ -909,10 +909,10 @@ public class RiTextTest
     {
       ok(result[i]==answer[i]);
     }
-  }
+  }*/
 
   @Test
-  public void testToLowerCase()
+  public void testToLowerCase() 
   {
     RiText rs = new RiText(null, "The Australian Pavilion.");
     rs.toLowerCase();

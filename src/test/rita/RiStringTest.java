@@ -1,7 +1,9 @@
 package test.rita;
 
-import static org.junit.Assert.fail;
-import static test.QUnitStubs.*;
+import static test.QUnitStubs.deepEqual;
+import static test.QUnitStubs.equal;
+import static test.QUnitStubs.notEqual;
+import static test.QUnitStubs.ok;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -11,8 +13,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-import rita.RiString;
-import rita.RiTa;
+import rita.*;
 import rita.support.Constants;
 
 /*
@@ -20,9 +21,6 @@ import rita.support.Constants;
  * 
  * For examples, see testAnalyze(),testCharAt(), and testTrim() below
  */
-
-
-
 public class RiStringTest implements Constants
 {
   @Test
@@ -46,10 +44,11 @@ public class RiStringTest implements Constants
   @Test
   public void testAnalyze()
   { 
-    Map<String,String> features = new RiString("Mom & Dad, waiting for the car, ate a steak.").analyze().features();
+    Map<String,String> features = new RiString
+      ("Mom & Dad, waiting for the car, ate a steak.").analyze().features();
     
     ok(features);
-    //System.out.println(features);
+    System.out.println(features);
     equal(features.get(PHONEMES),  "m-aa-m & d-ae-d , w-ey-t-ih-ng f-ao-r dh-ax k-aa-r , ey-t ey s-t-ey-k .");
     equal(features.get(SYLLABLES), "m-aa-m & d-ae-d , w-ey-t/ih-ng f-ao-r dh-ax k-aa-r , ey-t ey s-t-ey-k .");
     equal(features.get(STRESSES),  "1 & 1 , 1/0 1 0 1 , 1 1 1 .");
@@ -103,31 +102,25 @@ public class RiStringTest implements Constants
 
     RiString rs = new RiString("The dog was white");
 
-    char result = rs.charAt(0);
-    equal(result, 'T');
+    String result = rs.charAt(0);
+    equal(result, "T");
 
     result = rs.charAt(5);
-    equal(result, 'o');
+    equal(result, "o");
 
     result = rs.charAt(4);
-    notEqual(result, 'o');
+    notEqual(result, "o");
     
-    result = rs.charAt(-1); // out of range character
+    result = rs.charAt(-1); 
     //System.out.println("charAt :" + result);
-    equal(result, 'e');
+    equal(result, "e");
     
-    result = rs.charAt(-12); // out of range character
+    result = rs.charAt(-12);
     //System.out.println("charAt :" + result);
-    equal(result, 'o');
+    equal(result, "o");
     
-    try
-    {
-      result = rs.charAt(200); // out of range character
-    }
-    catch (Exception e)
-    {
-      ok(e);
-    }
+    result = rs.charAt(200);
+    equal(result, "e");
   }
 
   @Test
@@ -577,17 +570,34 @@ public class RiStringTest implements Constants
     RiString rs = new RiString("asdfaasd");
     String[] result = rs.pos();
     String[] answer = new String[] { "nn" };
+    //System.out.println(RiTa.asList(result));
+    deepEqual(result, answer);
     
+    rs = new RiString("cat");
+    result = rs.pos();
+    //System.out.println(RiTa.asList(result));
+    answer = new String[] { "nn" };
     deepEqual(result, answer);
 
     rs = new RiString("clothes");
     result = rs.pos();
     answer = new String[] { "nns" };
+    //System.out.println(RiTa.asList(result));
+
     deepEqual(result, answer);
 
     rs = new RiString("There is a cat.");
+    //System.out.println(rs.features()); 
     result = rs.pos();
-    answer = new String[] { "ex", "vbz", "dt", "nn", "." }; 
+    answer = new String[] { "ex", "vbz", "dt", "nn", "." };
+    //System.out.println(RiTa.asList(result));
+    if (!result[2].equals("dt")) {
+      System.out.println("==========================");
+      System.out.println(RiTa.asList(result));
+      System.out.println(rs.features());
+      System.out.println(rs.pos());
+      System.out.println("==========================");
+    }
     deepEqual(result, answer);
 
     rs = new RiString("The boy, dressed in red, ate an apple.");
@@ -596,7 +606,7 @@ public class RiStringTest implements Constants
     answer = new String[] {
         "dt", "nn", ",", "vbn", "in", "jj", ",", "vbd", "dt", "nn", "." 
      };
-    //System.out.println("result="+RiTa.asList(result));
+    //System.out.println(RiTa.asList(result));
 
     deepEqual(result, answer);
   }

@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import processing.core.*;
 import rita.render.*;
 import rita.support.*;
+import static rita.support.Constants.EventType.*;
 
 
 /**
@@ -64,8 +65,8 @@ public class RiText implements RiTextIF
   /** Font for this RiText */
   public PFont font;
 
-  public float fillR = defaults.rgba[0], fillG = defaults.rgba[1];
-  public float fillB = defaults.rgba[2], fillA = defaults.rgba[3];
+  public float fillR = defaults.fill[0], fillG = defaults.fill[1];
+  public float fillB = defaults.fill[2], fillA = defaults.fill[3];
   public float bbFillR = 0, bbFillG = 0, bbFillB = 0, bbFillA = 0;
   public float bbStrokeR = 0, bbStrokeG = 0, bbStrokeB = 0, bbStrokeA = 255;
   public float bbsStrokeR = 0, bbsStrokeG = 0, bbsStrokeB = 0, bbsStrokeA = 255;
@@ -239,15 +240,15 @@ public class RiText implements RiTextIF
   
   public static float[] defaultFill()
   {
-    return defaults.rgba;
+    return defaults.fill;
   }
   
   public static void defaultFill(float r, float g, float b, float alpha)
   {
-    defaults.rgba[0] = r;
-    defaults.rgba[1] = g;
-    defaults.rgba[2] = b;
-    defaults.rgba[3] = alpha;
+    defaults.fill[0] = r;
+    defaults.fill[1] = g;
+    defaults.fill[2] = b;
+    defaults.fill[3] = alpha;
   }
 
   public static void defaultFill(float gray)
@@ -762,7 +763,6 @@ public class RiText implements RiTextIF
 
   protected void update(PGraphics p)
   {
-
     if (x == Float.MIN_VALUE && text.text() != null)
       x = screenCenterX();
 
@@ -1020,7 +1020,7 @@ public class RiText implements RiTextIF
   public int fadeIn(float seconds, float startTime)
   {
     float[] col = { fillR, fillG, fillB, 255 };
-    return _colorTo(col, seconds, startTime, FADE_IN, false);
+    return _colorTo(col, seconds, startTime, FadeIn, false);
   }
 
   public int fadeIn(float seconds)
@@ -1043,10 +1043,10 @@ public class RiText implements RiTextIF
    */
   public int fadeOut(float seconds, float startTime, boolean removeOnComplete)
   {
-    return this._fadeOut(seconds, startTime, removeOnComplete, FADE_OUT);
+    return this._fadeOut(seconds, startTime, removeOnComplete, FadeOut);
   }
   
-  protected int _fadeOut(float seconds, float startTime, boolean removeOnComplete, int type)
+  protected int _fadeOut(float seconds, float startTime, boolean removeOnComplete, EventType type)
   {
     float[] col = { fillR, fillG, fillB, 0 };
     // if (isBoundingBoxVisible()) // fade bounding box too
@@ -1069,11 +1069,11 @@ public class RiText implements RiTextIF
     return this.fadeOut(seconds, false);
   }
 
-  protected synchronized int _colorTo(final float[] color, final float seconds, final float startTime, final int type, final boolean disposeWhenFinished)
+  protected synchronized int _colorTo(final float[] color, final float seconds, final float startTime, final EventType type, final boolean disposeWhenFinished)
   {
     //System.out.println(this+"._colorTo("+RiTa.asList(color)+")");
 
-    if (boundingBoxVisible && (type == FADE_IN || type == FADE_OUT))
+    if (boundingBoxVisible && (type == EventType.FadeIn || type == EventType.FadeOut))
     {
       if (color[3] >= 255 || color[3] < 1) // hack to fade bounding box too
         addBehavior(new BoundingBoxAlphaFade(this, color[3], startTime, seconds));
@@ -1097,7 +1097,7 @@ public class RiText implements RiTextIF
     return colorFade.getId();
   }
 
-  public int colorTo(float[] colors, float seconds, float delay, int type)
+  public int colorTo(float[] colors, float seconds, float delay, EventType type)
   {
     return this._colorTo(colors, seconds, delay, type, false);
   }
@@ -1124,7 +1124,7 @@ public class RiText implements RiTextIF
   }
   public int colorTo(float[] color, float seconds, float startTime)
   {
-    return this._colorTo(color, seconds, startTime, COLOR_TO, false);
+    return this._colorTo(color, seconds, startTime, ColorTo, false);
   }
 
   /**
@@ -1163,13 +1163,13 @@ public class RiText implements RiTextIF
     // use the copy to fade out
     textToCopy = RiText.copy(this);
     //textToCopy.fadeOut(seconds);
-    textToCopy._fadeOut(seconds, 0, false, TEXT_TO_COPY);
+    textToCopy._fadeOut(seconds, 0, false, TextToCopy);
 
     // and use 'this' to fade in
     this.text(newText);
     this.alpha(startAlpha);
     float[] col = { fillR, fillG, fillB, 255 }; // fadeIn
-    return _colorTo(col, seconds * .95f, startTime, TEXT_TO, false);
+    return _colorTo(col, seconds * .95f, startTime, TextTo, false);
   }
 
   /**
@@ -1629,8 +1629,6 @@ public class RiText implements RiTextIF
    * Returns a list of behaviors of the specified type for this object, where
    * type is generally one of (MOVE, FADE_IN, FADE_OUT, FADE_TO_TEXT, SCALE_TO,
    * etc.)
-   * 
-
    */
   public RiTextBehavior[] behaviorsByType(int type)
   {
@@ -2028,7 +2026,7 @@ public class RiText implements RiTextIF
   /**
    * Returns the character at the specified index
    */
-  public char charAt(int index)
+  public String charAt(int index)
   {
     return text.charAt(index);
   }
@@ -2659,10 +2657,10 @@ public class RiText implements RiTextIF
     return text.substr(i, j);
   }
 
-  public char[] toCharArray()
+/*  public char[] toCharArray()
   {
     return text.toCharArray();
-  }
+  }*/
 
   public RiTextIF toLowerCase()
   {

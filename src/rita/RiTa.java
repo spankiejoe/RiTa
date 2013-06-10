@@ -563,6 +563,10 @@ public class RiTa implements Constants
     return new RiTimer(parent, period).id();
   }
   
+  public static int timer(Object parent, float period, String callbackFunctionName) {
+    return new RiTimer(parent, period, callbackFunctionName).id();
+  }
+  
   public static void stopTimer(int id) { 
     RiTimer rt = RiTimer.findById(id);
     if (rt != null) rt.stop();

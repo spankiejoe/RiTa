@@ -6,7 +6,6 @@ import java.util.*;
 import rita.support.Constants;
 import rita.support.TextNode;
 
-// TODO: When should duplicate list be reset??
 
 /*
  * BUG: 
