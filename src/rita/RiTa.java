@@ -196,7 +196,7 @@ public class RiTa implements Constants
   } 
   
   /**
-   * Joins Array of String into delimited String.
+   * Joins Array of Objects into delimited String.
    * @param full - Array of Strings to be joined
    * @param delim - Delimiter to parse elements in resulting String
    * @return String containing elements of String[] or "" if null
