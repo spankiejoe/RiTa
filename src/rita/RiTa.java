@@ -26,7 +26,6 @@ public class RiTa implements Constants
   /** Stops all RiTa output to the console */
   public static boolean SILENT = false;
       
-  public static Conjugator conjugator;
   
   // METHODS ///////////////////////////////////////////////////////////
   
@@ -49,21 +48,15 @@ public class RiTa implements Constants
   public static String getPosTagsInline(String[] words) { return PosTagger.getInstance().tagInline(words); }
   public static String getPosTagsInline(String s)       { return PosTagger.getInstance().tagInline(s); } 
   
-  private static long millisOffset = System.currentTimeMillis();
+  protected static long millisOffset = System.currentTimeMillis();
   
-  private static Conjugator getConjugator()
+  protected static Conjugator conjugator;
+  protected static Conjugator getConjugator()
   {
     if (conjugator == null)
       conjugator = new Conjugator();
     return conjugator;
   }
-  /*
-  private static Analyzer getAnalyzer()
-  {
-    if (analyzer == null)
-      analyzer = new Analyzer();
-    return analyzer;
-  }*/
  
   public static String[] getPosTags(String[] words, boolean useWordnetTags) { 
     
@@ -315,7 +308,7 @@ public class RiTa implements Constants
     if (PUNCT == null)
       PUNCT = Pattern.compile(ALL_PUNCT);
     return PUNCT.matcher(s).matches();
-  }  private static Pattern PUNCT = null;
+  }  protected static Pattern PUNCT = null;
   
   
   public static float distance(float x1, float y1, float x2, float y2) { 
@@ -613,7 +606,7 @@ public class RiTa implements Constants
       internalRandom = new Random();
     return (float) internalRandom.nextFloat();
   } 
-  private static Random internalRandom;
+  protected static Random internalRandom;
 
   /**
    * Generates random numbers. Each time the <b>random()</b> function is
@@ -799,7 +792,7 @@ public class RiTa implements Constants
   }  
   
   /** @exclude */
-  private static boolean isIn(char c, String s) {
+  protected static boolean isIn(char c, String s) {
     
     return s.indexOf(c) >= 0;
   }
@@ -850,8 +843,8 @@ public class RiTa implements Constants
     return is;//new UnicodeInputStream(is);
   }*/
   
-  private static String[] includedFiles = new String[] { "addenda.txt", "bin.gz" };
-  private static boolean isIncluded(String fname) {
+  protected static String[] includedFiles = new String[] { "addenda.txt", "bin.gz" };
+  protected static boolean isIncluded(String fname) {
     for (int i = 0; i < includedFiles.length; i++) {
       if (fname.endsWith(includedFiles[i]))
         return true;
@@ -939,7 +932,7 @@ public class RiTa implements Constants
     return is;
   } 
   
-  private static String[] guesses = { "src"+SLASH+"data", "data", "" };
+  protected static String[] guesses = { "src"+SLASH+"data", "data", "" };
  
   /** @exclude */ 
   public static boolean _isAbsolutePath(String fileName) {
@@ -986,13 +979,13 @@ public class RiTa implements Constants
     return loadStringsLocal(fileName);
   }
  
-  private static String[] loadStringsLocal(String name)
+  protected static String[] loadStringsLocal(String name)
   {    
     return loadStrings(openStream(name), 100);
   }
 
   
-  private static String[] loadStrings(InputStream input, int numLines) {
+  protected static String[] loadStrings(InputStream input, int numLines) {
     
     if (input == null) throw new RiTaException("Null input stream!");
     
@@ -1050,7 +1043,7 @@ public class RiTa implements Constants
    * Loads a File by name and reads the  contents into a single String
    * @return Contents of the file as String
 
-  private static String loadStringOld(PApplet pApplet, String filename) {
+  protected static String loadStringOld(PApplet pApplet, String filename) {
     byte[] bytes = null;
     if (pApplet != null) {
       // ok, we're good w' papplet
@@ -1136,15 +1129,15 @@ public class RiTa implements Constants
     return shortName(c.getClass());   
   }
   
-  private static String getFeature(String[] str, String featureName)    {
+  protected static String getFeature(String[] str, String featureName)    {
     
     return getFeature(RiTa.join(str), featureName);
   }
   
-  private static String getFeature(String str, String featureName)    {
+  protected static String getFeature(String str, String featureName)    {
     
     RiString riString = new RiString(str);
-    String feature = riString.get(featureName);//getAnalyzer().analyze(str).getFeature(featureName);
+    String feature = riString.get(featureName);
     return feature == null ? E : feature;
   }
 
