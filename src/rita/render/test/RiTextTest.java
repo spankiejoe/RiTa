@@ -1,9 +1,9 @@
 package rita.render.test;
 
-import static test.QUnitStubs.deepEqual;
-import static test.QUnitStubs.equal;
-import static test.QUnitStubs.notEqual;
-import static test.QUnitStubs.ok;
+import static rita.support.QUnitStubs.deepEqual;
+import static rita.support.QUnitStubs.equal;
+import static rita.support.QUnitStubs.notEqual;
+import static rita.support.QUnitStubs.ok;
 
 import java.util.Map;
 import java.util.regex.Pattern;
