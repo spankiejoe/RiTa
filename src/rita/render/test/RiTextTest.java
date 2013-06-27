@@ -178,13 +178,23 @@ public class RiTextTest
   {
     RiText rs = new RiText(null, "Returns the array of words.");
     Map features = rs.features();
+    
+    ok(features);
+    ok(features.containsKey(RiTa.TEXT));
+    ok(features.containsKey(RiTa.MUTABLE));
+    ok(!features.containsKey(RiTa.SYLLABLES));
+    ok(!features.containsKey(RiTa.PHONEMES));
+    ok(!features.containsKey(RiTa.STRESSES));
+    ok(!features.containsKey(RiTa.TOKENS));
+    ok(!features.containsKey(RiTa.POS));
+    
+    rs.analyze();
     ok(features);
     ok(features.containsKey(RiTa.SYLLABLES));
     ok(features.containsKey(RiTa.PHONEMES));
     ok(features.containsKey(RiTa.STRESSES));
     ok(features.containsKey(RiTa.TEXT));
     ok(features.containsKey(RiTa.MUTABLE));
-    
     ok(features.containsKey(RiTa.TOKENS));
     ok(features.containsKey(RiTa.POS));
   }

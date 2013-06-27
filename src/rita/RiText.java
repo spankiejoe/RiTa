@@ -20,6 +20,8 @@ import static rita.support.Constants.EventType.*;
  */
 public class RiText implements RiTextIF
 {
+  static { RiTa.init(); }
+  
   public static final Defaults defaults = new Defaults();
   
   public static final RiText[] EMPTY_ARRAY = new RiText[0];
@@ -2725,8 +2727,14 @@ public class RiText implements RiTextIF
   }
   
   
-  ////// 10 methods for each
+  ////// 11 methods for each
 
+
+  public static RiText[] createLines(PApplet p, String txt, float x, float y, float w)
+  {
+    return createLines(p, txt, x, y, w, Float.MAX_VALUE);
+  }
+  
   public static final RiText[] createLines(PApplet p, String txt, float x, float y, float w, float h)
   {
     return createLines(p, txt, x, y, w, h, defaultFont(p));
@@ -2788,6 +2796,10 @@ public class RiText implements RiTextIF
   //////
   
 
+  public static RiText[] createWords(PApplet p, String txt, float x, float y, float w)
+  {
+    return createWords(p, txt, x, y, w, Float.MAX_VALUE);
+  }
   
   public static final RiText[] createWords(PApplet p, String txt, float x, float y, float w, float h)
   {
@@ -2842,6 +2854,11 @@ public class RiText implements RiTextIF
   }  
 
   //////
+  
+  public static RiText[] createLetters(PApplet p, String txt, float x, float y, float w)
+  {
+    return createLetters(p, txt, x, y, w, Float.MAX_VALUE);
+  }
   
   public static final RiText[] createLetters(PApplet p, String txt, float x, float y, float w, float h)
   {

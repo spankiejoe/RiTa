@@ -1315,7 +1315,7 @@ public class RiStringTest implements Constants
   }
 
   @Test
-  public void testCopy()
+  public void testCopy() 
   {
 	  RiString rs = new RiString("copy cat");
 	  RiString rs2 = rs.copy();

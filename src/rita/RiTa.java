@@ -19,17 +19,26 @@ public class RiTa implements Constants
 
   public static boolean callbacksDisabled = false;
   
-  static {
-      if (!RiTa.SILENT) System.out.println("[INFO] RiTa.version ["+VERSION+"]");    
-  }
-  
+  private static boolean INITD = false;
+   
   /** Stops all RiTa output to the console */
   public static boolean SILENT = false;
-      
+   
+  static {
+    if (!INITD) RiTa.init();
+  }
+  
+  static void init()
+  {
+    if (!SILENT && !INITD) {
+      INITD = true;
+      System.out.println("[INFO] RiTa.version ["+VERSION+"]");
+    }
+  }
   
   // METHODS ///////////////////////////////////////////////////////////
-  
   public static String stem(String s)                 { return Stemmer.getInstance().stem(s); }
+  
   public static String stem(String s, String stemmerType){ return Stemmer.getInstance(stemmerType).stem(s); }
 
   public static String conjugate(String s, Map args)  { return getConjugator().handleArgs(args).conjugate(s); }

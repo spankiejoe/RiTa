@@ -50,6 +50,8 @@ import rita.support.TextNode;
  */
 public class RiMarkov implements Constants
 {
+  static { RiTa.init(); }
+  
   public static String SS_REGEX = "\"?[A-Z][a-z\"',;`-]*";
 
   /** constant for max # of tries for a generation */
