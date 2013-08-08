@@ -17,6 +17,27 @@ import rita.support.Constants.StemmerType;
 public class RiTaTest
 {  
   @Test
+  public void loadString_RelFile()
+  {
+    String s = RiTa.loadString("kafka.txt");
+    ok(s != null && s.length() > 100000);
+  }
+  
+  @Test
+  public void loadString_AbsFile()
+  {
+    String s = RiTa.loadString("/Library/WebServer/Documents/testfiles/kafka.txt");
+    ok(s != null && s.length() > 100000);
+  }
+  
+  @Test
+  public void loadString_Url()
+  {
+    String s = RiTa.loadString("http://rednoise.org/testfiles/kafka.txt");
+    ok(s != null && s.length() > 100000);
+  }
+  
+  @Test
   public void testIsAbbreviation()
   {
 

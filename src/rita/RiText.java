@@ -1,4 +1,4 @@
-package rita;
+  package rita;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import processing.core.*;
+
 import rita.render.*;
 import rita.support.*;
 
@@ -65,23 +66,19 @@ public class RiText implements RiTextIF
    */
   public float z;
 
-  /** Font for this RiText */
-  public PFont font;
-
-  public float fillR = defaults.fill[0], fillG = defaults.fill[1];
-  public float fillB = defaults.fill[2], fillA = defaults.fill[3];
-  public float bbFillR = 0, bbFillG = 0, bbFillB = 0, bbFillA = 0;
-  public float bbStrokeR = 0, bbStrokeG = 0, bbStrokeB = 0, bbStrokeA = 255;
-  public float bbsStrokeR = 0, bbsStrokeG = 0, bbsStrokeB = 0, bbsStrokeA = 255;
+  protected float fillR = defaults.fill[0], fillG = defaults.fill[1];
+  protected float fillB = defaults.fill[2], fillA = defaults.fill[3];
+  protected float bbStrokeR, bbStrokeG, bbStrokeB, bbStrokeA = 255;
+  protected float bbFillR, bbFillG, bbFillB, bbFillA = 0;
+  protected Rect boundingBox, screenBoundingBox;
   
-  public float fontSize, bbStrokeWeight;
-  public boolean boundingBoxVisible;
-  public int alignment;
-  public PApplet _pApplet;
+  protected float fontSize, bbStrokeWeight;
+  protected boolean boundingBoxVisible;
+  protected int alignment;
   
-  public Rect boundingBox, screenBoundingBox;
-  
-  protected float mouseXOff, mouseYOff;
+  public PApplet pApplet;
+    
+  protected PFont font;
   protected RiText textToCopy;
   protected boolean hidden, autodraw;
   
@@ -132,7 +129,7 @@ public class RiText implements RiTextIF
    */
   public RiText(PApplet pApplet, String text, float xPos, float yPos, int alignment, PFont theFont)
   {
-    this._pApplet = (pApplet);
+    this.pApplet = pApplet;
     this.setDefaults();
     if (theFont != null) {
       this.font = theFont;
@@ -142,8 +139,8 @@ public class RiText implements RiTextIF
     this.registerInstance(pApplet);
     this.textMode(alignment);
     this.verifyFont();
-    this.x = xPos == Float.MIN_VALUE ? screenCenterX() : xPos;
-    this.y = yPos == Float.MIN_VALUE ? screenCenterY() : yPos;    
+    this.x = (xPos == Float.MIN_VALUE) ? screenCenterX() : xPos;
+    this.y = (yPos == Float.MIN_VALUE) ? screenCenterY() : yPos;    
     
     //System.out.println("RiText.boundingBoxVisible="+boundingBoxVisible);
   }
@@ -160,10 +157,11 @@ public class RiText implements RiTextIF
 
   static boolean msgNullPAppletRegisterInstance;
 
-  protected void registerInstance(PApplet pApplet)
+  protected void registerInstance(PApplet p)
   {
     instances.add(this);
-    if (pApplet == null)
+    
+    if (p == null)
     {
       if (!msgNullPAppletRegisterInstance)
       {
@@ -172,24 +170,23 @@ public class RiText implements RiTextIF
       }
       return;
     }
-    //this.registerDispose(pApplet);
-    //pApplet.registerMethod("dispose", this);
-    //pApplet.registerMethod("mouseEvent", this);
-    pApplet.smooth(); // for clean fonts
+
+    p.smooth(); // for clean fonts
   }
   
   protected void verifyFont()
   {
-    if (_pApplet == null) return;
+    if (pApplet == null) return;
     
     if (this.font == null) {
-      this.font = defaultFont(_pApplet);
+      this.font = defaultFont(pApplet);
+      this.fontSize = this.font.getSize();
     }
 
     //System.out.println("RiText.verifyFont() -> "+font+"/"+fontSize);
-    _pApplet.textFont(font);
+    pApplet.textFont(font);
     if (this.fontSize > 0)
-      _pApplet.textSize(fontSize);
+      pApplet.textSize(fontSize);
   }
 
   /**
@@ -206,26 +203,32 @@ public class RiText implements RiTextIF
   public static final PFont defaultFont(PApplet p)
   {
     //System.out.println("_defaultFont("+CREATE_FONT+")");
-    
-    PFont pf = checkFontCache(defaults.fontFamily, defaults.fontSize);
-    
+/*    PFont pf = checkFontCache(defaults.fontFamily, defaults.fontSize); 
     if (pf == null)
-    {
-      if (defaults.font == null)
-        pf = _createFont(p, defaults.fontFamily, defaults.fontSize);
-      else if (defaults.fontSize > 0)
-        pf = _createFont(p, defaults.fontFamily, defaults.fontSize);
-      else 
-        pf = _loadFont(p, defaults.fontFamily, -1);
-      
-      if (pf == null)
-      {
-        String msg = "Unable to load/create font " + "with name='" + defaults.font + "'";
-        if (defaults.fontSize > -1)
-          msg += " and size=" + defaults.fontSize;
-        throw new RiTaException(msg);
-      }
-    }
+    {*/
+      PFont pf = defaults.font;
+      if (pf == null) {
+        
+        if (defaults.fontFamily.endsWith(".vlw")) {
+          defaults.fontSize = -1;
+          pf = _loadFont(p, defaults.fontFamily, defaults.fontSize);
+        }
+        else
+          pf = _createFont(p, defaults.fontFamily, defaults.fontSize);
+        
+        if (pf != null) 
+        {
+          RiText.defaults.font = pf;
+          RiText.defaults.fontSize = pf.getSize();
+        }
+        else {
+          String msg = "Unable to find font " + "with name='" + defaults.font + "'";
+          if (defaults.fontSize > -1)
+            msg += " and size=" + defaults.fontSize;
+          throw new RiTaException(msg);
+        }
+      }           
+    //}
     return pf;
   }
   
@@ -235,9 +238,15 @@ public class RiText implements RiTextIF
     defaults.font = font; 
   } 
   
+  public static final void defaultFont(String name) { 
+    defaults.fontFamily = name;
+    defaults.font = null; 
+  }
+  
   public static final void defaultFont(String name, int size) { 
     defaults.fontFamily = name;
-    defaults.fontSize = size; 
+    defaults.fontSize = size;
+    defaults.font = null;
   }
   
   public static float[] defaultFill()
@@ -270,7 +279,7 @@ public class RiText implements RiTextIF
 
   private float screenCenterX()
   {
-    return (_pApplet != null) ? screenCenterX(_pApplet.g) : -1;
+    return (pApplet != null) ? screenCenterX(pApplet.g) : -1;
   }
 
   private float screenCenterX(PGraphics p)
@@ -286,7 +295,7 @@ public class RiText implements RiTextIF
 
   private float screenCenterY()
   {
-    return (_pApplet != null) ? _pApplet.height / 2 : -1;
+    return (pApplet != null) ? pApplet.height / 2 : -1;
   }
 
   public float boundingBoxStrokeWeight()
@@ -544,7 +553,7 @@ public class RiText implements RiTextIF
   public boolean contains(float mx, float my)
   {
     // System.out.println("Testing: ("+mx+","+my+") vs ("+x1+","+y1+")");
-    this.updateBoundingBox(_pApplet.g);
+    this.updateBoundingBox(pApplet.g);
     return (boundingBox.contains(mx - x, my - y));
   }
 
@@ -553,8 +562,8 @@ public class RiText implements RiTextIF
    */
   public RiTextIF draw()
   {
-    this.update(_pApplet.g);
-    this.render(_pApplet.g);
+    this.update(pApplet.g);
+    this.render(pApplet.g);
     return this;
   }
 
@@ -564,7 +573,7 @@ public class RiText implements RiTextIF
    */
   public RiTextIF draw(PGraphics p)
   {
-    PGraphics pg = p != null ? p : _pApplet.g;
+    PGraphics pg = p != null ? p : pApplet.g;
     this.update(pg);
     this.render(pg);
     return this;
@@ -578,7 +587,7 @@ public class RiText implements RiTextIF
    */
   protected void render()
   {
-    render(_pApplet.g);
+    render(pApplet.g);
   }
 
   /**
@@ -740,8 +749,8 @@ public class RiText implements RiTextIF
     
     this.verifyFont();
     
-    if (this._pApplet != null)
-      result = _pApplet.textWidth(txt);// * scaleX;
+    if (this.pApplet != null)
+      result = pApplet.textWidth(txt);// * scaleX;
     
     return result;
   }
@@ -760,7 +769,7 @@ public class RiText implements RiTextIF
 
   protected  void update()
   {
-    update(_pApplet.g);
+    update(pApplet.g);
   }
 
   protected void update(PGraphics p)
@@ -848,7 +857,7 @@ public class RiText implements RiTextIF
         + " expected 2 (or 3 in 3d mode), but found: " + newPosition.length;
 
     InterpolatingBehavior moveTo = null;
-    if (!is3D(_pApplet.g) || newPosition.length == 2) // 2d
+    if (!is3D(pApplet.g) || newPosition.length == 2) // 2d
     {
       if (newPosition.length != 2)
         throw new RiTaException(err3d);
@@ -879,7 +888,7 @@ public class RiText implements RiTextIF
    */
   public int moveBy(float xOffset, float yOffset, float seconds, float startTime)
   { 
-    return (is3D(_pApplet.g)) ?
+    return (is3D(pApplet.g)) ?
       this.moveBy(new float[] { xOffset, yOffset, 0 }, seconds, startTime) :
       this.moveBy(new float[] { xOffset, yOffset }, seconds, startTime);
   }
@@ -907,7 +916,7 @@ public class RiText implements RiTextIF
   public int moveBy(float[] posOffset, float seconds, float startTime)
   {
 
-    boolean is3d = is3D(_pApplet.g);
+    boolean is3d = is3D(pApplet.g);
     float[] newPos =  is3d ? new float[3] : new float[2];
     
     if (posOffset.length != newPos.length) {
@@ -926,7 +935,7 @@ public class RiText implements RiTextIF
    */
   public boolean isOffscreen()
   {
-    return isOffscreen(_pApplet.g);
+    return isOffscreen(pApplet.g);
   }
 
   /**
@@ -1344,7 +1353,7 @@ public class RiText implements RiTextIF
   }
 
   /**
-   * Returns the font specified after loading it and setting it as the the
+   * Returns the font specified after loading it and setting it as the
    * current font.
    */
   public PFont loadFont(String fontFileName)
@@ -1357,7 +1366,8 @@ public class RiText implements RiTextIF
     // System.out.println("fontFromStream("+name+")");
     try
     {
-      return new PFont(is);
+      PFont pFont = new PFont(is);
+      return pFont;
     }
     catch (IOException e)
     {
@@ -1376,7 +1386,7 @@ public class RiText implements RiTextIF
     return pf;
   }
 
-  protected static PFont _loadFont(PApplet pApplet, String fontFileName, float size)
+  protected static PFont _loadFont(PApplet p, String fontFileName, float size)
   {
     PFont pf = checkFontCache(fontFileName, size);
     if (pf == null)
@@ -1393,7 +1403,7 @@ public class RiText implements RiTextIF
         String errStr = "Could not load font '"+ fontFileName + "'. Make "
             + "sure that the font\nhas been copied to the data folder"+
             " of your sketch\nError="+ e.getMessage();
-        throw new RiTaException(e);
+        throw new RiTaException(errStr);
       }
       cacheFont(fontFileName, size, pf); // add to cache
     }
@@ -1416,7 +1426,7 @@ public class RiText implements RiTextIF
   public RiTextIF createFont(String fontName, float sz)
   {
     // System.out.println("RiText.createFont("+fontName+","+sz+")");
-    this.font = _createFont(_pApplet, fontName, sz);
+    this.font = _createFont(pApplet, fontName, sz);
     return font(font, sz);
   }
 
@@ -1443,7 +1453,7 @@ public class RiText implements RiTextIF
   }
 
   /**
-   * Gets the current text size
+   * Gets the current font size
    */
   public float textSize()
   {
@@ -1713,7 +1723,7 @@ public class RiText implements RiTextIF
    */
   public float[] boundingBox()
   {
-    updateBoundingBox(_pApplet.g);
+    updateBoundingBox(pApplet.g);
     
     if (screenBoundingBox == null)
       screenBoundingBox = new Rect();
@@ -1761,7 +1771,7 @@ public class RiText implements RiTextIF
     if (pfont == null)
       verifyFont();
     else
-      _pApplet.textFont((PFont)pfont);
+      pApplet.textFont((PFont)pfont);
 
     float xPos = this.x;
     if (wordIdx > 0)
@@ -1770,8 +1780,8 @@ public class RiText implements RiTextIF
       System.arraycopy(words, 0, pre, 0, pre.length);
       String preStr = RiTa.join(pre, SP) + SP;
       float tw = -1;
-      if (_pApplet != null)
-        tw = _pApplet.textWidth(preStr);
+      if (pApplet != null)
+        tw = pApplet.textWidth(preStr);
       switch (alignment)
       {
         case LEFT:
@@ -1793,7 +1803,7 @@ public class RiText implements RiTextIF
    */
   public float charOffset(int charIdx)
   {
-    return positionForChar(defaultFont(_pApplet), charIdx);
+    return positionForChar(defaultFont(pApplet), charIdx);
   }
   
   /**
@@ -1806,19 +1816,19 @@ public class RiText implements RiTextIF
     if (charIdx > length()) // -1?
       charIdx = length();
     String sub = text().substring(0, charIdx);
-    _pApplet.textFont(pf);
-    return x + _pApplet.textWidth(sub);
+    pApplet.textFont(pf);
+    return x + pApplet.textWidth(sub);
   }
 
   /** @exclude */
   public PApplet getPApplet()
   {
-    if (_pApplet == null && !msgNullRootApplet)
+    if (pApplet == null && !msgNullRootApplet)
     {
       System.err.println("[WARN] getPApplet() returned null");
       msgNullRootApplet = true;
     }
-    return _pApplet;
+    return pApplet;
   }
 
   static boolean msgNullRootApplet;
@@ -1971,12 +1981,12 @@ public class RiText implements RiTextIF
 
   public RiTextIF font(PFont pf)
   {
-    return this.font(pf, -1); // -1 ignored in render
+    return this.font(pf, -1); // -1 ignored in renderer
   } 
   
   public RiTextIF font(String name, float size)
   {
-    return this.font(_createFont(_pApplet, name, size), size);
+    return this.font(_createFont(pApplet, name, size), size);
   }
 
   /**
@@ -1985,7 +1995,7 @@ public class RiText implements RiTextIF
    */
   public float[] position()
   {
-    if (is3D(_pApplet.g))
+    if (is3D(pApplet.g))
       return new float[] { x, y, z };
     else
       return new float[] { x, y, };
@@ -2283,36 +2293,40 @@ public class RiText implements RiTextIF
     rt.font = toCopy.font;
 
     rt.behaviors = toCopy.behaviors; // deep or shallow?
-
     rt.text = new RiString(toCopy.text.text());
+    rt.autodraw = toCopy.autodraw;
+    
     rt.x = toCopy.x;
     rt.y = toCopy.y;
     rt.z = toCopy.z;
-    rt.autodraw = toCopy.autodraw;
+    
+    
+    
     rt.fillR = toCopy.fillR;
     rt.fillG = toCopy.fillG;
     rt.fillB = toCopy.fillB;
     rt.fillA = toCopy.fillA;
+    
     rt.bbFillR = toCopy.bbFillR;
     rt.bbFillG = toCopy.bbFillG;
     rt.bbFillB = toCopy.bbFillB;
     rt.bbFillA = toCopy.bbFillA;
+    
     rt.bbStrokeR = toCopy.bbStrokeR;
     rt.bbStrokeG = toCopy.bbStrokeG;
     rt.bbStrokeB = toCopy.bbStrokeB;
     rt.bbStrokeA = toCopy.bbStrokeA;
-    rt.bbsStrokeR = toCopy.bbsStrokeR;
+   /* rt.bbsStrokeR = toCopy.bbsStrokeR;
     rt.bbsStrokeG = toCopy.bbsStrokeG;
     rt.bbsStrokeB = toCopy.bbsStrokeB;
-    rt.bbsStrokeA = toCopy.bbsStrokeA;
+    rt.bbsStrokeA = toCopy.bbsStrokeA;*/
     rt.bbStrokeWeight = toCopy.bbStrokeWeight;
     rt.alignment = toCopy.alignment;
     rt.fontSize = toCopy.fontSize;
+
     //rt.mouseDraggable = toCopy.mouseDraggable;
     rt.boundingBoxVisible = toCopy.boundingBoxVisible;
     rt.motionType = toCopy.motionType;
-    rt.mouseXOff = toCopy.mouseXOff;
-    rt.mouseYOff = toCopy.mouseYOff;
     rt.hidden = toCopy.hidden;
 
     rt.scaleX = toCopy.scaleX;
@@ -2415,18 +2429,18 @@ public class RiText implements RiTextIF
 
   public float distanceTo(float px, float py)
   {
-    return _pApplet.dist(this.x, this.y, px, py);
+    return pApplet.dist(this.x, this.y, px, py);
   }
 
   public float textAscent()
   {
-    if (this.font == null) this.font = defaultFont(_pApplet);
+    if (this.font == null) this.font = defaultFont(pApplet);
     return font.ascent() * font.getSize();     // fix for bug in PApplet.textAscent
   }
 
   public float textDescent()
   {
-    if (this.font == null) this.font = defaultFont(_pApplet);
+    if (this.font == null) this.font = defaultFont(pApplet);
     return font.descent() * font.getSize();
   }
 
@@ -2596,7 +2610,7 @@ public class RiText implements RiTextIF
     {
       if (txts[i] != null && txts[i].length() > 0) {
         float xPos = wordOffsetWith(pf, txts, i);
-        result.add(new RiText(_pApplet, txts[i], xPos, this.y));
+        result.add(new RiText(pApplet, txts[i], xPos, this.y));
       }
     }
     return toArray(result);
@@ -2612,8 +2626,8 @@ public class RiText implements RiTextIF
   public RiText[] splitLetters()
   {
     Object pf = font();
-    if (_pApplet != null)
-      _pApplet.textFont((PFont) pf);
+    if (pApplet != null)
+      pApplet.textFont((PFont) pf);
     
     String measure = E;
     List result = new ArrayList();
@@ -2621,8 +2635,8 @@ public class RiText implements RiTextIF
     for (int i = 0; i < chars.length; i++)
     {
       if (chars[i] != ' ') {
-        float tw = _pApplet != null ? _pApplet.textWidth(measure) : 0;
-        result.add(new RiText(_pApplet, chars[i], this.x + tw, this.y));
+        float tw = pApplet != null ? pApplet.textWidth(measure) : 0;
+        result.add(new RiText(pApplet, chars[i], this.x + tw, this.y));
       }
       measure += chars[i];
     }
@@ -2753,7 +2767,7 @@ public class RiText implements RiTextIF
   public static final RiText[] createLines(PApplet p, String txt, float x, float y, float w, float h, PFont pf, float lead)
   {
     if (txt == null || txt.length() == 0) return EMPTY_ARRAY;
-    PageLayout rp = new PageLayout(p, new Rect(x, y, w, h), p.width, p.height);
+    rita.render.PageLayout rp = new PageLayout(p, new Rect(x, y, w, h), p.width, p.height);
     rp.paragraphIndent = defaults.paragraphIndent;
     RiTextIF[] rxts = rp.layout(pf, txt, lead);
     //RiText[] result = new RiText[rxts.length];
@@ -2985,375 +2999,24 @@ public class RiText implements RiTextIF
 
   public RiTextIF font(Object pf)
   {
+    if (pf instanceof String) {
+      
+      String fname = (String)pf;
+      if (fname.endsWith(".vlw")) { // P5 fonts
+        pf = _loadFont(pApplet, fname, -1);
+        this.fontSize = ((PFont)pf).getSize();
+      }
+      else {
+        return this.font(fname, DEFAULT_FONT_SIZE);
+      }
+    }
+    if (!(pf instanceof PFont))
+      throw new RiTaException("Expected PFont, but got: "+pf.getClass());
+    
     this.font = (PFont) pf;
     return this;
   }
 
 }// end
 
-class PageLayout implements Constants
-{ 
-public float paragraphIndent, paragraphLeading, textColor[];
-  public boolean showPageNumbers, indentFirstParagraph;
-  public int pageWidth, pageHeight, pageNo = 1;
-  public RiTextIF header, footer;
-  public Rect textRectangle;
-  
-  protected Stack words;
-  protected RiTextIF lines[];
-  protected PApplet _pApplet;
-  
-  public PageLayout(PApplet pApplet, int leftMargin, int topMargin, int rightMargin, int bottomMargin)
-  {
-    this(pApplet, leftMargin, topMargin, rightMargin, bottomMargin, pApplet.width, pApplet.height);
-  }
-
-  public PageLayout(PApplet pApplet, int leftMargin, int topMargin, int rightMargin, int bottomMargin, int pageWidth, int pageHeight)
-  {
-    this(pApplet, new Rect(leftMargin, topMargin, pageWidth - (leftMargin + rightMargin), pageHeight - (topMargin + bottomMargin)), pageWidth, pageHeight);
-  }
-
-  public PageLayout(PApplet pApplet, Rect rect, int pageWidth, int pageHeight) {
-    
-    this._pApplet = (pApplet);
-    this.textRectangle = rect;
-    this.pageWidth = pageWidth;
-    this.pageHeight = pageHeight;
-    
-    paragraphIndent = RiText.defaults.paragraphIndent;
-    paragraphLeading = RiText.defaults.paragraphLeading;
-    indentFirstParagraph = RiText.defaults.indentFirstParagraph;
-  }
-
-  public RiTextIF[] layoutFromFile(String fileName)
-  {
-    PFont font = RiText.defaultFont(_pApplet);
-    return layoutFromFile(font, fileName, font.getSize() * RiText.defaults.leadingFactor);
-  }
-  
-  public RiTextIF[] layoutFromFile(String fileName, float leading)
-  {
-    return layoutFromFile(RiText.defaultFont(_pApplet), fileName, leading);
-  }
-  
-  /**
-   * Creates an array of RiTextIF, one per line from the text loaded from the
-   * specified 'fileName', and lays it out on the page according to the specified
-   * font.
-   */
-  public RiTextIF[] layoutFromFile(PFont pf, String fileName, float leading)
-  {
-    String txt = RiTa.loadString(_pApplet, fileName);
-    return layout(pf, txt.replaceAll("[\\r\\n]", " "), leading);
-  }
-  
-  public RiTextIF[] layout(String text)
-  {
-    PFont font = RiText.defaultFont(_pApplet);
-    return layout(font, text, font.getSize() * RiText.defaults.leadingFactor);
-  }
-
-  /**
-   * Creates an array of RiTextIF, one per line from the input text
-   * and lays it out on the page.
-   */
-  public RiTextIF[] layout(String text, float leading)
-  {
-    return layout(RiText.defaultFont(_pApplet), text, leading);
-  }
-  
-  /**
-   * Creates an array of RiTextIF, one per line from the input text
-   * and lays it out on the page.
-   */
-  public RiTextIF[] layout(PFont pf, String text, float leading)
-  {
-    // System.out.println("RiPageLayout.layout("+text.length()+")");
-
-    if (showPageNumbers) {
-      footer(Integer.toString(pageNo));
-    }
-
-    if (text != null && text.length() > 0) {
-
-      // remove any line breaks from the original
-      text = text.replaceAll("\n", SP);
-  
-      // adds spaces around html tokens
-      text = text.replaceAll(" ?(<[^>]+>) ?", " $1 ");
-  
-      this.words = new Stack();
-  
-      addToStack(text.split(SP));
-      
-      this.lines = renderPage(pf, leading);
-    }
-    else {
-      this.lines = RiText.EMPTY_ARRAY;
-    }
-    
-    return lines;
-  }
-
-  RiTextIF[] renderPage(PFont pf, float leading)
-  {
-
-    if (words.isEmpty()) return RiText.EMPTY_ARRAY;
-    
-    if (pf == null && _pApplet != null)
-      pf = RiText.defaultFont(_pApplet);
-      
-    if (pf == null)
-      throw new RiTaException("Null font passed to PageLayout.renderPage()");
-    
-    if (leading <= 0)
-      leading = pf.getSize() * RiText.defaults.leadingFactor;
-    
-    leading = (int) leading; // same as JS
-    
-    float ascent = pf.ascent() * pf.getSize();
-    float descent = pf.descent() * pf.getSize();
-    float startX = textRectangle.x + 1;
-    float currentY = textRectangle.y + ascent;
-    float maxX = (textRectangle.x + textRectangle.w);
-    float maxY = (textRectangle.y + textRectangle.h);
-    boolean newParagraph = false, forceBreak = false, firstLine = true;
-    
-    //System.out.println("renderPage: font="+pf.getSize()+"/" + leading
-      //+ " pIndent="+paragraphIndent+" indent1st="+indentFirstParagraph
-      //+ " ascent="+ascent+" descent="+descent+" leading="+leading);
-    
-    List rlines = new ArrayList();
-    StringBuilder sb = new StringBuilder();
-
-    if (indentFirstParagraph) 
-      startX += RiText.defaults.paragraphIndent;
-    
-    this._pApplet.textFont(pf);
-        
-    while (!words.isEmpty())
-    {
-      String next = (String) words.pop();
-      
-      if (next.length() == 0) continue;
-
-      // check for HTML-style tags 
-      if (next.startsWith("<") && next.endsWith(">"))
-      {
-        if (next.equals(NON_BREAKING_SPACE))
-        {
-          sb.append(SP);
-        }
-        else if (next.endsWith(PARAGRAPH_BREAK))
-        {
-          if (sb.length() > 0)  {   // case: paragraph break
-            newParagraph = true;
-          }
-        }
-        else if (next.endsWith(LINE_BREAK)) {
-          forceBreak = true;
-        }
-        continue;
-      }
-
-      // re-calculate our X position
-      float currentX = startX + _pApplet.textWidth(sb.toString() + next);
-
-      // check it against the line-width 
-      if (!newParagraph && !forceBreak && currentX < maxX)
-      {
-        sb.append(next + SP);
-      }
-      else 
-      {
-         // check yPosition for line break
-        if (RiText._withinBoundsY(currentY, leading, maxY, descent))
-        {
-          float yPos = firstLine ? currentY : currentY + (int)leading; // or round?
-          RiTextIF rt = newRiTextLine(sb, pf, startX, yPos);
-          rlines.add(rt);
-          
-          currentY = newParagraph ? rt.y() + paragraphLeading : rt.y();
-          startX = textRectangle.x + 1; // reset
-
-          if (newParagraph) startX += RiText.defaults.paragraphIndent;
-          
-          sb.append(next + SP);
-          
-          newParagraph = false;
-          forceBreak = false;
-          firstLine = false;
-        }
-        else {
-          words.push(next);
-          break;
-        }
-      }
-    }
-    
-    // check if leftover words can make a new line 
-    if (RiText._withinBoundsY(currentY, leading, maxY, descent)) {
-      
-      // TODO: what if there is are tags in here -- is it possible?)
-      rlines.add(newRiTextLine(sb, pf, textRectangle.x+1, leading + currentY));
-    }
-    else
-      addToStack(sb.toString().split(SP)); // else save them for next time
-
-    return (RiTextIF[]) rlines.toArray(RiText.EMPTY_ARRAY);
-  }
-
-  // add to word stack in reverse order
-  private void addToStack(String[] tmp)
-  {
-    for (int i = tmp.length - 1; i >= 0; i--)
-      words.push(tmp[i]);
-  }
-  
-  public String remainingText()
-  {
-    return stackToString(words);
-  }
-
-  private String stackToString(Stack wrds)
-  {
-    if (wrds == null) return "";
-    StringBuilder sb = new StringBuilder();
-    while (!wrds.isEmpty())
-    {
-      if (sb.length() > 0)
-        sb.append(SP);
-      sb.append(wrds.pop());
-    }
-    return sb.toString();
-  }
-  
-  RiTextIF newRiTextLine(StringBuilder sb, PFont pf, float xPos, float nextY)
-  {
-    String s = sb.toString();
-    
-    //System.out.println("PageLayout.newRiTextLine: '"+sb+"'");
-    
-    // strip trailing spaces
-    while (s != null && s.length() > 0 && s.endsWith(SP))
-      s = s.substring(0, s.length() - 1);
-    
-    RiTextIF rt = new RiText(this._pApplet, s, xPos, nextY, pf);
-    if (textColor != null) rt.fill(textColor);
-    
-    sb.delete(0, sb.length()); // empty for reuse
-    
-    return rt;
-  }
-
-  public PageLayout copy()
-  {
-    if (_pApplet == null)
-      throw new RuntimeException("Null pApplet!");
-    PageLayout rpl = new PageLayout(_pApplet, textRectangle, pageWidth, pageHeight);
-    rpl.pageNo = pageNo;
-    rpl.paragraphIndent = paragraphIndent;
-    rpl.paragraphLeading = paragraphLeading;
-    rpl.pageHeight = pageHeight;
-    rpl.indentFirstParagraph = indentFirstParagraph;
-    rpl.pageNo =  pageNo;
-    rpl.textColor = textColor;
-    rpl.textRectangle = textRectangle;
-    rpl.showPageNumbers = showPageNumbers;
-    rpl.header = header != null ? header.copy() : null;
-    rpl.footer = footer != null ? footer.copy() : null;
-    if (lines != null)
-    {
-      rpl.lines = new RiTextIF[lines.length];
-      for (int i = 0; i < lines.length; i++)
-        rpl.lines[i] = lines[i].copy();
-    }
-    if (words != null)
-    {
-      for (Iterator it = this.words.iterator(); it.hasNext();)
-        rpl.words.add(it.next());
-    }
-    return rpl;
-  }
-
-  public void dispose()
-  {
-    RiText.dispose(lines);
-    RiText.dispose(header);
-    RiText.dispose(footer);
-  }
-  
-  public void drawGuides()
-  {
-    this.drawGuides(_pApplet.g);
-  }
-
-  public void drawGuides(PGraphics p)
-  {
-    p.line(textRectangle.x, 0, textRectangle.x, textRectangle.y + pageHeight);
-    p.line(textRectangle.x + textRectangle.w, 0, textRectangle.x + textRectangle.w, textRectangle.y + pageHeight);
-    p.line(0, textRectangle.y, textRectangle.x + pageWidth, textRectangle.y);
-    p.line(0, textRectangle.y + textRectangle.h, textRectangle.x + pageWidth, textRectangle.y + textRectangle.h);
-  }
-
-  public int getTopMargin()
-  {
-    return (int) textRectangle.y;
-  }
-
-  public int getLeftMargin()
-  {
-    return (int) textRectangle.x;
-  }
-
-  public int getRightMargin()
-  {
-    return (int) (pageWidth - (textRectangle.x + textRectangle.w));
-  }
-
-  public int getBottomMargin()
-  {
-    return (int) (pageHeight - (textRectangle.y + textRectangle.h));
-  }
-
-  public void setPageWidth(int pageWidth)
-  {
-    this.pageWidth = pageWidth;
-  }
-
-  public void setPageHeight(int pageHeight)
-  {
-    this.pageHeight = pageHeight;
-  }
-
-  public void header(String headerText)
-  {
-    this.header = new RiText(_pApplet, headerText, textRectangle.x + textRectangle.w / 2f, textRectangle.y - 25);
-    header.align(CENTER);
-  }
-
-  public void footer(String footerText)
-  {
-    this.footer = new RiText(_pApplet, footerText, 
-        textRectangle.x + textRectangle.w / 2f, textRectangle.y + textRectangle.h + RiTa.PAGE_NO_OFFSET);
-    footer.align(CENTER);
-  }
-
-  public RiTextIF[] getLines()
-  {
-    if (lines == null)
-      throw new RiTaException("No text has been assigned to this layout(" + hashCode() + "), make sure to call render() or setLines() first!");
-    return lines;
-  }
-
-  public String toString()
-  {
-    if (lines == null || lines.length<1)
-      return "EMPTY!";
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < lines.length; i++)
-      sb.append(lines[i].text()+" ");
-    return sb.toString().trim();
-  }
-}
   

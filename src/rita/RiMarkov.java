@@ -18,36 +18,6 @@ import rita.support.TextNode;
  inch.
  */
 
-/**
- * Performs analysis and text generation via Markov chains (aka N-Grams) with
- * options to process single characters, words, sentences, and arbitrary regular
- * expressions. Provides a variety of methods specifically designed for
- * text-generation. Example usage:
- * 
- * <pre>
- * RiMarkov rm = new RiMarkov(3);
- * rm.loadFile(&quot;war_peace.txt&quot;); // in data dir.
- * String[] sents = rm.generateSentences(10);
- * for (int i = 0; i &lt; sents.length; i++)
- * {
- *   System.out.println(sents[i]);
- * }
- * </pre>
- * 
- * <p>
- * Note: use RiMarkov.setTokenizerRegex() to control how inputs are tokenized
- * (or split-up). The default is to use the Penn word-tokenizing conventions
- * (without splitting contractions). You may wish to simply use whitespace (or
- * some other regular expression), which can be accomplished as follows:
- * 
- * <pre>
- * RiMarkov rm = new RiMarkov(3);
- * rm.setTokenizerRegex(&quot;\\s&quot;);
- * </pre>
- * 
- * This creates a new model, with n=3, that tokenizes its input on the
- * whitespace characters: [ \t\n\x0B\f\r].
- */
 public class RiMarkov implements Constants
 {
   static { RiTa.init(); }
@@ -73,7 +43,7 @@ public class RiMarkov implements Constants
 
   protected int nFactor, wordsPerFile, tokenCount, skippedDups;
   protected boolean useSmoothing, ignoreCase, allowDuplicates, printIgnoredText = false;
-  protected boolean removeQuotations = true, recognizeSentences = true, addSpaces = true, profile = true;
+  protected boolean removeQuotations = true, sentenceAware = true, addSpaces = true, profile = true;
 
   /**
    * Construct a sentence-generating Markov chain (or n-gram) model
@@ -102,8 +72,8 @@ public class RiMarkov implements Constants
     if (nFactor < 1)
       throw new RiTaException("N-factor must be > 0");
     this.nFactor = nFactor;
+    this.sentenceAware = recognizeSentences;
     this.allowDuplicates = allowDuplicates;
-    this.recognizeSentences = recognizeSentences;
     this.root = TextNode.createRoot(ignoreCase);
   }
 
@@ -114,9 +84,9 @@ public class RiMarkov implements Constants
     return printIgnoredText;
   }
 
-  public RiMarkov printIgnoredText(boolean printIgnoredText)
+  public RiMarkov printIgnoredText(boolean print)
   {
-    this.printIgnoredText = printIgnoredText;
+    this.printIgnoredText = print;
     return this;
   }
 
@@ -289,16 +259,6 @@ public class RiMarkov implements Constants
       s[i] = ((TextNode) it.next()).token();
     return RiTa.untokenize(s);
   }
-
-  /**
-   * Generates a string of
-   * 
-   * <pre>
-   * length
-   * </pre>
-   * 
-   * tokens from the model.
-   */
   public String[] generateTokens(int targetNumber)
   {
     int tries = 0, maxTries = 1000;
@@ -365,13 +325,8 @@ public class RiMarkov implements Constants
   public RiMarkov loadFile(String fileName, int multiplier)
   {
     long done, start = System.currentTimeMillis();
-    /*
-     * if (loadedFiles.contains(fileName)) { if
-     * (!RiTa.SILENT)System.out.println(
-     * "[INFO] Attempt to reload file: "+fileName+" ignored..."); return this; }
-     * loadedFiles.add(fileName);
-     */
-    String contents = RiTa.loadString(null, fileName);
+
+    String contents = RiTa.loadString(fileName);
 
     if (profile)
     {
@@ -435,7 +390,7 @@ public class RiMarkov implements Constants
    */
   public RiMarkov loadText(String rawText, int multiplier, String regex)
   {
-    if (recognizeSentences)
+    if (sentenceAware)
     {
       loadSentences(RiTa.splitSentences(rawText), multiplier, regex);
       // System.out.println(sentenceList);
@@ -835,15 +790,7 @@ public class RiMarkov implements Constants
 
   protected boolean validSentenceStart(String word)// , String previousWord)
   {
-    if (!recognizeSentences)
-      return true;
-
-    if (word.matches(SS_REGEX))
-    {
-      // if (previousWord == null || !Util.isAbbreviation(previousWord))
-      return true;
-    }
-    return false;
+    return (!sentenceAware || word.matches(SS_REGEX));
   }
 
   protected String clean(String sentence)
@@ -874,8 +821,7 @@ public class RiMarkov implements Constants
    */
   public RiMarkov loadSentences(String[] sentences, int multiplier, String regex)
   {
-
-    // System.out.println("RiMarkov.loadSentences()");
+    //System.out.println("RiMarkov.loadSentences("+sentences.length+")");
 
     List allWords = new ArrayList();
 
@@ -885,7 +831,6 @@ public class RiMarkov implements Constants
     // do the cleaning/splitting first ---------------------
     for (int i = 0; i < sentences.length; i++)
     {
-
       String sentence = clean(sentences[i]);
       if (!allowDuplicates)
       {
@@ -938,11 +883,17 @@ public class RiMarkov implements Constants
 
   protected TextNode getSentenceStart()
   {
+    if (!this.sentenceAware) {
+      throw new RiTaException("getSentenceStart() can only "
+        + "be called when the model is sentence-aware...");
+    }
+    
     if (sentenceStarts == null || sentenceStarts.size() < 1)
-      throw new RiTaException("No sentence starts found! genSen=" + recognizeSentences);
+      throw new RiTaException("No sentence starts found! genSen=" + sentenceAware);
 
     int idx = (int) (Math.random() * sentenceStarts.size());
     String txt = (String) sentenceStarts.get(idx);
+    
     return root.lookup(txt);
   }
 
@@ -994,6 +945,11 @@ public class RiMarkov implements Constants
    */
   public String[] generateSentences(int numSentences)
   {
+    if (!this.sentenceAware) {
+      throw new RiTaException("generateSentences() can only be called"
+        + " when the model is sentence-aware, otherwise use generateTokens()");
+    }
+    
     Set<String> result = new LinkedHashSet<String>();
     int totalTries = 0, wordsInSentence = 1, tries = 0;
     StringBuilder s = new StringBuilder(32);
@@ -1086,10 +1042,13 @@ public class RiMarkov implements Constants
             + " duplicates, now allowing duplicates!");
         allowDuplicates = true;
       }
+      
       if (printIgnoredText && !RiTa.SILENT)
         System.err.println("[WARN] Skipping input duplicate: " + sent);
+      
       return false;
     }
+    
     return true;
   }
 
@@ -1127,7 +1086,7 @@ public class RiMarkov implements Constants
       {
         TextNode child = (TextNode) it.next();
         pTotal += child.probability();
-        if (current.isRoot() && (recognizeSentences && !child.isSentenceStart()))
+        if (current.isRoot() && (sentenceAware && !child.isSentenceStart()))
           continue;
         if (selector < pTotal)
           return child;
@@ -1156,7 +1115,7 @@ public class RiMarkov implements Constants
         pTotal += child.probability();
         // System.out.println("pTotal="+pTotal);
         
-        if (current.isRoot() && (recognizeSentences && !child.isSentenceStart()))
+        if (current.isRoot() && (sentenceAware && !child.isSentenceStart()))
         {
           // System.out.println("continuing...");
           continue;
@@ -1235,9 +1194,9 @@ public class RiMarkov implements Constants
    * Returns whether the model will attempt to recognize (english-like)
    * sentences in the input text (default=true).
    */
-  public boolean recognizeSentences()
+  public boolean sentenceAware()
   {
-    return this.recognizeSentences;
+    return this.sentenceAware;
   }
 
   /**

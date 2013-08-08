@@ -1,12 +1,10 @@
 package rita;
 
 import java.io.*;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.lang.reflect.*;
+import java.net.*;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 import rita.support.*;
 
@@ -23,6 +21,8 @@ public class RiTa implements Constants
    
   /** Stops all RiTa output to the console */
   public static boolean SILENT = false;
+  
+  protected static String[] guesses = { "src/data", "data", "" };
    
   static {
     if (!INITD) RiTa.init();
@@ -863,14 +863,8 @@ public class RiTa implements Constants
   
   public static InputStream openStream(String streamName) // need to handle URLs here..
   {
-//System.out.println("RiTa.openStreamLocal("+streamName+")");
-    
-/*    if (!SILENT && !printedNullParentWarning) { // hack, just print this once
-      System.err.println( "[WARN] Null PApplet passed to RiTa when loading '"
-        + streamName + "'\n       If you are using Processing, this may cause problems...");
-      printedNullParentWarning = true;
-    }    */
-    
+    //System.out.println("RiTa.openStreamLocal("+streamName+")");
+
     try // check for url first  (from PApplet)
     {
       URL url = new URL(streamName);
@@ -894,7 +888,7 @@ public class RiTa implements Constants
         guess = guesses[i] + SLASH + guess;
       }
    
-      boolean isDefaultFile = isIncluded(guess);       
+      //boolean isDefaultFile = isIncluded(guess);       
       //if (!isDefaultFile && !RiTa.SILENT) 
         //System.out.print("[INFO] Trying "+guess);
       
@@ -941,56 +935,9 @@ public class RiTa implements Constants
     return is;
   } 
   
-  protected static String[] guesses = { "src"+SLASH+"data", "data", "" };
- 
-  /** @exclude */ 
-  public static boolean _isAbsolutePath(String fileName) {
-    return (fileName.startsWith(SLASH) || 
-     fileName.matches("^[A-Za-z]:")); // hmmmmm... 'driveA:\\'?
-  }
-  
-  /**
-   * Opens a URL (line-by-line) and reads the 
-   * contents into a String[], one line per array element
-   * @return Contents of the URL stream as a String
- 
-  public static String[] loadStrings(URL url)
-  {  
-    try
-    {
-      return PApplet.loadStrings(url.openStream());
-    } 
-    catch (IOException e)
-    {
-      throw new RiTaException("unable to open url: "+url);
-    } 
-  }  */
-  
-  /**
-   * Same as pApplet.loadStrings but correctly handles UTF-8 characters.
-   */
-  public static String[] loadStrings(String fileName)
-  {
-   String[] lines = null;
-/*    if (pApplet != null) {
-      lines = pApplet.loadStrings(fileName);
-    }
-    else { // uh-oh, who knows?
-*/     
-   lines = loadStringsLocal(fileName);
-    //}
-    
-    if (lines == null)
-      throw new RiTaException("The file '"+fileName+"' is missing or inaccessible, " +
-        "make sure the URL is valid or that the file has been added to your data " +
-        "folder and is readable.");
- 
-    return loadStringsLocal(fileName);
-  }
- 
-  protected static String[] loadStringsLocal(String name)
+  public static String[] loadStrings(String fname)
   {    
-    return loadStrings(openStream(name), 100);
+    return loadStrings(openStream(fname), 100);
   }
 
   
@@ -999,8 +946,8 @@ public class RiTa implements Constants
     if (input == null) throw new RiTaException("Null input stream!");
     
     try {
-      BufferedReader reader =
-        new BufferedReader(new InputStreamReader(input, "UTF-8"));
+      BufferedReader reader = new BufferedReader
+         (new InputStreamReader(input, "UTF-8"));
 
       String lines[] = new String[numLines];
       int lineCount = 0;
@@ -1032,19 +979,49 @@ public class RiTa implements Constants
     return EMPTY;
   } 
   
+  /** @exclude */ 
+  public static boolean _isAbsolutePath(String fileName) {
+    return (fileName.startsWith(SLASH) || 
+     fileName.matches("^[A-Za-z]:")); // hmmmmm... 'driveA:\\'?
+  }
   
   /**
-   * Loads a File by name and reads the 
+   * Loads a file or URL by name and reads the 
    * contents into a single String
    * 
    * @return Contents of the file as String
    */
-  public static String loadString(Object pApplet, String fileName) {
-/*    if (pApplet != null) {
-      String[] lines = ;
-      return join(loadStrings(pApplet, fileName), BN);
-    }*/
-    return new String(processing.core.PApplet.loadBytes(openStream(fileName)));
+  public static String loadString(String fileName) {
+    String[] lines = loadStrings(fileName);
+    return RiTa.join(lines,"\n");
+    //return new String(processing.core.PApplet.loadBytes(openStream(fileName)));
+  }
+  
+  public static String loadString(Object parent, String fileName)
+  {
+    if (parent != null && parent instanceof processing.core.PApplet) {
+/*      Class pApplet = null;
+      try
+      {
+        pApplet = RiTa.class.getClassLoader().loadClass("processing.core.PApplet");
+      }
+      catch (ClassNotFoundException e)
+      {
+        System.err.println("[WARN] Unable to load PApplet class...");
+      }*/
+      
+
+        Object result = invoke(parent, "loadBytes", 
+            new Class[] { String.class }, new Object[] { fileName });
+        if (result != null && result instanceof String)
+          return (String) result;
+    }
+    else {
+      System.err.println("[WARN] Failed calling PApplet.loadBytes...");
+    }
+    
+    
+    return loadString(fileName);
   }
   
   /*
@@ -1265,10 +1242,9 @@ public class RiTa implements Constants
       System.out.println("[]");
       return;
     }
-    int i = 0;
-    for (Iterator it = l.keySet().iterator(); it.hasNext();i++)
+    for (Iterator it = l.keySet().iterator(); it.hasNext();)
     {
-      Object key = (String) it.next();
+      Object key = it.next();
       Object val = l.get(key);
       System.out.println(key + "='"+val+"'");
     }
@@ -1280,6 +1256,9 @@ public class RiTa implements Constants
 
   public static void main(String[] args)
   {
+    //PApplet.loadBytes("/User/dhowe/Desktop/times-24.json");
+    if (1==1) return;
+    
     String[] toks = tokenize("The boy, dressed in red, ate an apple.!?");
     toks[0] = "@#$%^#$%^";
     toks[1] = "can't";
@@ -1290,6 +1269,5 @@ public class RiTa implements Constants
       System.out.println(toks[i]+" -> "+isPunctuation(toks[i])+"");
     }
   }
-
 
 }
