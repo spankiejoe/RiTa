@@ -36,7 +36,7 @@ public class RiText implements RiTextIF
   public static boolean callbacksDisabled = false;
   
   protected static Boolean rendering3D;
-  protected static Map fontCache;
+  public static Map fonts;
 
   // Members ============================================================
 
@@ -1345,9 +1345,9 @@ public class RiText implements RiTextIF
 
   protected static PFont checkFontCache(String fontFileName, float sz)
   {
-    if (fontCache == null)
-      fontCache = new HashMap();
-    PFont pf = (PFont) fontCache.get(fontFileName + sz);
+    if (fonts == null)
+      fonts = new HashMap();
+    PFont pf = (PFont) fonts.get(fontFileName + sz);
     // System.out.println("CacheCheck: "+fontFileName+sz+" -> "+(pf!=null));
     return pf;
   }
@@ -1413,9 +1413,9 @@ public class RiText implements RiTextIF
   protected static void cacheFont(String fontFileName, float fontSz, PFont pf)
   {
     // System.out.println("caching: "+fontFileName+fontSz+"->"+pf);
-    if (fontCache == null)
-      fontCache = new HashMap();
-    fontCache.put(fontFileName + fontSz, pf);
+    if (fonts == null)
+      fonts = new HashMap();
+    fonts.put(fontFileName + fontSz, pf);
   }
 
   /**
@@ -2741,8 +2741,12 @@ public class RiText implements RiTextIF
   }
   
   
-  ////// 11 methods for each
+  ////// 12 methods for each
 
+  public static RiText[] createLines(PApplet p, String txt, float x, float y)
+  {
+    return createLines(p, txt, x, y, p.width-x, Float.MAX_VALUE);
+  }
 
   public static RiText[] createLines(PApplet p, String txt, float x, float y, float w)
   {
@@ -2809,7 +2813,11 @@ public class RiText implements RiTextIF
   
   //////
   
-
+  public static RiText[] createWords(PApplet p, String txt, float x, float y)
+  {
+    return createWords(p, txt, x, y, p.width-x, Float.MAX_VALUE);
+  }
+  
   public static RiText[] createWords(PApplet p, String txt, float x, float y, float w)
   {
     return createWords(p, txt, x, y, w, Float.MAX_VALUE);
@@ -2868,6 +2876,11 @@ public class RiText implements RiTextIF
   }  
 
   //////
+  
+  public static RiText[] createLetters(PApplet p, String txt, float x, float y)
+  {
+    return createLetters(p, txt, x, y, p.width-x, Float.MAX_VALUE);
+  }
   
   public static RiText[] createLetters(PApplet p, String txt, float x, float y, float w)
   {
