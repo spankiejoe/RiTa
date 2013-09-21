@@ -149,6 +149,24 @@ public class RiTa implements Constants
     return untokenize(arr, ' ', adjustPunctuationSpacing);
   }
   
+  public static Method _findCallback(Object parent, String callbackName)
+  {
+    try
+    {
+      return (callbackName == null) ? 
+         _findMethod(parent, DEFAULT_CALLBACK, new Class[] { RiTaEvent.class }, false)
+         : _findMethod(parent, callbackName, new Class[] {}, false);
+    }
+    catch (RiTaException e)
+    {
+      String msg = (callbackName == null) ? 
+          DEFAULT_CALLBACK+"(RiTaEvent re);" : callbackName+"();";
+      System.err.println("[WARN] Expected callback not found: "
+          + shortName(parent)+"."+msg);
+      return null;
+    }
+  }
+  
   /**
    * Joins array of word, similar to words.join(delim), but attempts to preserve punctuation position
    * unless the 'adjustPunctuationSpacing' flag is set to false
@@ -998,31 +1016,24 @@ public class RiTa implements Constants
    * @return Contents of the file as String
    */
   public static String loadString(String fileName) {
+
     String[] lines = loadStrings(fileName);
     return RiTa.join(lines,"\n");
-    //return new String(processing.core.PApplet.loadBytes(openStream(fileName)));
   }
   
+  // TODO: add a version that takes a callback function (like in RiTimer)
   public static String loadString(Object parent, String fileName)
   {
     if (parent != null && parent instanceof processing.core.PApplet) {
-/*      Class pApplet = null;
-      try
-      {
-        pApplet = RiTa.class.getClassLoader().loadClass("processing.core.PApplet");
-      }
-      catch (ClassNotFoundException e)
-      {
-        System.err.println("[WARN] Unable to load PApplet class...");
-      }*/
-      
-
-        Object result = invoke(parent, "loadBytes", 
+        
+      Object result = invoke(parent, "loadBytes", 
             new Class[] { String.class }, new Object[] { fileName });
+        
         if (result != null && result instanceof String)
           return (String) result;
     }
     else {
+      
       System.err.println("[WARN] Failed calling PApplet.loadBytes...");
     }
     
@@ -1275,5 +1286,6 @@ public class RiTa implements Constants
       System.out.println(toks[i]+" -> "+isPunctuation(toks[i])+"");
     }
   }
+
 
 }
