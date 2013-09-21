@@ -2370,6 +2370,11 @@ public class RiText implements RiTextIF
     float dx = x1 - x2, dy = y1 - y2;
     return (float) Math.sqrt(dx * dx + dy * dy);
   }
+  
+  public static int timer(float period) { // for better error msg
+    throw new RiTaException("Missing parent object -- did you mean: RiText.timer(this, "+period+");"); 
+  }
+  
   public static final int timer(Object parent, float period) {  return RiTa.timer(parent, period); } 
   public static final void stopTimer(int idx) { RiTa.stopTimer(idx); } 
   public static final void pauseTimer(int idx, boolean b) { RiTa.pauseTimer(idx, b); }

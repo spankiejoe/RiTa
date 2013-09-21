@@ -561,6 +561,12 @@ public class RiTa implements Constants
     return result;
   }
   
+  public static int timer(float period) { // for better error msg
+    throw new RiTaException("Missing parent object -- did you mean: RiTa.timer(this, "+period+");"); 
+  }
+  
+  public static int timer(float period, String fun) { return timer(period); } // for better error msg
+  
   public static int timer(Object parent, float period) {
     return new RiTimer(parent, period).id();
   }
