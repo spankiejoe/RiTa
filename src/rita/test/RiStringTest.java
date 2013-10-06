@@ -386,37 +386,37 @@ public class RiStringTest implements Constants
   public void testInsertWordAt()
   {
     RiString rs = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(4,"then");
+    rs.insertWord(4,"then");
     String rs3 = "Inserts at wordIdx and then shifts each subsequent word accordingly.";
     equal(rs.text(), rs3);
 
     rs = new RiString("inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(0,"He");
+    rs.insertWord(0,"He");
     rs3 = "He inserts at wordIdx and shifts each subsequent word accordingly.";
     equal(rs.text(), rs3);
 
     rs = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(1,"newWord");
+    rs.insertWord(1,"newWord");
     RiString rs2 = new RiString("Inserts newWord at wordIdx and shifts each subsequent word accordingly.");
     equal(rs.text(), rs2.text());
 
     rs = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(1,"newWord and newWords");
+    rs.insertWord(1,"newWord and newWords");
     rs2 = new RiString("Inserts newWord and newWords at wordIdx and shifts each subsequent word accordingly.");
     equal(rs.text(), rs2.text());
 
     rs =  new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(5," ");
+    rs.insertWord(5," ");
     rs2 = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
     ok(rs.text().equals(rs2.text()));
 
     rs =  new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(5," "); // space
+    rs.insertWord(5," "); // space
     rs2 = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
     equal(rs.text(), rs2.text());
 
     rs = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(5,"  "); // tab space
+    rs.insertWord(5,"  "); // tab space
     rs2 = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
     equal(rs.text(), rs2.text());
 
@@ -424,39 +424,39 @@ public class RiStringTest implements Constants
     // either way
     /* TODO: reconsider */
     rs = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(5,"**");
+    rs.insertWord(5,"**");
     rs2 = new RiString("Inserts at wordIdx and shifts ** each subsequent word accordingly.");
     //System.out.println("'"+rs.text()+"'\n'"+rs2.text()+"'");
     equal(rs.text(), rs2.text()); // "testing the (private) joinWords() actually [currently failing]"
 
     rs = new RiString("Inserts at wordIdx shifting each subsequent word accordingly.");
-    rs.insertWordAt(3,",");
+    rs.insertWord(3,",");
     rs2 = new RiString("Inserts at wordIdx, shifting each subsequent word accordingly.");
     equal(rs.text(), rs2.text());
 
     rs = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(2,"newWord"); // error -- (no change to original string);
+    rs.insertWord(2,"newWord"); // error -- (no change to original string);
     equal(rs.text(), rs.text());
     
     //out of range test
     rs = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(500,"hey");
+    rs.insertWord(500,"hey");
     rs2 = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly. hey");
     equal(rs.text(), rs2.text());
     
     rs = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(-500, "hey");
+    rs.insertWord(-500, "hey");
     rs2 = new RiString("hey Inserts at wordIdx and shifts each subsequent word accordingly.");
     //System.out.println("RESULT: "+rs.text());
     equal(rs.text(), rs2.text());
     
     rs = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(500,"");
+    rs.insertWord(500,"");
     rs2 = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
     equal(rs.text(), rs2.text());
     
     rs = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(-500,"");
+    rs.insertWord(-500,"");
     rs2 = new RiString("Inserts at wordIdx and shifts each subsequent word accordingly.");
     equal(rs.text(), rs2.text());
     
@@ -644,33 +644,33 @@ public class RiStringTest implements Constants
   public void testRemoveCharAt()
   {
     RiString rs = new RiString("The dog was white");
-    rs.removeCharAt(1);
+    rs.removeChar(1);
     equal(rs.text(), "Te dog was white");
 
     rs = new RiString("The dog was white");
-    rs.removeCharAt(rs.length() - 1);
+    rs.removeChar(rs.length() - 1);
     equal(rs.text(), "The dog was whit");
 
     rs = new RiString("The dog was white");
-    rs.removeCharAt(0);
+    rs.removeChar(0);
     equal(rs.text(), "he dog was white");
 
     rs = new RiString("The dog was white.");
-    rs.removeCharAt(rs.length() - 1);
+    rs.removeChar(rs.length() - 1);
     equal(rs.text(), "The dog was white");
 
     // out of range tests
 
     rs = new RiString("The dog was white");
-    rs.removeCharAt(-1);
+    rs.removeChar(-1);
     equal(rs.text(), "The dog was whit");
 
     rs = new RiString("The dog was white");
-    rs.removeCharAt(1000);
+    rs.removeChar(1000);
     equal(rs.text(), "The dog was whit");
 
     rs = new RiString("The dog was white");
-    rs.removeCharAt(rs.length());
+    rs.removeChar(rs.length());
     equal(rs.text(), "The dog was whit");
   }
 
@@ -678,35 +678,35 @@ public class RiStringTest implements Constants
   public void testReplaceCharAt() 
   {
     RiString rs = new RiString("Who are you?");
-    rs.replaceCharAt(2, "");
+    rs.replaceChar(2, "");
     //System.out.println(rs.text());
     equal(rs.text(), "Wh are you?");
 
     rs = new RiString("Who are you?");
-    rs.replaceCharAt(2, "e");
+    rs.replaceChar(2, "e");
     equal(rs.text(), "Whe are you?");
 
     rs = new RiString("Who are you?");
-    rs.replaceCharAt(2, "ere");
+    rs.replaceChar(2, "ere");
     equal(rs.text(), "Where are you?");
 
     rs = new RiString("Who are you?");
-    rs.replaceCharAt(11, "!!");
+    rs.replaceChar(11, "!!");
     equal(rs.text(), "Who are you!!");
 
     rs = new RiString("Who are you?");
-    rs.replaceCharAt(0, "me");
+    rs.replaceChar(0, "me");
     equal(rs.text(), "meho are you?");
 
     // out of range test
     rs = new RiString("Who are you?");
     // System.out.println("replaceCharAt :" + rs.text());
-    rs.replaceCharAt(-1, "me");
+    rs.replaceChar(-1, "me");
     equal(rs.text(), "Who are youme");
 
     rs = new RiString("Who are you?");
     // System.out.println("replaceCharAt :" + rs.text());
-    rs.replaceCharAt(10000, "me");
+    rs.replaceChar(10000, "me");
     equal(rs.text(), "Who are youme");
 
   }

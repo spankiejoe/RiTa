@@ -256,43 +256,43 @@ public class RiTextTest
   }
 
   @Test
-  public void testInsertWordAt()
+  public void testInsertWord()
   {
     // check that these are ok ---------------
     RiText rs = new RiText(null, "Inserts at wordIdx and shifts each subsequent word accordingly.");
-    RiTextIF result = rs.insertWordAt(4, "then");
+    RiTextIF result = rs.insertWord(4, "then");
     equal(result.text(), rs.text());
     
     // TODO: next: fix whitespace regex!!
 
     rs = new RiText(null, "inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(0, "He");
+    rs.insertWord(0, "He");
     String rss2 = "He inserts at wordIdx and shifts each subsequent word accordingly.";
     //System.out.println("testInsertWordAt :'"+rs.text() + "'");
     equal(rs.text(), rss2);
 
     rs = new RiText(null, "Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(1, "newWord");
+    rs.insertWord(1, "newWord");
     RiText rs2 = new RiText(null, "Inserts newWord at wordIdx and shifts each subsequent word accordingly.");
     equal(rs.text(), rs2.text());
 
     rs = new RiText(null, "Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(1, "newWord and newWords");
+    rs.insertWord(1, "newWord and newWords");
     rs2 = new RiText(null, "Inserts newWord and newWords at wordIdx and shifts each subsequent word accordingly.");
     equal(rs.text(), rs2.text());
 
     rs = new RiText(null, "Inserts at wordIdx and shifts each subsequent word accordingly.");
-    result = rs.insertWordAt(5, "");
+    result = rs.insertWord(5, "");
     rs2 = new RiText(null, "Inserts at wordIdx and shifts each subsequent word accordingly.");
     equal(result.text(), rs2.text());
 
     rs = new RiText(null,  "Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(5, " "); // space
+    rs.insertWord(5, " "); // space
     rs2 = new RiText(null, "Inserts at wordIdx and shifts each subsequent word accordingly.");
     equal(rs.text(), rs2.text());
 
     rs = new RiText(null, "Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(5, "  "); // tab space
+    rs.insertWord(5, "  "); // tab space
     rs2 = new RiText(null, "Inserts at wordIdx and shifts each subsequent word accordingly.");
     //System.out.println(rs);
     equal(rs.text(), rs2.text());
@@ -301,17 +301,17 @@ public class RiTextTest
     // either way
     /* TODO: reconsider */
     rs = new RiText(null, "Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(5, "**");
+    rs.insertWord(5, "**");
     rs2 = new RiText(null, "Inserts at wordIdx and shifts ** each subsequent word accordingly.");
     equal(rs.text(), rs2.text()); // "testing the (private) joinWords() actually [currently failing]"
 
     rs = new RiText(null, "Inserts at wordIdx shifting each subsequent word accordingly.");
-    rs.insertWordAt(3, ",");
+    rs.insertWord(3, ",");
     rs2 = new RiText(null, "Inserts at wordIdx, shifting each subsequent word accordingly.");
     equal(rs.text(), rs2.text());
 
     rs = new RiText(null, "Inserts at wordIdx and shifts each subsequent word accordingly.");
-    rs.insertWordAt(-2, "newWord"); 
+    rs.insertWord(-2, "newWord"); 
     equal("Inserts at wordIdx and shifts each subsequent word newWord accordingly.", rs.text());
   }
 
@@ -448,74 +448,74 @@ public class RiTextTest
   }
 
   @Test
-  public void testRemoveCharAt()
+  public void testRemoveChar()
   {
     RiText rs = new RiText(null, "The dog was white");
-    rs.removeCharAt(1);
+    rs.removeChar(1);
     equal(rs.text(), "Te dog was white");
 
     rs = new RiText(null, "The dog was white");
     //System.out.println("testRemoveCharAt"+rs.length());
-    rs.removeCharAt(rs.length() - 1);
+    rs.removeChar(rs.length() - 1);
     equal(rs.text(), "The dog was whit");
 
     rs = new RiText(null, "The dog was white");
-    rs.removeCharAt(0);
+    rs.removeChar(0);
     //System.out.println("testRemoveCharAt :"+rs.text());
     equal(rs.text(), "he dog was white");
 
     rs = new RiText(null, "The dog was white");
-    rs.removeCharAt(-1);
+    rs.removeChar(-1);
     equal(rs.text(), "The dog was whit");
 
     rs = new RiText(null, "The dog was white.");
-    rs.removeCharAt(rs.length() - 1);
+    rs.removeChar(rs.length() - 1);
     equal(rs.text(), "The dog was white");
     
     //out of range tests
     
     rs = new RiText(null, "The dog was white");
-    rs.removeCharAt(-1);
+    rs.removeChar(-1);
     equal(rs.text(), "The dog was whit");
 
     rs = new RiText(null, "The dog was white");
-    rs.removeCharAt(1000);
+    rs.removeChar(1000);
     equal(rs.text(), "The dog was whit");
 
     rs = new RiText(null, "The dog was white");
-    rs.removeCharAt(rs.length());
+    rs.removeChar(rs.length());
   }
   
   
   @Test
-  public void testReplaceCharAt()
+  public void testReplaceChar()
   {
     RiText rs = new RiText(null, "Who are you?");
-    rs.replaceCharAt(2, "");
+    rs.replaceChar(2, "");
     equal(rs.text(), "Wh are you?");
 
     rs = new RiText(null, "Who are you?");
-    rs.replaceCharAt(2, "e");
+    rs.replaceChar(2, "e");
     equal(rs.text(), "Whe are you?");
 
     rs = new RiText(null, "Who are you?");
-    rs.replaceCharAt(2, "ere");
+    rs.replaceChar(2, "ere");
     equal(rs.text(), "Where are you?");
 
     rs = new RiText(null, "Who are you?");
-    rs.replaceCharAt(11, "!!");
+    rs.replaceChar(11, "!!");
     equal(rs.text(), "Who are you!!");
 
     rs = new RiText(null, "Who are you?");
-    rs.replaceCharAt(0, "me");
+    rs.replaceChar(0, "me");
     equal(rs.text(), "meho are you?");
 
     rs = new RiText(null, "Who are you?");
-    rs.replaceCharAt(-1, "me");
+    rs.replaceChar(-1, "me");
     equal(rs.text(), "Who are youme");
 
     rs = new RiText(null, "Who are you?");
-    rs.replaceCharAt(rs.length(), "me");
+    rs.replaceChar(rs.length(), "me");
     //System.out.println(rs);
     equal(rs.text(), "Who are youme");
     
@@ -523,12 +523,12 @@ public class RiTextTest
     //out of range test
     rs = new RiText(null,"Who are you?"); 
    // System.out.println("replaceCharAt :" + rs.text());
-    rs.replaceCharAt(-1, "me");
+    rs.replaceChar(-1, "me");
     equal(rs.text(), "Who are youme"); // TODO: shouldn't this go back from the end?
     
     rs = new RiText(null, "Who are you?"); 
     //System.out.println("replaceCharAt :" + rs.text());
-    rs.replaceCharAt(10000, "me");
+    rs.replaceChar(10000, "me");
     equal(rs.text(), "Who are youme");
     
 
@@ -651,38 +651,38 @@ public class RiTextTest
   }
 
   @Test
-  public void testReplaceWordAt()
+  public void testReplaceWord()
   {
 
     RiText rs = new RiText(null, "Who are you?");
-    equal(rs.replaceWordAt(0, "What").text(), "What are you?");
+    equal(rs.replaceWord(0, "What").text(), "What are you?");
 
     rs = new RiText(null, "Who are you?");
-    rs.replaceWordAt(3, "!!"); //
+    rs.replaceWord(3, "!!"); //
     equal(rs.text(), "Who are you!!"); // nice! this is a strange one...
     
     rs = new RiText(null, "Who are you?");
-    rs.replaceWordAt(-1, "!");
+    rs.replaceWord(-1, "!");
     //System.out.println("TEST:"+rs);
     equal(rs.text(), "Who are you!");
     
     rs = new RiText(null, "Who are you?");
-    rs.replaceWordAt(2, "What");
+    rs.replaceWord(2, "What");
     equal("Who are What?", rs.text());
     
     //out of range test
     
     rs = new RiText(null,"Who are you?"); 
-    rs.replaceWordAt(-1, "asfasf"); //negative number
+    rs.replaceWord(-1, "asfasf"); //negative number
     //System.out.println(rs);
     equal(rs.text(), "Who are you asfasf");
     
     rs = new RiText(null,"Who are you?"); 
-    rs.replaceWordAt(-2, "asfasf"); //negative number
+    rs.replaceWord(-2, "asfasf"); //negative number
     equal(rs.text(), "Who are asfasf?");
     
     rs = new RiText(null,"Who are you?"); 
-    rs.replaceWordAt(20, "asfasf");
+    rs.replaceWord(20, "asfasf");
     equal(rs.text(), "Who are you asfasf");
     
   }

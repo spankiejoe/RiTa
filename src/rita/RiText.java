@@ -2195,9 +2195,9 @@ public class RiText implements RiTextIF
    * specified 'idx' is less than xero, or beyond the length of the current
    * text, there will be no effect.
    */
-  public RiTextIF removeCharAt(int idx)
+  public RiTextIF removeChar(int idx)
   {
-    text.removeCharAt(idx);
+    text.removeChar(idx);
     return this;
   }
 
@@ -2208,9 +2208,9 @@ public class RiText implements RiTextIF
    * If the specified 'idx' is less than zero, or beyond the length of the
    * current text, there will be no effect. 
    */
-  public RiTextIF replaceCharAt(int idx, char replaceWith)
+  public RiTextIF replaceChar(int idx, char replaceWith)
   {
-    text.replaceCharAt(idx, replaceWith);
+    text.replaceChar(idx, replaceWith);
     return this;
   }
   
@@ -2219,9 +2219,9 @@ public class RiText implements RiTextIF
    * is less than xero, or beyond the length of the current text, there will be
    * no effect. 
    */
-  public RiTextIF replaceCharAt(int idx, String replaceWith)
+  public RiTextIF replaceChar(int idx, String replaceWith)
   {
-    text.replaceCharAt(idx, replaceWith);
+    text.replaceChar(idx, replaceWith);
     return this;
   }
 
@@ -2230,21 +2230,9 @@ public class RiText implements RiTextIF
    * specified 'idx' is less than zero, or beyond the length of the current
    * text, there will be no effect. 
    */
-  public RiTextIF insertCharAt(int idx, char toInsert)
+  public RiTextIF insertChar(int idx, char toInsert)
   {
-    text.insertCharAt(idx, toInsert);
-    return this;
-  }
-
-  /**
-   * Inserts the 'toInsert' String at the desired character index ('idx'). If
-   * the specified 'idx' is less than zero, or beyond the length of the current
-   * text, there will be no effect.
-   */
-  public RiTextIF insertAt(int idx, String toInsert)
-  {
-    if (toInsert != null && idx < 0 || idx > length())
-      text.insertAt(idx, toInsert);
+    text.insertChar(idx, toInsert);
     return this;
   }
 
@@ -2534,9 +2522,9 @@ public class RiText implements RiTextIF
     return text.lastIndexOf(s);
   }
 
-  public RiTextIF insertWordAt(int wordIdx, String newWord)
+  public RiTextIF insertWord(int wordIdx, String newWord)
   {
-    text.insertWordAt(wordIdx, newWord);
+    text.insertWord(wordIdx, newWord);
     return this;
   }
 
@@ -2560,7 +2548,7 @@ public class RiText implements RiTextIF
     return text.posAt(wordIdx, useWordNetTags);
   }
 
-  public RiTextIF replaceWordAt(int wordIdx, String newWord)
+  public RiTextIF replaceWord(int wordIdx, String newWord)
   {
     text.replaceWordAt(wordIdx, newWord);
     return this;
@@ -2726,9 +2714,9 @@ public class RiText implements RiTextIF
     return text.match(s, flags);
   }
 
-  public RiTextIF removeWordAt(int idx)
+  public RiTextIF removeWord(int idx)
   {
-     text.removeWordAt(idx);
+     text.removeWord(idx);
      return this;
   }
 
