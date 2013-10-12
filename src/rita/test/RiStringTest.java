@@ -945,14 +945,23 @@ public class RiStringTest implements Constants
   @Test
   public void testSplit()
   {
-    RiString rs = new RiString("Who are you?"); 
-    RiString[] result = rs.split("W"); 
-    RiString[] answer = new RiString[] { new RiString("ho are you?") };
+    RiString rs, result[], answer[];
+    
+    rs = new RiString("Who are you?"); 
+    result = rs.split("\\?"); 
+    answer = new RiString[] { new RiString("Who are you") };
+    //System.out.println(RiTa.asList(answer));
+    //System.out.println(result.length +" ? "+ answer.length);
+    equal(result.length, answer.length);
+    equal(result.length, 1);
+    equal(result[0].text(), answer[0].text());
+        
+    rs = new RiString("Who are you?"); 
+    result = rs.split("W"); 
+    answer = new RiString[] { new RiString("ho are you?") };
     //System.out.println(RiTa.asList(answer));
     deepEqual(result, answer);
-    
-    //if (1==1) return;
-    
+
     rs = new RiString("Who are you?");
     result = rs.split(" ");
     answer = new RiString[]{ new RiString("Who"), new RiString("are"), new RiString("you?") };
@@ -967,15 +976,6 @@ public class RiStringTest implements Constants
      result = rs.split("are"); 
      answer = new RiString[] { new RiString("Who "),new RiString(" you?") }; 
      deepEqual(result, answer);
-     
-     rs = new RiString("Who are you?"); 
-     result = rs.split("\\?"); 
-     answer = new RiString[] { new RiString("Who are you") };
-     //System.out.println(RiTa.asList(answer));
-     //System.out.println(result.length +" ? "+ answer.length);
-     equal(result.length, answer.length);
-     equal(result.length, 1);
-     equal(result[0].text(), answer[0].text());
 
      rs = new RiString("Who are you?"); 
      result = rs.split("abc"); 
