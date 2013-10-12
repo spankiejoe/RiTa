@@ -448,6 +448,12 @@ public class RiTaTest
   }
 
   @Test
+  public void testEnv()
+  {
+    ok(RiTa.env() == RiTa.JAVA);
+  }
+  
+  @Test
   public void testDistance()
   {
     equal(1, RiTa.distance(1, 3, 2, 3));

@@ -15,6 +15,8 @@ public class RiTa implements Constants
 { 
   public final static String VERSION = "##version##";
 
+  public static final int JAVA = 1, JS = 2, NODEJS = 3;
+
   public static boolean callbacksDisabled = false;
   
   private static boolean INITD = false;
@@ -78,19 +80,16 @@ public class RiTa implements Constants
     return getPosTags(tokenize(s), useWordnetTags);
   }
   
-  /** 
-   * Returns a copy of the string, with leading and trailing whitespace omitted. 
-   */
+  public static int env() {
+    
+    return JAVA;
+  }
+  
   public static String trim(String s) {
     
     return s.trim(); 
   }
-  
-  /**
-   * Returns the # of words in the String according to the default tokenizer.
-   * @param s the string to analyze
-   * @return int
-   */
+
   public static int getWordCount(String s)  { 
     return RiTa.tokenize(s).length;
   }
