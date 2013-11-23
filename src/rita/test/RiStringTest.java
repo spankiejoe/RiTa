@@ -48,7 +48,7 @@ public class RiStringTest implements Constants
       ("Mom & Dad, waiting for the car, ate a steak.").analyze().features();
     
     ok(features);
-    System.out.println(features);
+    //System.out.println(features);
     equal(features.get(PHONEMES),  "m-aa-m & d-ae-d , w-ey-t-ih-ng f-ao-r dh-ax k-aa-r , ey-t ey s-t-ey-k .");
     equal(features.get(SYLLABLES), "m-aa-m & d-ae-d , w-ey-t/ih-ng f-ao-r dh-ax k-aa-r , ey-t ey s-t-ey-k .");
     equal(features.get(STRESSES),  "1 & 1 , 1/0 1 0 1 , 1 1 1 .");
@@ -218,7 +218,7 @@ public class RiStringTest implements Constants
     String ph = rs.get(RiTa.PHONEMES); // TODO
     String sy = rs.get(RiTa.SYLLABLES);
     String st = rs.get(RiTa.STRESSES);
-    System.out.println(ph);
+    //System.out.println(ph);
     equal(ph, "dh-ax l-ae-g-ih-n d-r-ae-g-ax-n");
     equal(sy, "dh-ax l-ae/g-ih-n d-r-ae-g/ax-n");
     // in RITAJS equal(sy, "dh-ax l-ae/g-ih-n d-r-ae-g/ax-n");
@@ -591,7 +591,7 @@ public class RiStringTest implements Constants
     result = rs.pos();
     answer = new String[] { "ex", "vbz", "dt", "nn", "." };
     //System.out.println(RiTa.asList(result));
-    if (!result[2].equals("dt")) {
+    if (false && !result[2].equals("dt")) {
       System.out.println("==========================");
       System.out.println(RiTa.asList(result));
       System.out.println(rs.features());

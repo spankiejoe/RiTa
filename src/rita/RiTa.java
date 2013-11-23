@@ -379,7 +379,7 @@ public class RiTa implements Constants
   }
   
   
-  /** Delegates to the default sentencer parser to split <code>text</code> into sentences */
+  /** Delegates to the default sentence-parser to split <code>text</code> into sentences */
   public static String[] splitSentences(String text) {
     return Splitter.getInstance().splitSentences(text);
   }
@@ -636,7 +636,7 @@ public class RiTa implements Constants
   public static float random() { 
     if (internalRandom == null) 
       internalRandom = new Random();
-    return (float) internalRandom.nextFloat();
+    return internalRandom.nextFloat();
   } 
   protected static Random internalRandom;
 
@@ -695,6 +695,16 @@ public class RiTa implements Constants
     internalRandom.setSeed(seed);
   }
   
+  private static String escapeHTML(String s) {
+    
+    return EntityLookup.getInstance().escape(s);
+  }
+  
+  public static String unescapeHTML(String s) { // TODO: add to reference?
+    
+    return EntityLookup.getInstance().unescape(s);
+  }
+  
   /*
    * Only relevant in the javascript version of RiTa
    */
@@ -709,17 +719,36 @@ public class RiTa implements Constants
     return (String[])l.toArray(new String[l.size()]);
   }
   
-  /** 
-   * Calls 'methodName' on 'callee' Object with args via reflection
-   * @return return value of method or null on error.
-   * @exclude
-   */
-  public static Object invoke(Object callee, 
-    String methodName, Class[] argTypes, Object[] args)
+  public static Object invoke(Object callee, String methodName, Class[] argTypes, Object[] args)
   { 
     //System.out.println("INVOKE: "+callee.getClass()+"."+methodName+"(types="+asList(argTypes)+", vals="+asList(args)+")");      
     return _invoke(callee, _findMethod(callee, methodName, argTypes, true), args);
   }
+
+  public static Object invoke(Object callee, String methodName)
+  { 
+    return invoke(callee, methodName, null, null);    
+  }
+  
+  public static Object invoke(Object callee, String methodName, Object[] args)
+  { 
+    if (args == null) return invoke(callee, methodName);    
+    Class[] argTypes = new Class[args.length];
+    for (int i = 0; i < args.length; i++)  {
+      argTypes[i] = args[i].getClass();  
+      if (argTypes[i]==Integer.class)
+        argTypes[i] = Integer.TYPE;
+      else if (argTypes[i]==Boolean.class)
+        argTypes[i] = Boolean.TYPE;
+      else if (argTypes[i]==Float.class)
+        argTypes[i] = Float.TYPE;
+      else if (argTypes[i]==Double.class)
+        argTypes[i] = Double.TYPE;
+      else if (argTypes[i]==Character.class)
+        argTypes[i] = Character.TYPE; 
+    }
+    return invoke(callee, methodName, argTypes, args);
+  }   
   
   public static Object _invoke(Object callee, Method m, Object[] args)
   {
