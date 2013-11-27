@@ -695,7 +695,7 @@ public class RiTa implements Constants
     internalRandom.setSeed(seed);
   }
   
-  private static String escapeHTML(String s) {
+  private static String escapeHTML(String s) { // problem?
     
     return EntityLookup.getInstance().escape(s);
   }
