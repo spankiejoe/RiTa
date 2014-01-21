@@ -2,15 +2,14 @@
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.util.*;
 import java.util.regex.Pattern;
 
 import processing.core.*;
-
+import processing.opengl.PGraphics3D;
+import processing.opengl.PGraphicsOpenGL;
 import rita.render.*;
 import rita.support.*;
-
 import static rita.support.Constants.EventType.*;
 
 /**
@@ -35,7 +34,6 @@ public class RiText implements RiTextIF
   protected static boolean behaviorWarningsDisabled;
   public static boolean callbacksDisabled = false;
   
-  protected static Boolean rendering3D;
   public static Map fonts;
 
   // Members ============================================================
@@ -647,8 +645,7 @@ public class RiText implements RiTextIF
 
   /**
    * Returns true if we are rendering in 3D, else false
-   */
-  static boolean is3D(PGraphics p)
+  static boolean is3D(PGraphics p) // OLD version
   {
     if (p instanceof PGraphicsJava2D) // for PDF renderer
       return false;
@@ -661,8 +658,13 @@ public class RiText implements RiTextIF
         rendering3D = new Boolean(!(p instanceof PGraphicsJava2D));
     }
     return rendering3D.booleanValue();
-  }
+  }   */
 
+  static boolean is3D(PGraphics p)
+  {
+    return (p instanceof PGraphics3D); // ??
+  }
+  
   protected void drawBoundingBox(PGraphics p)
   {
     if (bbFillA <= 0) 

@@ -827,7 +827,7 @@ public class RiTa implements Constants
     catch (NoSuchMethodException e)
     {
       throw new RiTaException("Method not found: " +
-          callee.getClass().getName()+"."+methodName+"()");      
+          callee.getClass().getName()+"."+methodName+"()", e);      
     }
   
     return m;
