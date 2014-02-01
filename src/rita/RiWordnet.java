@@ -52,8 +52,8 @@ import rita.wordnet.jwnl.dictionary.FileBackedDictionary;
  * are no entries for the relation type being sought.
  * 
  * <p>
- * For more info on the meaning of various wordnet concepts (synset, sense,
- * hypernym, etc), see: {@link http://wordnet.princeton.edu/gloss}
+ * For more info on the meaning of various wordnet concepts (synset, sense, hypernym, etc),
+ * see: {@link http://wordnet.princeton.edu/gloss}
  * 
  * <p>
  * See the accompanying documentation for license information

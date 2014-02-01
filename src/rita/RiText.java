@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import processing.core.*;
 import processing.opengl.PGraphics3D;
-import processing.opengl.PGraphicsOpenGL;
 import rita.render.*;
 import rita.support.*;
 import static rita.support.Constants.EventType.*;
@@ -198,6 +197,9 @@ public class RiText implements RiTextIF
     //return new float[] { x + textWidth() / 2f, y - textHeight() / 2f};
   }
   
+  /**
+   * Returns the current default font
+   */
   public static final PFont defaultFont(PApplet p)
   {
     //System.out.println("_defaultFont("+CREATE_FONT+")");
@@ -1176,7 +1178,7 @@ public class RiText implements RiTextIF
     // use the copy to fade out
     textToCopy = RiText.copy(this);
     //textToCopy.fadeOut(seconds);
-    textToCopy._fadeOut(seconds, 0, false, TextToCopy);
+    textToCopy._fadeOut(seconds, 0, false, Internal);
 
     // and use 'this' to fade in
     this.text(newText);
@@ -1363,19 +1365,6 @@ public class RiText implements RiTextIF
     return loadFont(fontFileName, -1);
   }
 
-  protected static PFont fontFromStream(InputStream is, String name)
-  {
-    // System.out.println("fontFromStream("+name+")");
-    try
-    {
-      PFont pFont = new PFont(is);
-      return pFont;
-    }
-    catch (IOException e)
-    {
-      throw new RiTaException("creating font from stream: " + is + " with name=" + name);
-    }
-  }
 
   /**
    * Returns the font specified after loading it and setting the current font
@@ -1393,12 +1382,20 @@ public class RiText implements RiTextIF
     PFont pf = checkFontCache(fontFileName, size);
     if (pf == null)
     {
+      InputStream is = null;
+      
       // try the filesystem...
       try
-      {
-        // System.out.println("looking for font: "+fontFileName);
-        InputStream is = RiTa.openStream(fontFileName);
-        pf = fontFromStream(is, fontFileName);
+      {  
+        if (p != null)  {
+            //System.out.println("RiText._loadFont() -> Trying: "+fontFileName);
+            is = p.createInput(fontFileName);
+        }
+        
+        if (is == null)
+          is = RiTa.openStream(fontFileName);
+        
+        pf = new PFont(is);
       }
       catch (Throwable e)
       {
@@ -1406,6 +1403,13 @@ public class RiText implements RiTextIF
             + "sure that the font\nhas been copied to the data folder"+
             " of your sketch\nError="+ e.getMessage();
         throw new RiTaException(errStr);
+      }
+      finally {
+        if (is != null)
+          try {
+            is.close();
+          }
+          catch (IOException e) {}
       }
       cacheFont(fontFileName, size, pf); // add to cache
     }
@@ -1855,15 +1859,14 @@ public class RiText implements RiTextIF
    * 
    * @param fileName
    *          located in data directory
-   */
   protected static RiText[] loadStrings(PApplet p, String fileName)
   {
-    String[] lines = RiTa.loadStrings(/*p, */fileName);
+    String[] lines = RiTa.loadStrings(fileName);
     RiText[] rts = new RiText[lines.length];
     for (int i = 0; i < lines.length; i++)
       rts[i] = new RiText(p, lines[i]);
     return rts;
-  }
+  }*/
 
   /**
    * Pops the last value off the array, disposes it, and returns the new array
@@ -2740,7 +2743,16 @@ public class RiText implements RiTextIF
 
   public static RiText[] createLines(PApplet p, String txt, float x, float y)
   {
-    return createLines(p, txt, x, y, p.width-x, Float.MAX_VALUE);
+    float maxWidth = p.width;
+    switch (RiText.defaults.alignment) {
+      case RiText.LEFT:
+        maxWidth = p.width - x;
+        break;
+      case RiText.RIGHT:
+        maxWidth = p.width - (p.width - x);
+        break;
+    }
+    return createLines(p, txt, x, y, maxWidth, Float.MAX_VALUE);
   }
 
   public static RiText[] createLines(PApplet p, String txt, float x, float y, float w)
@@ -2766,25 +2778,22 @@ public class RiText implements RiTextIF
   public static final RiText[] createLines(PApplet p, String txt, float x, float y, float w, float h, PFont pf, float lead)
   {
     if (txt == null || txt.length() == 0) return EMPTY_ARRAY;
-    rita.render.PageLayout rp = new PageLayout(p, new Rect(x, y, w, h), p.width, p.height);
+    PageLayout rp = new PageLayout(p, new Rect(x, y, w, h), p.width, p.height);
     rp.paragraphIndent = defaults.paragraphIndent;
-    RiTextIF[] rxts = rp.layout(pf, txt, lead);
-    //RiText[] result = new RiText[rxts.length];
-    //for (int i = 0; i < result.length; i++)
-      //result[i] = (RiText) rxts[i];
-    return (RiText[])rxts;
+    return (RiText[])rp.layout(pf, txt, lead);
   }
   
   // arrays
 
   public static final RiText[] createLines(PApplet p, String[] lines, float x, float y)
   {    
-    return createLines(p, lines, x, y, Float.MAX_VALUE);
+    PFont pf = defaultFont(p); // no width, so respect the line-breaks in the array
+    return layoutArray(p, pf, lines, x, y, Float.MAX_VALUE, computeLeading(pf)); 
   }
   
   public static final RiText[] createLines(PApplet p, String[] lines, float x, float y, float w)
   {    
-    return createLines(p, lines, x, y, w, Float.MAX_VALUE, defaultFont(p));
+    return createLines(p, lines, x, y, w, Float.MAX_VALUE);
   }
   
   public static final RiText[] createLines(PApplet p, String[] lines, float x, float y, float w, float h)
@@ -2794,17 +2803,17 @@ public class RiText implements RiTextIF
   
   public static final RiText[] createLines(PApplet p, String[] lines, float x, float y, float w, float h, PFont pf)
   {    
-    return createLines(p, lines, x, y, w, h, pf, computeLeading(pf));
+    return createLines(p, RiTa.join(lines,SP), x, y, w, h, pf, computeLeading(pf));
   }
   
   public static final RiText[] createLines(PApplet p, String[] lines, float x, float y, float w, float h, float lead)
   {    
-    return createLines(p, lines, x, y, w, h, defaultFont(p), lead);
+    return createLines(p, RiTa.join(lines,SP), x, y, w, h, defaultFont(p), lead);
   }
   
-  public static final RiText[] createLines(PApplet p, String[] lines, float x, float y, float w, float h, PFont pf, float lead) {
+  /*public static final RiText[] createLines(PApplet p, String[] lines, float x, float y, float w, float h, PFont pf, float lead) {
       return layoutArray(p, pf, lines, x, y, h, lead); // width is ignored here
-  }
+  }*/
   
   //////
   
@@ -2842,7 +2851,7 @@ public class RiText implements RiTextIF
 
   public static final RiText[] createWords(PApplet p, String[] lines, float x, float y)
   {
-    return createWords(p, lines, x, y, Float.MAX_VALUE);
+    return linesToWords(createLines(p, lines, x, y)).toArray(EMPTY_ARRAY);
   }
   
   public static final RiText[] createWords(PApplet p, String[] lines, float x, float y, float w)
@@ -2867,7 +2876,7 @@ public class RiText implements RiTextIF
   
   public static final RiText[] createWords(PApplet p, String[] lines, float x, float y, float w, float h, PFont pf, float lead) {
     
-    return linesToWords(createLines(p, lines, x, y, w, h, pf, lead)).toArray(EMPTY_ARRAY);
+    return linesToWords(createLines(p, RiTa.join(lines,SP), x, y, w, h, pf, lead)).toArray(EMPTY_ARRAY);
   }  
 
   //////
@@ -2906,7 +2915,7 @@ public class RiText implements RiTextIF
   
   public static final RiText[] createLetters(PApplet p, String[] lines, float x, float y)
   {    
-    return createLetters(p,  lines, x, y, Float.MAX_VALUE);
+    return linesToLetters(createLines(p, lines, x, y)).toArray(EMPTY_ARRAY);
   }
   
   public static final RiText[] createLetters(PApplet p, String[] lines, float x, float y, float w)
@@ -2931,7 +2940,7 @@ public class RiText implements RiTextIF
   
   public static final RiText[] createLetters(PApplet p, String[] lines, float x, float y,  float w, float h, PFont pf, float lead)
   {
-    return linesToLetters(createLines(p, lines, x, y, w, h, pf, lead)).toArray(EMPTY_ARRAY);
+    return linesToLetters(createLines(p, RiTa.join(lines,SP), x, y, w, h, pf, lead)).toArray(EMPTY_ARRAY);
   }
   
   //////

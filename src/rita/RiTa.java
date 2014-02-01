@@ -39,9 +39,9 @@ public class RiTa implements Constants
   }
   
   // METHODS ///////////////////////////////////////////////////////////
-  public static String stem(String s)                 { return Stemmer.getInstance().stem(s); }
   
-  public static String stem(String s, String stemmerType){ return Stemmer.getInstance(stemmerType).stem(s); }
+  public static String stem(String s)                 { return Stemmer.getInstance().stem(s); }
+  public static String stem(String s, String stemmerType) { return Stemmer.getInstance(stemmerType).stem(s); }
 
   public static String conjugate(String s, Map args)  { return getConjugator().handleArgs(args).conjugate(s); }
   public static String getPastParticiple(String s)    { return getConjugator().getPastParticiple(s); }
@@ -733,7 +733,9 @@ public class RiTa implements Constants
   public static Object invoke(Object callee, String methodName, Object[] args)
   { 
     if (args == null) return invoke(callee, methodName);    
+    
     Class[] argTypes = new Class[args.length];
+    
     for (int i = 0; i < args.length; i++)  {
       argTypes[i] = args[i].getClass();  
       if (argTypes[i]==Integer.class)
@@ -747,6 +749,7 @@ public class RiTa implements Constants
       else if (argTypes[i]==Character.class)
         argTypes[i] = Character.TYPE; 
     }
+    
     return invoke(callee, methodName, argTypes, args);
   }   
   
@@ -905,6 +908,10 @@ public class RiTa implements Constants
   }*/
   
   protected static String[] includedFiles = new String[] { "addenda.txt", "bin.gz" };
+
+  private static Class<?> pAppletClass;
+
+  private static boolean pAppletAttempted;
   protected static boolean isIncluded(String fname) {
     for (int i = 0; i < includedFiles.length; i++) {
       if (fname.endsWith(includedFiles[i]))
@@ -913,10 +920,11 @@ public class RiTa implements Constants
     return false;
   }  
   
-  public static InputStream openStream(String streamName) // need to handle URLs here..
+  public static InputStream openStream(String streamName) 
   {
     //System.out.println("RiTa.openStreamLocal("+streamName+")");
-
+    boolean dbug = false;
+    
     try // check for url first  (from PApplet)
     {
       URL url = new URL(streamName);
@@ -941,15 +949,23 @@ public class RiTa implements Constants
       }
    
       //boolean isDefaultFile = isIncluded(guess);       
-      //if (!isDefaultFile && !RiTa.SILENT) 
-        //System.out.print("[INFO] Trying "+guess);
+      if (dbug && !RiTa.SILENT) 
+        System.out.print("[INFO] Trying "+guess);
       
       try {
         is = new FileInputStream(guess);
-        //if (!isDefaultFile&& !RiTa.SILENT) System.out.println("... OK");
+        if (dbug && !RiTa.SILENT)System.out.println("... OK");
       } 
       catch (FileNotFoundException e) {
-        //if (!isDefaultFile&& !RiTa.SILENT) System.out.println("... failed");
+        if (dbug && !RiTa.SILENT) System.out.println("... failed");
+        if (is != null)
+          try
+          {
+            is.close();
+          }
+          catch (IOException e1)
+          {
+          }
       }
       if (is != null) break;
     }
@@ -964,21 +980,25 @@ public class RiTa implements Constants
 
       // by default, data files are exported to the root path of the jar.
       // (not the data folder) so check there first.
-      //if (!RiTa.SILENT)System.out.print("[INFO] Trying data/" + streamName+" as resource");
+      if (dbug && !RiTa.SILENT) System.out.print("[INFO] Trying data/" + streamName+" as resource");
       
       is = cl.getResourceAsStream("data/" + streamName);
       if (is != null) {
+        
         String cn = is.getClass().getName();
+        
         // this is an irritation of sun's java plug-in, which will return
         // a non-null stream for an object that doesn't exist. like all good
         // things, this is probably introduced in java 1.5. awesome!
         // http://dev.processing.org/bugs/show_bug.cgi?id=359
         if (!cn.equals("sun.plugin.cache.EmptyInputStream")) {
-          //if (!RiTa.SILENT) System.out.println("... OK");
+          
+          if (dbug && !RiTa.SILENT) System.out.println("... OK");
+          
           return is;
         }
       }
-      //if (!RiTa.SILENT)System.out.println("... failed");
+      if (dbug && !RiTa.SILENT) System.out.println("... failed");
     }
     
     if (is == null) 
@@ -986,14 +1006,90 @@ public class RiTa implements Constants
     
     return is;
   } 
+
+  /**
+   * Returns true if Processing classes are available, else false 
+   */
+  public static boolean hasProcessing()
+  {
+    return getProcessing() != null;
+  }
   
-  public static String[] loadStrings(String fname)
-  {    
-    return loadStrings(openStream(fname), 100);
+  static Class getProcessing()
+  {
+    if (pAppletClass == null && !pAppletAttempted) { 
+      
+      pAppletAttempted = true;
+      
+      try {
+        pAppletClass = Class.forName("processing.core.PApplet");
+      }
+      catch (Exception e) { }
+    }
+    return pAppletClass;
   }
 
+  public static String[] loadStrings(String fileName)
+  {
+    String[] str = loadStrings(fileName, null);
+    if (str == null) {
+      System.err.println("[WARN] Unable to load: " + fileName + "\n" +
+          "If you are using the Processing IDE, pass 'this' as the 2nd "+
+          "argument:  RiTa.loadStrings("+fileName+", this);");
+    }
+    return str;
+  }
   
-  protected static String[] loadStrings(InputStream input, int numLines) {
+  static String[] loadStrings(String fileName, Object parent)
+  {
+    
+    if (parent != null) {
+
+        Class pclass = getProcessing();
+        
+        if (pclass != null) {
+          
+          if (pclass.isInstance(parent)) {
+
+            PAppletIF pApplet = (PAppletIF)RiDynamic.cast(parent, PAppletIF.class);
+            return pApplet.loadStrings(fileName);
+          }
+          
+          try
+          {
+            parent = RiDynamic.cast(parent, RiTaEventListener.class);
+          }
+          catch (Throwable e)
+          {
+            //System.out.println(e.getMessage());
+          }
+          
+          if (!(parent instanceof RiTaEventListener)) {
+            
+            System.err.println("[WARN] RiTa.loadString(s): Expecting a PApplet"
+              + " as 2nd argument, but found: "+ parent.getClass());
+          }
+        }
+    }
+
+    return loadStrings(openStream(fileName), 100);
+  }
+  
+  static String[] loadStrings(URL url)
+  {    
+    try
+    {
+      return loadStrings(url.openStream(), 100);
+    }
+    catch (IOException e)
+    {
+      throw new RiTaException("Unable to load: "+url,e);
+    }
+  }
+  
+  static String[] loadStrings(InputStream input) { return loadStrings(input, 100); }
+    
+  static String[] loadStrings(InputStream input, int numLines) {
     
     if (input == null) throw new RiTaException("Null input stream!");
     
@@ -1042,56 +1138,117 @@ public class RiTa implements Constants
    * contents into a single String
    * 
    * @return Contents of the file as String
-   */
+
   public static String loadString(String fileName) {
 
     String[] lines = loadStrings(fileName);
-    return RiTa.join(lines,"\n");
-  }
-  
-  // TODO: add a version that takes a callback function (like in RiTimer)
-  public static String loadString(Object parent, String fileName)
-  {
-    if (parent != null && parent instanceof processing.core.PApplet) {
-        
-      Object result = invoke(parent, "loadBytes", 
-            new Class[] { String.class }, new Object[] { fileName });
-        
-        if (result != null && result instanceof String)
-          return (String) result;
-    }
-    else {
-      
-      System.err.println("[WARN] Failed calling PApplet.loadBytes...");
-    }
-    
-    
-    return loadString(fileName);
-  }
-  
-  /*
-   * (Only used as backup method)
-   * Loads a File by name and reads the  contents into a single String
-   * @return Contents of the file as String
-
-  protected static String loadStringOld(PApplet pApplet, String filename) {
-    byte[] bytes = null;
-    if (pApplet != null) {
-      // ok, we're good w' papplet
-      bytes = pApplet.loadBytes(filename);
-    }
-    else  {// uh-oh, who knows?
-      bytes = PApplet.loadBytes(openStreamLocal(filename));
-    }    
-    
-    if (bytes == null)
-      throw new RiTaException("The file '"+filename+"' is missing or inaccessible, " +
-        "make sure the URL is valid or that the file has been added to your data " +
-        "folder and is readable.");  
-    
-    return new String(bytes);
+    return RiTa.join(lines, BN);
   }   */
   
+  public static String loadString(URL url)
+  {
+    return join(loadStrings(url), BN);
+  }
+  
+  public static String loadString(String fileName)
+  {
+    return loadString(fileName, "RiTa.loadString");
+  }
+  
+  public static String loadString(String[] files)
+  {
+    String s = E;
+
+    try
+    {
+      for (int i = 0; i < files.length; i++) 
+        s += loadString(files[i]);
+    }
+    catch (Exception e)
+    {
+      String methodNameForConsole = "RiTa.loadString";
+      String fileName = RiTa.asList(files).toString();
+      printPAppletMessage(methodNameForConsole, fileName);    
+    }
+ 
+    return s;
+  }
+
+  private static void printPAppletMessage(String methodNameForConsole, String fileName)
+  {
+    System.err.println("[WARN] Unable to load: '" +  
+        fileName + "', please double-check the filename.\n" +
+        "If you are using the Processing IDE, pass 'this' as the 2nd "+
+        "argument to "+methodNameForConsole+":\n\n    " +
+        methodNameForConsole+"(\""+fileName+"\", this);\n");
+  }
+  
+  public static String loadString(String[] files, Object parent)
+  {
+    String s = E;
+    for (int i = 0; i < files.length; i++)
+      s += loadString(files[i], parent, false);
+    if (s.length() > 0)
+      fireDataLoaded(files, parent, s);
+    return s;
+  }
+  
+  public static String loadString(URL[] urls)
+  {
+    String s = E;
+    for (int i = 0; i < urls.length; i++)
+      s += loadString(urls[i]);  
+    return s;
+  }
+  
+  static class RiTaLoaderSource { // stub to match JS object
+    public String[] urls;
+    public String name = "RiTaLoader";
+    public RiTaLoaderSource(String[] u) {
+      this.urls = u;
+    }
+    public RiTaLoaderSource(String url) {
+      this.urls = new String[] {url};
+    }
+  }
+  
+  public static String loadString(String fileName, Object parent)
+  {
+    return loadString(fileName, parent, true);
+  }
+  
+  static String loadString(String fileName, Object parent, boolean fireEvent)
+  {
+    String result = join(loadStrings(fileName, parent), BN);
+
+    if (fireEvent && parent != null) 
+      fireDataLoaded(new String[]{ fileName }, parent, result);
+
+    return result;
+  }
+
+  private static boolean fireDataLoaded(String[] urls, Object parent, String result)
+  {
+    return new RiTaEvent(new RiTaLoaderSource(urls), EventType.DataLoaded, result).fire(parent);
+  }
+  
+  static String loadString(String fileName, String methodNameForConsole)
+  {
+    String[] str = null;
+    try
+    {
+      str = loadStrings(openStream(fileName));
+    }
+    catch (RiTaException e)
+    {
+        printPAppletMessage(methodNameForConsole, fileName);
+        
+        return null;
+    }
+    
+    return join(str, BN);
+  }
+
   /** Returns a String holding the current working directory */
   public static String cwd() {
     
@@ -1301,6 +1458,8 @@ public class RiTa implements Constants
 
   public static void main(String[] args)
   {
+    System.out.println(loadStrings("pulp.json"));
+    
     //PApplet.loadBytes("/User/dhowe/Desktop/times-24.json");
     if (1==1) return;
     

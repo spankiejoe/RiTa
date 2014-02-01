@@ -1,6 +1,7 @@
 package rita;
 
 import java.io.PrintStream;
+import java.net.URL;
 import java.util.*;
 
 import rita.support.Constants;
@@ -45,12 +46,19 @@ public class RiMarkov implements Constants
   protected boolean useSmoothing, ignoreCase, allowDuplicates, printIgnoredText = false;
   protected boolean removeQuotations = true, sentenceAware = true, addSpaces = true, profile = true;
 
+  private Object parent;
+
   /**
    * Construct a sentence-generating Markov chain (or n-gram) model
    */
   public RiMarkov(int nFactor)
   {
     this(nFactor, true, true);
+  }
+  
+  public RiMarkov(Object parent, int nFactor)
+  {
+    this(parent, nFactor, true, true);
   }
 
   /**
@@ -61,24 +69,152 @@ public class RiMarkov implements Constants
   {
     this(nFactor, recognizeSentences, true);
   }
+  
+  public RiMarkov(Object parent, int nFactor, boolean recognizeSentences)
+  {
+    this(parent, nFactor, recognizeSentences, true);
+  }
 
+  public RiMarkov(int nFactor, boolean recognizeSentences, boolean allowDuplicates) {
+    
+    this(null, nFactor, recognizeSentences, allowDuplicates);
+  }
+  
   /**
    * Construct a sentence-generating Markov chain (or n-gram) model and set its
    * n-Factor and whether it will attempt to recognize (English) sentences, and
    * allow duplicates in its output
    */
-  public RiMarkov(int nFactor, boolean recognizeSentences, boolean allowDuplicates)
+  public RiMarkov(Object parent, int nFactor, boolean recognizeSentences, boolean allowDuplicates)
   {
     if (nFactor < 1)
       throw new RiTaException("N-factor must be > 0");
+    
+    this.parent = parent;
     this.nFactor = nFactor;
     this.sentenceAware = recognizeSentences;
     this.allowDuplicates = allowDuplicates;
     this.root = TextNode.createRoot(ignoreCase);
   }
 
-  // METHODS ----------------------------------------------------------
+  // loadFrom  ----------------------------------------------------------
 
+  public RiMarkov loadFrom(String url)
+  {
+    return loadFrom(url, 1, null, null);
+  }
+  
+  public RiMarkov loadFrom(URL url)
+  {
+    return loadFrom(url, 1, null);
+  }
+  
+  public RiMarkov loadFrom(String url, int multiplier)
+  {
+    return loadFrom(url, multiplier, null, null);
+  }
+  
+  public RiMarkov loadFrom(URL url, int multiplier)
+  {
+    return loadFrom(url, multiplier, null);
+  }
+
+  public RiMarkov loadFrom(URL url, int multiplier, String regex)
+  {
+    return loadText(RiTa.loadString(url), multiplier, regex);
+  }
+  
+  public RiMarkov loadFrom(String url, int multiplier, String regex)
+  {
+    return this.loadFrom(url, multiplier, regex, null);
+  }
+  
+  public RiMarkov loadFrom(URL[] urls)
+  {
+    for (int i = 0; i < urls.length; i++)
+      this.loadFrom(urls[i], 1, null);
+    
+    return this;
+  }
+  
+  public RiMarkov loadFrom(String[] urls)
+  {
+    return this.loadFrom(urls, 1, null, null);
+  }
+  
+  public RiMarkov loadFrom(URL[] urls, int multiplier)
+  {
+    for (int i = 0; i < urls.length; i++)
+      this.loadFrom(urls[i], multiplier, null);
+    
+    return this;
+  }
+  
+  public RiMarkov loadFrom(String[] urls, int multiplier)
+  {
+    return this.loadFrom(urls, multiplier, null, null);
+  }
+  
+  public RiMarkov loadFrom(URL[] urls, int multiplier, String regex) // impl
+  {
+    for (int i = 0; i < urls.length; i++)
+      this.loadFrom(urls[i], multiplier, regex);
+    
+    return this;
+  }
+  
+  public RiMarkov loadFrom(String[] urls, int multiplier, String regex)
+  {
+    return this.loadFrom(urls, multiplier, regex, null);
+  }
+  
+  // -----
+  
+  public RiMarkov loadFrom(String url, Object aParent)
+  {
+    return loadFrom(url, 1, null, aParent);
+  }
+  
+  public RiMarkov loadFrom(String url, int multiplier, Object aParent)
+  {
+    return loadFrom(url, multiplier, null, aParent);
+  }
+  
+  public RiMarkov loadFrom(String url, int multiplier, String regex, Object aParent)
+  {
+    if (parent == null)
+      return loadText(loadString(url), multiplier, regex);
+    
+    return loadText(RiTa.loadString(url, aParent), multiplier, regex);
+  }
+  
+  public RiMarkov loadFrom(String[] urls, Object aParent)
+  {
+    for (int i = 0; i < urls.length; i++)
+      this.loadFrom(urls[i], 1, null, aParent);
+    
+    return this;
+  }
+  
+  public RiMarkov loadFrom(String[] urls, int multiplier, Object aParent)
+  {
+    for (int i = 0; i < urls.length; i++)
+      this.loadFrom(urls[i], multiplier, null, aParent);
+    
+    return this;
+  }
+  
+  public RiMarkov loadFrom(String[] urls, int multiplier, String regex, Object aParent)
+  {
+    
+    for (int i = 0; i < urls.length; i++)
+      this.loadFrom(urls[i], multiplier, regex, aParent);
+    
+    return this;
+  }
+
+  // METHODS ----------------------------------------------------------
+  
   public boolean printingIgnoredText()
   {
     return printIgnoredText;
@@ -314,19 +450,20 @@ public class RiMarkov implements Constants
   /**
    * Load a text file into the model -- if using Processing, the file should be
    * in the sketch's data folder.
-   * 
+   * @param pApplet
+   *          pass 'this' if using Processing, otherwise null should be fine
    * @param fileName
    *          name of file to load
    * @param multiplier
    *          weighting for tokens in the file;<br>
    *          a weight of 3 is equivalent to loading that file 3 times and gives
    *          each token 3x the probability of being chosen during generation.
-   */
-  public RiMarkov loadFile(String fileName, int multiplier)
+
+  public RiMarkov loadFile(Object pApplet, String fileName, int multiplier)
   {
     long done, start = System.currentTimeMillis();
 
-    String contents = RiTa.loadString(fileName);
+    String contents = RiTa.loadString(pApplet, fileName);
 
     if (profile)
     {
@@ -346,12 +483,7 @@ public class RiMarkov implements Constants
         System.out.println("[INFO] Loaded data into model in " + done / 1000d + "s");
     }
     return this;
-  }
-
-  public RiMarkov loadFile(String fileName)
-  {
-    return this.loadFile(fileName, 1);
-  }
+  }   */
 
   public RiMarkov loadText(String rawText)
   {
@@ -390,13 +522,18 @@ public class RiMarkov implements Constants
    */
   public RiMarkov loadText(String rawText, int multiplier, String regex)
   {
+    if (rawText == null || rawText.length() < 1) return this;
+    
     if (sentenceAware)
     {
       loadSentences(RiTa.splitSentences(rawText), multiplier, regex);
+      
       // System.out.println(sentenceList);
       // System.out.println(sentenceStarts);
+      
       if (sentenceStarts.size() > 0)
         return this;
+      
       System.err.println("[WARN] No sentences found, parsing as tokens");
     }
     return loadTokens(RiTa.tokenize(rawText, regex), multiplier);
@@ -419,12 +556,17 @@ public class RiMarkov implements Constants
    */
   public RiMarkov loadTokens(String[] tokens, int multiplier)
   {
+    if (tokens == null || tokens.length < 1) return this;
+
     // setAddSpaces(addSpacesInBetween);
 
+    multiplier = Math.max(multiplier, 1);
+    
     for (int m = 0; m < multiplier; m++)
     {
       String[] toAdd;
       tokenCount += tokens.length;
+      
       for (int k = 0; k < tokens.length; k++)
       {
         toAdd = new String[nFactor];
@@ -822,7 +964,8 @@ public class RiMarkov implements Constants
   public RiMarkov loadSentences(String[] sentences, int multiplier, String regex)
   {
     //System.out.println("RiMarkov.loadSentences("+sentences.length+")");
-
+    multiplier = Math.max(multiplier, 1); 
+    
     List allWords = new ArrayList();
 
     if (sentenceStarts == null)
@@ -1162,26 +1305,28 @@ public class RiMarkov implements Constants
   protected void addSentenceSequence(String[] toAdd)
   {
     // System.out.println(Util.asList(toAdd));
+    
     TextNode node = root;
     for (int i = 0; i < toAdd.length; i++)
     {
       if (toAdd[i] == null)
         continue;
+      
       // System.out.println("  "+i+") "+toAdd[i]);
+      
       if (node.token() != null)
       {
         String add = toAdd[i];
         if (add.startsWith(SS_DELIM))
         {
-          add = add.substring(SS_DELIM.length()); // awful (use-ristring)
+          add = add.substring(SS_DELIM.length()); // awful (use-RiString)
           TextNode parent = node;
           node = node.addChild(add, useSmoothing ? 2 : 1);
           node.isSentenceStart(true);
           if (parent.isRoot())
           {
             sentenceStarts.add(node.token());
-            // System.out.println("adding Starter: "+node.getToken()+
-            // " "+toAdd[i+1]);
+            // System.out.println("adding Starter: "+node.getToken()+ " "+toAdd[i+1]);
           }
         }
         else
@@ -1208,10 +1353,14 @@ public class RiMarkov implements Constants
    * RiTaException("recognizeSentences must be set *before* loading any text.");
    * this.recognizeSentences = recognizeSentences; return this; }
    */
-
   public boolean isIgnoringCase()
   {
     return this.ignoreCase;
+  }
+  
+  public boolean ready()
+  {
+    return this.size() > 0;
   }
 
   public RiMarkov loadSentences(String[] sentences)
@@ -1244,6 +1393,19 @@ public class RiMarkov implements Constants
   public boolean removeQuotations()
   {
     return removeQuotations;
+  }
+  
+  static String loadString(String fileName)
+  {
+    return RiTa.loadString(fileName, "RiMarkov.loadFrom");
+  }
+  
+  public static void main(String[] args)
+  {
+    String sample = "One reason people lie is to achieve personal power. Achieving personal power is helpful for one who pretends to be more confident than he really is. For example, one of my friends threw a party at his house last month. He asked me to come to his party and bring a date. However, I did not have a girlfriend. One of my other friends, who had a date to go to the party with, asked me about my date. I did not want to be embarrassed, so I claimed that I had a lot of work to do. I said I could easily find a date even better than his if I wanted to. I also told him that his date was ugly. I achieved power to help me feel confident; however, I embarrassed my friend and his date. Although this lie helped me at the time, since then it has made me look down on myself.";
+    String[] tokens = RiTa.tokenize(sample);
+    System.out.println(new RiMarkov(3,false).loadTokens(tokens).size());
+    System.out.println(new RiMarkov(3,true).loadTokens(tokens).size());
   }
   
 }// end

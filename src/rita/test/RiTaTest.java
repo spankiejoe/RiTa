@@ -5,6 +5,8 @@ import static rita.support.QUnitStubs.deepEqual;
 import static rita.support.QUnitStubs.equal;
 import static rita.support.QUnitStubs.ok;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +36,80 @@ public class RiTaTest
   public void loadString_Url()
   {
     String s = RiTa.loadString("http://rednoise.org/testfiles/kafka.txt");
+    ok(s != null && s.length() > 100000);
+  }
+  
+  @Test
+  public void loadString_FileAsUrl()
+  {
+    URL url = null;
+    try
+    {
+      url = new URL("file:///Library/WebServer/Documents/testfiles/kafka.txt");
+    }
+    catch (MalformedURLException e)
+    {
+      e.printStackTrace();
+    }
+    String s = RiTa.loadString(url);
+    ok(s != null && s.length() > 100000);
+  }
+  
+  @Test
+  public void loadString_RelFileMulti()
+  {
+    String[] files = { "sentence1.json", "sentence2.json" };
+    String s = RiTa.loadString(files, null);
+    ok(s != null && s.length() > 500);
+  }
+  
+  @Test
+  public void loadString_AbsFileMulti()
+  {
+    String[] files = { "sentence1.json", "sentence2.json" };
+    String s = RiTa.loadString(files, null);
+    ok(s != null && s.length() > 500);
+  }
+  
+  @Test
+  public void loadString_UrlStrMulti()
+  {
+    String[] files = {  
+        "http://localhost/testfiles/sentence1.json",
+        "http://localhost/testfiles/sentence2.json" 
+    };
+    String s = RiTa.loadString(files, null);
+    ok(s != null && s.length() > 500);
+  }
+  
+  @Test
+  public void loadString_UrlMulti()
+  {
+    URL[] urls = null;
+    
+    try {
+      urls = new URL[] {  
+        new URL("http://localhost/testfiles/sentence1.json"),
+        new URL("http://localhost/testfiles/sentence2.json") 
+    };} catch (MalformedURLException e){e.printStackTrace();}
+    
+    String s = RiTa.loadString(urls);
+    ok(s != null && s.length() > 500);
+  }
+  
+  @Test
+  public void loadUrl()
+  {
+    URL url = null;
+    try
+    {
+      url = new URL("http://rednoise.org/testfiles/kafka.txt");
+    }
+    catch (MalformedURLException e)
+    {
+      e.printStackTrace();
+    }
+    String s = RiTa.loadString(url);
     ok(s != null && s.length() > 100000);
   }
   
