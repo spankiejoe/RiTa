@@ -105,10 +105,15 @@ public class RiWordNet implements Wordnet
    * @param wordnetInstallDir
    *          home directory for a pre-installed Wordnet installation.
    */
-  public RiWordNet(String wordnetInstallDir)
+  public RiWordNet(String wordnetInstallDir, Object parent)
   {
     this(wordnetInstallDir, getDefaultConfFile());
   }
+  
+  public RiWordNet(String wordnetInstallDir) {
+    this(wordnetInstallDir, null);
+  }
+
 
   private RiWordNet(String wordnetHome, String confFile)
   {

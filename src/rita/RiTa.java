@@ -1155,41 +1155,71 @@ public class RiTa implements Constants
     return loadString(fileName, "RiTa.loadString");
   }
   
-  public static String loadString(String[] files)
+  static String loadString(String[] files)
   {
+    return loadString(files, "RiTa.loadString");
+  }
+  
+  static String loadString(String[] files, String methodNameForConsole)
+  {
+    //System.out.println("RiTa.loadString("+files.length+", "+methodNameForConsole+")");
     String s = E;
 
     try
     {
-      for (int i = 0; i < files.length; i++) 
-        s += loadString(files[i]);
+      for (int i = 0; i < files.length; i++) {
+        String content = loadString(files[i], null);
+        System.out.println(i+") "+content);
+        if (content == null) 
+          throw new RiTaException("Unable to load: "+files[i]);
+        s += content;
+      }
     }
-    catch (Exception e)
+    catch (Throwable e)
     {
-      String methodNameForConsole = "RiTa.loadString";
-      String fileName = RiTa.asList(files).toString();
-      printPAppletMessage(methodNameForConsole, fileName);    
+      printPAppletMessage(methodNameForConsole, files);    
     }
  
     return s;
   }
 
-  private static void printPAppletMessage(String methodNameForConsole, String fileName)
+  private static void printPAppletMessage(String methodName, String file)
   {
-    System.err.println("[WARN] Unable to load: '" +  
-        fileName + "', please double-check the filename.\n" +
-        "If you are using the Processing IDE, pass 'this' as the 2nd "+
-        "argument to "+methodNameForConsole+":\n\n    " +
-        methodNameForConsole+"(\""+fileName+"\", this);\n");
+    if (methodName != null) {
+      System.err.println("[WARN] Unable to load: '" +  file + "', please double-check "
+        + "the filename.\nIf you are using the Processing IDE, pass 'this' as the 2nd "
+        + "argument to "+methodName+":\n\n    " +methodName+"("+file+", this);\n");
+    }
+  }
+  
+  private static void printPAppletMessage(String methodName, String[] files)
+  {
+    if (methodName != null) {
+      String fs = E;
+      for (int i = 0; i < files.length; i++) {
+        fs += DQ + files[i] + DQ;
+        if (i<files.length-1) fs += ", ";
+      }
+      System.err.println("[WARN] Unable to load: '" +  RiTa.asList(files) + "', please double-check "
+        + "the filename.\nIf you are using the Processing IDE, pass 'this' as the 2nd "
+        + "argument to "+methodName+":\n\n    " +methodName+"(new String[]{"+fs+"}, this);\n");
+    }
   }
   
   public static String loadString(String[] files, Object parent)
   {
+    if (parent == null) {
+    
+      return loadString(files);
+    }
+    
     String s = E;
     for (int i = 0; i < files.length; i++)
       s += loadString(files[i], parent, false);
+    
     if (s.length() > 0)
       fireDataLoaded(files, parent, s);
+    
     return s;
   }
   
@@ -1241,8 +1271,7 @@ public class RiTa implements Constants
     }
     catch (RiTaException e)
     {
-        printPAppletMessage(methodNameForConsole, fileName);
-        
+        printPAppletMessage(methodNameForConsole, "\""+fileName+"\"");
         return null;
     }
     

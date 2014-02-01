@@ -35,7 +35,7 @@ public class RiTaTest
   @Test
   public void loadString_Url()
   {
-    String s = RiTa.loadString("http://rednoise.org/testfiles/kafka.txt");
+    String s = RiTa.loadString("http://localhost/testfiles/kafka.txt");
     ok(s != null && s.length() > 100000);
   }
   
@@ -103,7 +103,7 @@ public class RiTaTest
     URL url = null;
     try
     {
-      url = new URL("http://rednoise.org/testfiles/kafka.txt");
+      url = new URL("http://localhost/testfiles/kafka.txt");
     }
     catch (MalformedURLException e)
     {

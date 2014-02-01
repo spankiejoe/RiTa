@@ -97,21 +97,11 @@ public class RiMarkov implements Constants
     this.root = TextNode.createRoot(ignoreCase);
   }
 
-  // loadFrom  ----------------------------------------------------------
+  // loadFrom(URL)  ----------------------------------------------------------
 
-  public RiMarkov loadFrom(String url)
-  {
-    return loadFrom(url, 1, null, null);
-  }
-  
   public RiMarkov loadFrom(URL url)
   {
     return loadFrom(url, 1, null);
-  }
-  
-  public RiMarkov loadFrom(String url, int multiplier)
-  {
-    return loadFrom(url, multiplier, null, null);
   }
   
   public RiMarkov loadFrom(URL url, int multiplier)
@@ -119,53 +109,58 @@ public class RiMarkov implements Constants
     return loadFrom(url, multiplier, null);
   }
 
-  public RiMarkov loadFrom(URL url, int multiplier, String regex)
+  public RiMarkov loadFrom(URL url, int multiplier, String regex) // impl
   {
     return loadText(RiTa.loadString(url), multiplier, regex);
   }
   
-  public RiMarkov loadFrom(String url, int multiplier, String regex)
-  {
-    return this.loadFrom(url, multiplier, regex, null);
-  }
-  
+  // loadFrom(URLs)  ----------------------------------------------------------
+
   public RiMarkov loadFrom(URL[] urls)
   {
-    for (int i = 0; i < urls.length; i++)
-      this.loadFrom(urls[i], 1, null);
-    
-    return this;
-  }
-  
-  public RiMarkov loadFrom(String[] urls)
-  {
-    return this.loadFrom(urls, 1, null, null);
+    return this.loadFrom(urls, 1, null); 
   }
   
   public RiMarkov loadFrom(URL[] urls, int multiplier)
   {
-    for (int i = 0; i < urls.length; i++)
-      this.loadFrom(urls[i], multiplier, null);
-    
-    return this;
-  }
-  
-  public RiMarkov loadFrom(String[] urls, int multiplier)
-  {
-    return this.loadFrom(urls, multiplier, null, null);
+    return this.loadFrom(urls, multiplier, null); 
   }
   
   public RiMarkov loadFrom(URL[] urls, int multiplier, String regex) // impl
   {
-    for (int i = 0; i < urls.length; i++)
-      this.loadFrom(urls[i], multiplier, regex);
-    
-    return this;
+    return loadText(RiTa.loadString(urls), multiplier, regex);
+  } 
+  
+  // loadFrom(Str)  ----------------------------------------------------------
+
+  public RiMarkov loadFrom(String url)
+  {
+    return loadFrom(url, 1, null, this.parent);
+  }
+  
+  public RiMarkov loadFrom(String url, int multiplier, String regex)
+  {
+    return loadFrom(url, multiplier, regex, this.parent);
+  }
+  
+  public RiMarkov loadFrom(String url, int multiplier)
+  {
+    return loadFrom(url, multiplier, null, this.parent);
+  }
+  
+  public RiMarkov loadFrom(String[] urls)
+  {
+    return this.loadFrom(urls, 1, null, this.parent);
+  }
+
+  public RiMarkov loadFrom(String[] urls, int multiplier)
+  {
+    return this.loadFrom(urls, multiplier, null, this.parent);
   }
   
   public RiMarkov loadFrom(String[] urls, int multiplier, String regex)
   {
-    return this.loadFrom(urls, multiplier, regex, null);
+    return this.loadFrom(urls, multiplier, regex, this.parent);
   }
   
   // -----
@@ -180,37 +175,30 @@ public class RiMarkov implements Constants
     return loadFrom(url, multiplier, null, aParent);
   }
   
-  public RiMarkov loadFrom(String url, int multiplier, String regex, Object aParent)
+  public RiMarkov loadFrom(String url, int multiplier, String regex, Object aParent) // impl
   {
-    if (parent == null)
-      return loadText(loadString(url), multiplier, regex);
-    
+    if (aParent == null)
+      return loadText(RiTa.loadString(url, "RiMarkov.loadFrom"), multiplier, regex);
+
     return loadText(RiTa.loadString(url, aParent), multiplier, regex);
   }
   
   public RiMarkov loadFrom(String[] urls, Object aParent)
   {
-    for (int i = 0; i < urls.length; i++)
-      this.loadFrom(urls[i], 1, null, aParent);
-    
-    return this;
+    return this.loadFrom(urls, 1, aParent); 
   }
   
   public RiMarkov loadFrom(String[] urls, int multiplier, Object aParent)
   {
-    for (int i = 0; i < urls.length; i++)
-      this.loadFrom(urls[i], multiplier, null, aParent);
-    
-    return this;
+    return this.loadFrom(urls, multiplier, null, aParent); 
   }
   
   public RiMarkov loadFrom(String[] urls, int multiplier, String regex, Object aParent)
   {
-    
-    for (int i = 0; i < urls.length; i++)
-      this.loadFrom(urls[i], multiplier, regex, aParent);
-    
-    return this;
+    if (aParent == null)
+      return loadText(RiTa.loadString(urls, "RiMarkov.loadFrom"), multiplier, regex);
+
+    return loadText(RiTa.loadString(urls, aParent), multiplier, regex);
   }
 
   // METHODS ----------------------------------------------------------
@@ -263,8 +251,8 @@ public class RiMarkov implements Constants
 
         mn = nextNodeForList(tokens);
         if (mn == null || mn.token() == null)
-        { // hit the end
-          // System.err.println("FAILED: "+tokens);
+        { 
+          // hit the end
           if (dbug)
             System.out.println("  NULL TOKEN after: " + tokens);
           tokens.clear(); // start over
@@ -395,6 +383,7 @@ public class RiMarkov implements Constants
       s[i] = ((TextNode) it.next()).token();
     return RiTa.untokenize(s);
   }
+  
   public String[] generateTokens(int targetNumber)
   {
     int tries = 0, maxTries = 1000;
@@ -522,6 +511,11 @@ public class RiMarkov implements Constants
    */
   public RiMarkov loadText(String rawText, int multiplier, String regex)
   {
+    
+/*System.out.println("RiMarkov.loadText("+rawText.length()+")");
+if (rawText.length() < 10)
+  System.out.println("RiMarkov.loadText("+rawText+")");*/
+    
     if (rawText == null || rawText.length() < 1) return this;
     
     if (sentenceAware)
@@ -536,6 +530,7 @@ public class RiMarkov implements Constants
       
       System.err.println("[WARN] No sentences found, parsing as tokens");
     }
+    
     return loadTokens(RiTa.tokenize(rawText, regex), multiplier);
   }
 
@@ -1170,9 +1165,9 @@ public class RiMarkov implements Constants
       return false;
     }
     
-    if (!last.matches("[!?.]"))
+    if (!RiTa.SILENT && !last.matches("[!?.]"))
     {
-      System.out.println("Bad last token: '" + last + "' in:\n  " + sent);
+      System.out.println("[WARN] Bad last token: '" + last + "' in:\n  " + sent);
       return false;
     }
     
@@ -1180,7 +1175,8 @@ public class RiMarkov implements Constants
     {
       if (++skippedDups == MAX_DUPLICATE_TO_SKIP)
       {
-        System.err.println("[WARN] Hit skip-maximum (RiMarkov.maxDuplicatesToSkip="
+        if (!RiTa.SILENT)
+          System.err.println("[WARN] Hit skip-maximum (RiMarkov.maxDuplicatesToSkip="
             + MAX_DUPLICATE_TO_SKIP + ") after skipping " + MAX_DUPLICATE_TO_SKIP
             + " duplicates, now allowing duplicates!");
         allowDuplicates = true;
