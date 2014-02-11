@@ -14,8 +14,6 @@ import static rita.support.Constants.EventType.*;
 /**
  * RiTa's text display object. Wraps an instance of RiString to provide utility
  * methods for typography and animation.
- *
- * @example RiTextMoveTo
  */
 public class RiText implements RiTextIF
 {
@@ -2022,16 +2020,26 @@ public class RiText implements RiTextIF
   {
     for (int i = 0; i < instances.size(); i++)
     {
-      RiText rt = (RiText) instances.get(i);
-      rt.draw(p);
+      RiText rt = instances.get(i);
+      if (rt != null)
+        rt.draw(p);
     }
   }
   
-  /**
-   * Draws all (visible) RiText objects
-   */
-  public static final void drawAll() { drawAll(null); }
+  protected static void drawAll(RiText[] rts, PGraphics p)
+  {
+    if (rts == null) return;
+    for (int i = 0; i < rts.length; i++) {
+      if (rts[i] != null)
+        rts[i].draw(p);
+    }
+  }
+  
+  /** Draws all (visible) RiText objects */
+  public static final void drawAll() { drawAll((PGraphics)null); }
 
+  public static final void drawAll(RiText[] rts) { drawAll(rts, null); }
+  
   /**
    * Returns a Map of all the features (key-value pairs) exists for this RiText
    */

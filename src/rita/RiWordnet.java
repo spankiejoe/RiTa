@@ -429,7 +429,6 @@ public class RiWordNet implements Wordnet
    *         RiWordnet.WILDCARD_MATCH
    *         RiWordnet.REGEX_MATCH
    * </pre>
-   * @example SimpleFilterExample.pde
    * @param word
    * @param pos
    * @param filterFlag
@@ -496,7 +495,6 @@ public class RiWordNet implements Wordnet
    *         RiWordnet.WILDCARD_MATCH
    *         RiWordnet.REGEX_MATCH
    * </pre>
-   * @example SimpleFilterExample.pde
    * @param word
    * @param pos
    * @param filterFlag
@@ -556,7 +554,6 @@ public class RiWordNet implements Wordnet
    *         RiWordnet.WILDCARD_MATCH
    *         RiWordnet.REGEX_MATCH
    * </pre>
-   * @example SimpleFilterExample.pde
    * @param word
    * @param pos
    * @param filterFlag
