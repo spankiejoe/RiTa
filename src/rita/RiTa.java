@@ -1133,18 +1133,6 @@ public class RiTa implements Constants
      fileName.matches("^[A-Za-z]:")); // hmmmmm... 'driveA:\\'?
   }
   
-  /**
-   * Loads a file or URL by name and reads the 
-   * contents into a single String
-   * 
-   * @return Contents of the file as String
-
-  public static String loadString(String fileName) {
-
-    String[] lines = loadStrings(fileName);
-    return RiTa.join(lines, BN);
-  }   */
-  
   public static String loadString(URL url)
   {
     return join(loadStrings(url), BN);
@@ -1169,7 +1157,7 @@ public class RiTa implements Constants
     {
       for (int i = 0; i < files.length; i++) {
         String content = loadString(files[i], null);
-        System.out.println(i+") "+content);
+        //System.out.println(i+") "+content);
         if (content == null) 
           throw new RiTaException("Unable to load: "+files[i]);
         s += content;

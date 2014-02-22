@@ -1275,7 +1275,7 @@ public class RiText implements RiTextIF
   /**
    * Returns all existing instances of RiText objects in an array
    */
-  protected static RiText[] getInstances()
+  public static RiText[] getInstances()
   {
     return (RiText[]) instances.toArray(new RiText[instances.size()]);
   }
@@ -2461,7 +2461,7 @@ public class RiText implements RiTextIF
     return this.fontSize;
   }
 
-  public RiTextIF align(int i)
+  public RiText align(int i)
   {
     this.alignment = i;
     return this;
