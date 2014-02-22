@@ -769,6 +769,7 @@ public class RiTa implements Constants
       }
       System.err.println("[WARN] Invoke error on "+RiTa.shortName
         (callee)+"."+m.getName()+"("+asList(args)+")\n  "+_exceptionToString(e));
+      
       throw new RiTaException(e);      
     }
   }
