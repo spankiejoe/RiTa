@@ -105,22 +105,19 @@ public class RiWordNet implements Wordnet
    * @param wordnetInstallDir
    *          home directory for a pre-installed Wordnet installation.
    */
-  public RiWordNet(String wordnetInstallDir, Object parent)
-  {
-    this(wordnetInstallDir, getDefaultConfFile());
-  }
-  
   public RiWordNet(String wordnetInstallDir) {
+    
     this(wordnetInstallDir, null);
   }
+  
+  public RiWordNet(String wnHome, Object parent) {
+    
+    String confFile = getDefaultConfFile();
 
-
-  private RiWordNet(String wordnetHome, String confFile)
-  {
-    this.setWordnetHome(wordnetHome);
+    this.setWordnetHome(wnHome);
 
     if (false && !RiTa.SILENT)
-      System.err.println("RiWordnet.RiWordnet("+ wordnetHome + "," + confFile + ")");
+      System.err.println("RiWordnet.RiWordnet("+ wnHome + "," + confFile + ")");
 
     if (!JWNL.isInitialized())
     {
@@ -131,7 +128,7 @@ public class RiWordNet implements Wordnet
       catch (Exception e)
       {
         throw new WordnetError("Error loading WordNet with $WORDNET_HOME="
-            + wordnetHome + " & CONF_FILE=" + confFile, e);
+            + wnHome + " & CONF_FILE=" + confFile, e);
       }
     }
     

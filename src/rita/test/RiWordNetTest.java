@@ -28,7 +28,7 @@ public class RiWordNetTest
     
     SILENT = false;
     long ts = System.currentTimeMillis();
-    w = new RiWordNet("/WordNet-3.1");
+    w = new RiWordNet("/Users/dhowe/code/WordNet-3.1");
     System.out.println("[INFO] Loaded in "+(System.currentTimeMillis()-ts)+"ms");
   }
   
