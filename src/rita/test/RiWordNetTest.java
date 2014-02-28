@@ -9,13 +9,13 @@ import java.util.*;
 import org.junit.Test;
 
 import rita.RiWordNet;
-import rita.wordnet.WordnetPos;
 import rita.wordnet.jwnl.data.Synset;
 
 /*
  * Compare results to: http://wordnetweb.princeton.edu/perl/webwn
  * 
- * (ALEX)
+ * (KENNY)
+ * TODO: add cases for: w.ignoreCompoundWords(false);
  * TODO: Add all negative cases (where there is no match in db)
  * TODO: Make sure all methods return non-deterministic arrays
  * TODO: Documentation (JSON) for all methods 
@@ -28,12 +28,13 @@ public class RiWordNetTest
     
     SILENT = false;
     long ts = System.currentTimeMillis();
-    w = new RiWordNet("/Users/dhowe/code/WordNet-3.1");
+    w = new RiWordNet("/WordNet-3.1");
+    w.ignoreCompoundWords(true);
     System.out.println("[INFO] Loaded in "+(System.currentTimeMillis()-ts)+"ms");
   }
   
   @Test
-  public void testRiWordnetString() {
+  public void testRiWordNetString() {
     ok(w); // see above
     ok(w.exists("hello"));
   }
@@ -100,11 +101,24 @@ public class RiWordNetTest
 	  String[] result = w.getContains("active", "n", 3);
 	  //println(result);
 	  deepEqual(expected, result);
+	  
 	  String[] expected2 = { "avalokiteshvara", "avalokitesvara" };
 	  String[] result2 = w.getContains("kite", "n", 2);
 	  //printArr(result2);
 	  deepEqual(expected2, result2);
 	  //fail("Not yet implemented");
+	  
+	  w.ignoreCompoundWords(false);
+    String[] expected3 = { "active agent", "active air defense", "active application" };
+    String[] result3 = w.getContains("active", "n", 3);
+    //println(result3);
+    deepEqual(expected3, result3);
+    
+    String[] expected4 = { "avalokiteshvara", "avalokitesvara" };
+    String[] result4 = w.getContains("kite", "n", 2);
+    deepEqual(expected4, result4);
+    w.ignoreCompoundWords(true);
+
   }
 
   @Test
@@ -114,6 +128,8 @@ public class RiWordNetTest
 	  String[] result = w.getContains("active", "n");
 	  //println(result);
 	  deepEqual(expected, result);
+	  
+	  
 	  String[] expected2 = { "avalokiteshvara", "avalokitesvara", "blatherskite", "greenockite", "kitembilla", "melkite", "samarskite" };
 	  String[] result2 = w.getContains("kite", "n");
 	  //println(result2);
@@ -218,19 +234,19 @@ public class RiWordNetTest
   }
 
   @Test
-  public void testFilterIntStringPOSInt()
+  public void testFilterIntStringStringInt()
   {
 	  String[] expected = { "tabbouleh", "tableau", "tabooli"};
-	  String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", WordnetPos.getPos("n"), 3);
+	  String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n", 3);
 	  //println(result);
 	  deepEqual(expected, result);
   }
 
   @Test
-  public void testFilterIntStringPOS()
+  public void testFilterIntStringString()
   {
 	  String[] expected = { "tabbouleh", "tableau", "tabooli", "tepal", "tiepolo", "tipple", "tivoli", "tubful", "tubule", "tupelo", "tuvalu" };
-	  String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", WordnetPos.getPos("n"));
+	  String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n");
 	  //println(result);
 	  deepEqual(expected, result);
   }
@@ -390,7 +406,8 @@ public class RiWordNetTest
   }
 
   @Test
-  public void testGetCommonParents(){
+  public void testGetCommonParents() {
+    
 	  String[] expected = {"clothing", "vesture", "wear", "wearable", "habiliment"};
 	  String[] result = w.getCommonParents("activewear", "beachwear", "n");
 	  //println(w.getSenseIds("search", "v"));
@@ -410,12 +427,23 @@ public class RiWordNetTest
   @Test
   public void testGetSynsetStringString()
   {
-	  String[] expected = {"sportswear"};
-	  String[] result = w.getSynset("activewear", "n");
-	  //println(w.getSenseIds("search", "v"));
-	  //println(result);
-	  deepEqual(expected, result);
-	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
+    String[] result = w.getSynset("medicare", "n");
+    //println(result);
+    deepEqual(null, result);
+    
+    String[] expected = {};
+    result = w.getSynset("health insurance", "n");
+    //println(result);
+    deepEqual(null, result);
+
+    // assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
+    expected = new String[] { "sportswear" };
+    result = w.getSynset("activewear", "n");
+    //println(result);
+
+    //println(w.getSenseIds("search", "v"));
+    
+    deepEqual(expected, result);
   }
 
   @Test
@@ -998,7 +1026,7 @@ public class RiWordNetTest
   }
 
   @Test
-  public void testIsIgnoringCompoundWords()
+  public void testIgnoreCompoundWordsBoolean()
   {
     fail("Not yet implemented");
   }
@@ -1010,7 +1038,7 @@ public class RiWordNetTest
   }
 
   @Test
-  public void testIsIgnoringUpperCaseWords()
+  public void testIgnoreUpperCaseWordsBoolean()
   {
     fail("Not yet implemented");
   }
@@ -1028,25 +1056,20 @@ public class RiWordNetTest
   }
 
   @Test
-  public void testOrFilterIntArrayStringArrayPOSInt()
+  public void testOrFilterIntArrayStringArrayStringInt()
   {
     fail("Not yet implemented");
   }
 
   @Test
-  public void testOrFilterIntArrayStringArrayPOS()
+  public void testOrFilterIntArrayStringArrayString()
   {
     fail("Not yet implemented");
   }
 
-  @Test
-  public void testDispose()
-  {
-    fail("Not yet implemented");
-  }
 
   @Test
-  public void testSetWordnetHome()
+  public void testSetWordNetHome()
   {
     fail("Not yet implemented");
   }
@@ -1073,4 +1096,8 @@ public class RiWordNetTest
    * @After public void tearDown() { w = null; }
    */
 
+  public static void main(String[] args)
+  {  
+    println(new RiWordNet("/WordNet-3.1").ignoreCompoundWords(false).getSynset("medicare", "n"));
+  }
 }

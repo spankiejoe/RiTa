@@ -26,9 +26,7 @@ public class RiTa implements Constants
   
   protected static String[] guesses = { "src/data", "data", "" };
    
-  static {
-    if (!INITD) RiTa.init();
-  }
+  static { if (!INITD) RiTa.init(); }
   
   static void init()
   {
@@ -102,9 +100,7 @@ public class RiTa implements Constants
     Collections.shuffle(tmp);
     int idx = 0;
     for (Iterator i = tmp.iterator(); i.hasNext(); idx++)
-    {
       items[idx] = i.next();      
-    }
   }
   
   /**

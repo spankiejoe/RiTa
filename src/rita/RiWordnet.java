@@ -21,11 +21,11 @@ import rita.wordnet.jwnl.dictionary.FileBackedDictionary;
  * 
  * You can construct this object like so, passing in the location of your installed WordNet files
  * 
- *   RiWordnet wordnet = new RiWordnet(this, &quot;/Wordnet3.1\\&quot;);
+ *   RiWordNet wordnet = new RiWordNet(this, &quot;/Wordnet3.1\\&quot;);
  *   
  *   (Note: windows paths require double backslashes as below...)
  *   
- *   RiWordnet wordnet = new RiWordnet(this, &quot;c:\\Wordnet3.0\\&quot;);
+ *   RiWordNet wordnet = new RiWordNet(this, &quot;c:\\Wordnet3.0\\&quot;);
  * </pre>
  * 
  * Generally three methods are provided for each relation type (e.g.,
@@ -42,10 +42,10 @@ import rita.wordnet.jwnl.dictionary.FileBackedDictionary;
  * These can be specified either as literals or using the String constants:
  * 
  * <pre>
- *    RiWordnet.NOUN
- *    RiWordnet.VERB
- *    RiWordnet.ADJ
- *    RiWordnet.ADV
+ *    RiWordNet.NOUN
+ *    RiWordNet.VERB
+ *    RiWordNet.ADJ
+ *    RiWordNet.ADV
  * </pre>
  * <p>
  * Note: all methods return null either when the query term is not found or there
@@ -75,10 +75,7 @@ public class RiWordNet implements Wordnet
   private static final String ROOT = "entity";
 
   /** @invisible */
-  public static String wordnetHome;
-
-  /** @invisible */
-  public static String SLASH;
+  public static String wordNetHome;
   
   /** @invisible */
   public Dictionary jwnlDict;
@@ -87,19 +84,14 @@ public class RiWordNet implements Wordnet
   protected WordnetFilters filters;
   protected int maxCharsPerWord = 10;
   
-  protected boolean ignoreCompoundWords = true;
+  protected boolean ignoreCompoundWords = false;
   protected boolean ignoreUpperCaseWords = true;
   protected boolean randomizeResults = true;
-
-  static
-  {
-    SLASH = System.getProperty("file.separator");
-  }
 
   // -------------------- CONSTRUCTORS ----------------------------
 
   /**
-   * Constructs an instance of <code>RiWordnet</code> using the Wordnet
+   * Constructs an instance of <code>RiWordNet</code> using the Wordnet
    * installation whose location is specified at <code>wordnetInstallDir</code>.
    * 
    * @param wordnetInstallDir
@@ -114,10 +106,10 @@ public class RiWordNet implements Wordnet
     
     String confFile = getDefaultConfFile();
 
-    this.setWordnetHome(wnHome);
+    this.setWordNetHome(wnHome);
 
     if (false && !RiTa.SILENT)
-      System.err.println("RiWordnet.RiWordnet("+ wnHome + "," + confFile + ")");
+      System.err.println("RiWordNet.RiWordNet("+ wnHome + "," + confFile + ")");
 
     if (!JWNL.isInitialized())
     {
@@ -127,8 +119,7 @@ public class RiWordNet implements Wordnet
       }
       catch (Exception e)
       {
-        throw new WordnetError("Error loading WordNet with $WORDNET_HOME="
-            + wnHome + " & CONF_FILE=" + confFile, e);
+        throw new RiWordNetError("Error loading WordNet with $WORDNET_HOME="+ wnHome);// + " & CONF_FILE=" + confFile, e);
       }
     }
     
@@ -150,9 +141,9 @@ public class RiWordNet implements Wordnet
    * 
    * @invisible
 
-  public static RiWordnet createRemote(Map params)
+  public static RiWordNet createRemote(Map params)
   {
-    return new RiWordnet();
+    return new RiWordNet();
   }   */
 
   // METHODS =====================================================
@@ -178,7 +169,7 @@ public class RiWordNet implements Wordnet
    */
   public String[] getAnagrams(String word, String posStr, int maxResults)
   {
-    return filter(ANAGRAMS, word, convertPos(posStr), maxResults);
+    return filter(ANAGRAMS, word, (posStr), maxResults);
   }
 
   /**
@@ -207,7 +198,7 @@ public class RiWordNet implements Wordnet
    */
   public String[] getContains(String word, String posStr, int maxResults)
   {
-    return filter(CONTAINS, word, convertPos(posStr), maxResults);
+    return filter(CONTAINS, word, (posStr), maxResults);
   }
 
   /**
@@ -236,7 +227,7 @@ public class RiWordNet implements Wordnet
    */
   public String[] getEndsWith(String word, String posStr, int maxResults)
   {
-    return filter(ENDS_WITH, word, convertPos(posStr), maxResults);
+    return filter(ENDS_WITH, word, (posStr), maxResults);
   }
 
   /**
@@ -265,7 +256,7 @@ public class RiWordNet implements Wordnet
    */
   public String[] getStartsWith(String word, String posStr, int maxResults)
   {
-    return filter(STARTS_WITH, word, convertPos(posStr), maxResults);
+    return filter(STARTS_WITH, word, posStr, maxResults);
   }
 
   /**
@@ -294,7 +285,7 @@ public class RiWordNet implements Wordnet
    */
   public String[] getRegexMatch(String pattern, String posStr, int maxResults)
   {
-    return filter(REGEX_MATCH, pattern, convertPos(posStr), maxResults);
+    return filter(REGEX_MATCH, pattern, posStr, maxResults);
   }
 
   /**
@@ -321,7 +312,7 @@ public class RiWordNet implements Wordnet
    */
   public String[] getSoundsLike(String pattern, String posStr, int maxResults)
   {
-    return filter(SOUNDS_LIKE, pattern, convertPos(posStr), maxResults);
+    return filter(SOUNDS_LIKE, pattern, posStr, maxResults);
   }
 
   /**
@@ -353,7 +344,7 @@ public class RiWordNet implements Wordnet
    */
   public String[] getWildcardMatch(String pattern, String posStr, int maxResults)
   {
-    return filter(WILDCARD_MATCH, pattern, convertPos(posStr), maxResults);
+    return filter(WILDCARD_MATCH, pattern, (posStr), maxResults);
   }
 
   /**
@@ -383,17 +374,17 @@ public class RiWordNet implements Wordnet
    * Filter types include:
    * 
    * <pre>
-   * RiWordnet.EXACT_MATCH
-   *         RiWordnet.ENDS_WITH
-   *         RiWordnet.STARTS_WITH
-   *         RiWordnet.ANAGRAMS 
-   *         RiWordnet.CONTAINS_ALL
-   *         RiWordnet.CONTAINS_SOME  
-   *         RiWordnet.CONTAINS
-   *         RiWordnet.SIMILAR_TO
-   *         RiWordnet.SOUNDS_LIKE
-   *         RiWordnet.WILDCARD_MATCH
-   *         RiWordnet.REGEX_MATCH
+   * RiWordNet.EXACT_MATCH
+   *         RiWordNet.ENDS_WITH
+   *         RiWordNet.STARTS_WITH
+   *         RiWordNet.ANAGRAMS 
+   *         RiWordNet.CONTAINS_ALL
+   *         RiWordNet.CONTAINS_SOME  
+   *         RiWordNet.CONTAINS
+   *         RiWordNet.SIMILAR_TO
+   *         RiWordNet.SOUNDS_LIKE
+   *         RiWordNet.WILDCARD_MATCH
+   *         RiWordNet.REGEX_MATCH
    * </pre>
    * 
    * @param filterFlag
@@ -402,9 +393,9 @@ public class RiWordNet implements Wordnet
    * @param maxResults
    * @invisible
    */
-  public String[] filter(int filterFlag, String word, POS pos, int maxResults)
+  public String[] filter(int filterFlag, String word, String pos, int maxResults)
   {
-    return toStrArr(getFilters().filter(filterFlag, word, pos, maxResults));
+    return toStrArr(getFilters().filter(filterFlag, word, convertPos(pos), maxResults));
   }
 
   /**
@@ -414,23 +405,23 @@ public class RiWordNet implements Wordnet
    *            Filter types include:
    * 
    *            <pre>
-   * RiWordnet.EXACT_MATCH
-   *         RiWordnet.ENDS_WITH
-   *         RiWordnet.STARTS_WITH
-   *         RiWordnet.ANAGRAMS 
-   *         RiWordnet.CONTAINS_ALL
-   *         RiWordnet.CONTAINS_SOME  
-   *         RiWordnet.CONTAINS
-   *         RiWordnet.SIMILAR_TO
-   *         RiWordnet.SOUNDS_LIKE
-   *         RiWordnet.WILDCARD_MATCH
-   *         RiWordnet.REGEX_MATCH
+   * RiWordNet.EXACT_MATCH
+   *         RiWordNet.ENDS_WITH
+   *         RiWordNet.STARTS_WITH
+   *         RiWordNet.ANAGRAMS 
+   *         RiWordNet.CONTAINS_ALL
+   *         RiWordNet.CONTAINS_SOME  
+   *         RiWordNet.CONTAINS
+   *         RiWordNet.SIMILAR_TO
+   *         RiWordNet.SOUNDS_LIKE
+   *         RiWordNet.WILDCARD_MATCH
+   *         RiWordNet.REGEX_MATCH
    * </pre>
    * @param word
    * @param pos
    * @param filterFlag
    */
-  public String[] filter(int filterFlag, String word, POS pos)
+  public String[] filter(int filterFlag, String word, String pos)
   {
     return filter(filterFlag, word, pos, Integer.MAX_VALUE);
   }
@@ -442,17 +433,17 @@ public class RiWordNet implements Wordnet
    * Filter types include:
    * 
    * <pre>
-   * RiWordnet.EXACT_MATCH
-   *         RiWordnet.ENDS_WITH
-   *         RiWordnet.STARTS_WITH
-   *         RiWordnet.ANAGRAMS 
-   *         RiWordnet.CONTAINS_ALL
-   *         RiWordnet.CONTAINS_SOME  
-   *         RiWordnet.CONTAINS
-   *         RiWordnet.SIMILAR_TO
-   *         RiWordnet.SOUNDS_LIKE
-   *         RiWordnet.WILDCARD_MATCH
-   *         RiWordnet.REGEX_MATCH
+   * RiWordNet.EXACT_MATCH
+   *         RiWordNet.ENDS_WITH
+   *         RiWordNet.STARTS_WITH
+   *         RiWordNet.ANAGRAMS 
+   *         RiWordNet.CONTAINS_ALL
+   *         RiWordNet.CONTAINS_SOME  
+   *         RiWordNet.CONTAINS
+   *         RiWordNet.SIMILAR_TO
+   *         RiWordNet.SOUNDS_LIKE
+   *         RiWordNet.WILDCARD_MATCH
+   *         RiWordNet.REGEX_MATCH
    * </pre>
    * 
    * @param filterFlags
@@ -461,9 +452,9 @@ public class RiWordNet implements Wordnet
    * @param maxResults
    * @invisible
    */
-  public String[] orFilter(int[] filterFlags, String[] words, POS pos, int maxResults)
+  public String[] orFilter(int[] filterFlags, String[] words, String pos, int maxResults)
   {
-    return toStrArr(getFilters().orFilter(filterFlags, words, pos, maxResults));
+    return toStrArr(getFilters().orFilter(filterFlags, words, convertPos(pos), maxResults));
   }
 
   private WordnetFilters getFilters()
@@ -480,23 +471,23 @@ public class RiWordNet implements Wordnet
    *            Filter types include:
    * 
    *            <pre>
-   * RiWordnet.EXACT_MATCH
-   *         RiWordnet.ENDS_WITH
-   *         RiWordnet.STARTS_WITH
-   *         RiWordnet.ANAGRAMS 
-   *         RiWordnet.CONTAINS_ALL
-   *         RiWordnet.CONTAINS_SOME  
-   *         RiWordnet.CONTAINS
-   *         RiWordnet.SIMILAR_TO
-   *         RiWordnet.SOUNDS_LIKE
-   *         RiWordnet.WILDCARD_MATCH
-   *         RiWordnet.REGEX_MATCH
+   *         RiWordNet.EXACT_MATCH
+   *         RiWordNet.ENDS_WITH
+   *         RiWordNet.STARTS_WITH
+   *         RiWordNet.ANAGRAMS 
+   *         RiWordNet.CONTAINS_ALL
+   *         RiWordNet.CONTAINS_SOME  
+   *         RiWordNet.CONTAINS
+   *         RiWordNet.SIMILAR_TO
+   *         RiWordNet.SOUNDS_LIKE
+   *         RiWordNet.WILDCARD_MATCH
+   *         RiWordNet.REGEX_MATCH
    * </pre>
    * @param word
    * @param pos
    * @param filterFlag
    */
-  public String[] orFilter(int[] filterFlag, String[] word, POS pos)
+  public String[] orFilter(int[] filterFlag, String[] word, String pos)
   {
     return orFilter(filterFlag, word, pos, Integer.MAX_VALUE);
   }
@@ -508,92 +499,75 @@ public class RiWordNet implements Wordnet
    * Filter types include:
    * 
    * <pre>
-   * RiWordnet.EXACT_MATCH
-   *         RiWordnet.ENDS_WITH
-   *         RiWordnet.STARTS_WITH
-   *         RiWordnet.ANAGRAMS 
-   *         RiWordnet.CONTAINS_ALL
-   *         RiWordnet.CONTAINS_SOME  
-   *         RiWordnet.CONTAINS
-   *         RiWordnet.SIMILAR_TO
-   *         RiWordnet.SOUNDS_LIKE
-   *         RiWordnet.WILDCARD_MATCH
-   *         RiWordnet.REGEX_MATCH
+   * RiWordNet.EXACT_MATCH
+   *         RiWordNet.ENDS_WITH
+   *         RiWordNet.STARTS_WITH
+   *         RiWordNet.ANAGRAMS 
+   *         RiWordNet.CONTAINS_ALL
+   *         RiWordNet.CONTAINS_SOME  
+   *         RiWordNet.CONTAINS
+   *         RiWordNet.SIMILAR_TO
+   *         RiWordNet.SOUNDS_LIKE
+   *         RiWordNet.WILDCARD_MATCH
+   *         RiWordNet.REGEX_MATCH
    * </pre>
    * 
    * @param filterFlags
    * @param words
    * @param pos
    * @param maxResults
-   * @invisible
    */
-  private String[] andFilter(int[] filterFlags, String[] words, POS pos, int maxResults)
+  public String[] andFilter(int[] filterFlags, String[] words, String pos, int maxResults)
   {
-    return toStrArr(getFilters().andFilter(filterFlags, words, pos, maxResults));
+    return toStrArr(getFilters().andFilter(filterFlags, words, convertPos(pos), maxResults));
   }
 
   /**
-   * @invisible Return all instances of specified <code>posStr</code> matching
+   * Return all instances of specified <code>posStr</code> matching
    *            ALL of the filters specified with <code>filterFlags</code>.
    *            <p>
    *            Filter types include:
    * 
    *            <pre>
-   * RiWordnet.EXACT_MATCH
-   *         RiWordnet.ENDS_WITH
-   *         RiWordnet.STARTS_WITH
-   *         RiWordnet.ANAGRAMS 
-   *         RiWordnet.CONTAINS_ALL
-   *         RiWordnet.CONTAINS_SOME  
-   *         RiWordnet.CONTAINS
-   *         RiWordnet.SIMILAR_TO
-   *         RiWordnet.SOUNDS_LIKE
-   *         RiWordnet.WILDCARD_MATCH
-   *         RiWordnet.REGEX_MATCH
+   *         RiWordNet.EXACT_MATCH
+   *         RiWordNet.ENDS_WITH
+   *         RiWordNet.STARTS_WITH
+   *         RiWordNet.ANAGRAMS 
+   *         RiWordNet.CONTAINS_ALL
+   *         RiWordNet.CONTAINS_SOME  
+   *         RiWordNet.CONTAINS
+   *         RiWordNet.SIMILAR_TO
+   *         RiWordNet.SOUNDS_LIKE
+   *         RiWordNet.WILDCARD_MATCH
+   *         RiWordNet.REGEX_MATCH
    * </pre>
    * @param word
    * @param pos
    * @param filterFlag
    */
-  private String[] andFilter(int[] filterFlag, String[] word, POS pos)
+  // TODO: add tests!
+  public String[] andFilter(int[] filterFlag, String[] word, String pos)
   {
     return andFilter(filterFlag, word, pos, Integer.MAX_VALUE);
   }
 
   // ---------------- end filter methods -------------------
 
-  /**
-   * Called by PApplet on shutdown
-   * 
-   * @invisible
-   */
-  public void dispose()
+  protected void setWordNetHome(String path)
   {
-    // System.err.println("[INFO] RiTa.Wordnet.dispose()...");
-    if (jwnlDict != null)
-      jwnlDict.close();
-    jwnlDict = null;
-    if (zipReader != null)
-      zipReader.dispose();
-    zipReader = null;
-  }
-
-  /**
-   * @invisible
-   */
-  protected void setWordnetHome(String wordnetHome)
-  {
-    if (wordnetHome != null)
+    if (path != null)
     {
-      if (!(wordnetHome.endsWith("/") || wordnetHome.endsWith("\\")))
-        wordnetHome += SLASH;
+      if (!(path.endsWith("/") || path.endsWith("\\")))
+        path += RiTa.SLASH;
     }
-    RiWordNet.wordnetHome = wordnetHome;
-    String home = wordnetHome != null ? wordnetHome : "jar:/rita/wordnet/WordNet3.1";
-    System.out.println("[INFO] RiTa.Wordnet.HOME=" + home);
+    
+    wordNetHome = path;
+    //String home = path != null ? path : "jar:/rita/wordnet/WordNet3.1";
+    System.out.println("[INFO] RiTa.WordNet.HOME=" + wordNetHome);
   }
 
   // -------------------------- MAIN METHODS ----------------------------
+  
   private List getSynsetList(int id)
   {
     Synset syns = getSynsetAtId(id);
@@ -633,7 +607,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(e);
+      throw new RiWordNetError(e);
     }
   }
 
@@ -673,7 +647,7 @@ public class RiWordNet implements Wordnet
     }
     catch (Exception e)
     {
-      throw new WordnetError(e);
+      throw new RiWordNetError(e);
     }
     // System.err.println("ids: "+Util.asList(result));
     return result;
@@ -691,7 +665,7 @@ public class RiWordNet implements Wordnet
     else if (wnpos == POS.ADVERB)
       posDigit = 6;
     else
-      throw new WordnetError("Invalid POS type: " + wnpos);
+      throw new RiWordNetError("Invalid POS type: " + wnpos);
     return Integer.parseInt((Integer.toString(posDigit) + offset));
   }
 
@@ -1097,7 +1071,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
     List l = new ArrayList();
     addLemmas(syn.getWords(), l);
@@ -1159,7 +1133,7 @@ public class RiWordNet implements Wordnet
     if (!includeOriginal)
       l.remove(word);
 
-    // System.out.println("RiWordnet.getSynset("+word+","+pos+") -> "+l);
+    // System.out.println("RiWordNet.getSynset("+word+","+pos+") -> "+l);
 
     return toStrArr(l);
   }
@@ -1204,7 +1178,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(e);
+      throw new RiWordNetError(e);
     }
   }
 
@@ -1241,7 +1215,7 @@ public class RiWordNet implements Wordnet
       }
       catch (JWNLException e)
       {
-        throw new WordnetError(e);
+        throw new RiWordNetError(e);
       }
     }
     return syns;
@@ -1261,7 +1235,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(e);
+      throw new RiWordNetError(e);
     }
   }
 
@@ -1283,7 +1257,7 @@ public class RiWordNet implements Wordnet
       if (iw != null)
         senses = iw.getSenseCount();
     }
-    catch (WordnetError e)
+    catch (RiWordNetError e)
     {
       System.err.println("[WARN] " + e.getMessage());
     }
@@ -1376,7 +1350,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(e);
+      throw new RiWordNetError(e);
     }
     return ptnlToStrings(word, ptnl);
   }
@@ -1411,7 +1385,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(e);
+      throw new RiWordNetError(e);
     }
     return ptnlToStrings(null, ptnl);
   }
@@ -1476,7 +1450,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
   }
 
@@ -1518,7 +1492,7 @@ public class RiWordNet implements Wordnet
 
   private List getHypernymTree(Synset synset) throws JWNLException
   {
-    // System.err.println("RiWordnet.getHypernymTree("+word+","+synset+")");
+    // System.err.println("RiWordNet.getHypernymTree("+word+","+synset+")");
     if (synset == null)
       return null;
 
@@ -1607,7 +1581,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(e);
+      throw new RiWordNetError(e);
     }
     return ptnlToStrings(word, ptnl);
   }
@@ -1642,7 +1616,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(e);
+      throw new RiWordNetError(e);
     }
     return ptnlToStrings(null, ptnl);
   }
@@ -1715,7 +1689,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(e);
+      throw new RiWordNetError(e);
     }
     if (synsets == null || synsets.length <= 0)
       return null;
@@ -1908,7 +1882,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
   }
 
@@ -1954,7 +1928,7 @@ public class RiWordNet implements Wordnet
    * 
    * @param words
    */
-  public void removeNonExistent(Collection words)
+  public RiWordNet removeNonExistent(Collection words)
   {
     for (Iterator i = words.iterator(); i.hasNext();)
     {
@@ -1962,6 +1936,7 @@ public class RiWordNet implements Wordnet
       if (!exists(word))
         i.remove();
     }
+    return this;    
   }
 
   // -------------------------- PRIVATE METHODS ------------------------------
@@ -1975,14 +1950,14 @@ public class RiWordNet implements Wordnet
   {
     POS wnPos = WordnetPos.getPos(pos);
     if (wnPos == null)
-      throw new WordnetError(this, "Invalid Pos-String: '" + pos + "'");
+      throw new RiWordNetError(this, "Invalid Pos-String: '" + pos + "'");
     return wnPos;
   }
   
   /** @invisible */
   public IndexWord lookupIndexWord(POS pos, String cs)
   {
-    // System.err.println("RiWordnet.lookupIndexWord("+cs+")");
+    // System.err.println("RiWordNet.lookupIndexWord("+cs+")");
     if (cs == null)
       return null;
     String word = cs.toString().replace('-', '_');
@@ -2195,7 +2170,7 @@ public class RiWordNet implements Wordnet
       return ADV;
     if (p == POS.ADJECTIVE)
       return ADJ;
-    throw new WordnetError("no pos for word: " + word);
+    throw new RiWordNetError("no pos for word: " + word);
   }
 
   private IndexWord[] getIndexWords(String word)
@@ -2406,7 +2381,7 @@ public class RiWordNet implements Wordnet
       }
       catch (JWNLException e)
       {
-        throw new WordnetError(e);
+        throw new RiWordNetError(e);
       }
       String word = iw.getLemma();
       if (ignoreCompoundWords && isCompound(word))
@@ -2439,7 +2414,7 @@ public class RiWordNet implements Wordnet
    * @param senseId
    * @invisible
    */
-  public void printHyponymTree(int senseId)
+  public RiWordNet printHyponymTree(int senseId)
   {
     try
     {
@@ -2447,8 +2422,9 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(e);
+      throw new RiWordNetError(e);
     }
+    return this;
   }
 
   void dumpHyponymTree(String word, String pos) throws JWNLException
@@ -2456,11 +2432,12 @@ public class RiWordNet implements Wordnet
     dumpHyponymTree(System.err, word, pos);
   }
 
-  public void dumpHyponymTree(PrintStream ps, String word, String pos) throws JWNLException
+  public RiWordNet dumpHyponymTree(PrintStream ps, String word, String pos) throws JWNLException
   {
     IndexWord iw = lookupIndexWord(pos, word);
     Synset syn = iw.getSense(1);
     this.dumpHyponymTree(ps, syn);
+    return this;
   }
 
   void dumpHyponymTree(PrintStream ps, Synset syn) throws JWNLException
@@ -2489,35 +2466,35 @@ public class RiWordNet implements Wordnet
    * 
    * @param senseId
    */
-  public void printHypernymTree(int senseId)
+  public RiWordNet printHypernymTree(int senseId)
   {
     try
     {
       Synset s = getSynsetAtId(senseId);
       // System.out.println("Syn: "+s);
-      dumpHypernymTree(System.out, s);
+      return dumpHypernymTree(System.out, s);
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(e);
+      throw new RiWordNetError(e);
     }
   }
 
-  void printHypernymTree(String word, String pos) throws JWNLException
+  RiWordNet printHypernymTree(String word, String pos) throws JWNLException
   {
-    dumpHypernymTree(System.err, word, pos);
+    return dumpHypernymTree(System.err, word, pos);
   }
 
   /** @invisible */
-  public void dumpHypernymTree(PrintStream ps, String word, String pos) throws JWNLException
+  public RiWordNet dumpHypernymTree(PrintStream ps, String word, String pos) throws JWNLException
   {
     // Get all the hyponyms (children) of the first sense of <var>word</var>
     IndexWord iw = lookupIndexWord(pos, word);
     Synset syn = iw.getSense(1);
-    dumpHypernymTree(ps, syn);
+    return dumpHypernymTree(ps, syn);
   }
 
-  void dumpHypernymTree(PrintStream ps, Synset syn) throws JWNLException
+  RiWordNet dumpHypernymTree(PrintStream ps, Synset syn) throws JWNLException
   {
     PointerTargetTree hypernyms = null;
     try
@@ -2533,13 +2510,16 @@ public class RiWordNet implements Wordnet
     {
       // ignore jwnl bug
     }
+    
     if (hypernyms == null)
-      return;
+      return this;
+    
     Set syns = new TreeSet();
     addLemmas(syn.getWords(), syns);
     ps.println("\nHypernyms of synset" + syns + ":\n-------------------------------------------");
     hypernyms.print(ps);
     ps.println();
+    return this;
   }
 
   /**
@@ -2652,7 +2632,7 @@ public class RiWordNet implements Wordnet
         }
         catch (Exception e)
         {
-          //System.out.println("RiWordnet.getWordDistance().exception="+e.getMessage());
+          //System.out.println("RiWordNet.getWordDistance().exception="+e.getMessage());
           continue;
         }
 
@@ -2743,7 +2723,7 @@ public class RiWordNet implements Wordnet
 
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
   }
 
@@ -2777,7 +2757,7 @@ public class RiWordNet implements Wordnet
 
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
   }
 
@@ -2822,7 +2802,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
   }
 
@@ -2854,7 +2834,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
     // returns part,member, and substance holonyms
     return ptnlToStrings(query, ptnl);
@@ -2888,7 +2868,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
     return ptnlToStrings(null, ptnl);
   }
@@ -2933,7 +2913,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
   }
 
@@ -2975,7 +2955,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
     return result;
   }
@@ -3001,7 +2981,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
     return result;
   }
@@ -3054,7 +3034,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
   }
 
@@ -3088,7 +3068,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
     return ptnlToStrings(query, ptnl);
   }
@@ -3120,7 +3100,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
     return ptnlToStrings(null, ptnl);
   }
@@ -3161,7 +3141,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
   }
 
@@ -3367,7 +3347,7 @@ public class RiWordNet implements Wordnet
     if (synset == null)
       return null;
 
-    // System.err.println("RiWordnet.getPointerTargets("+synset+", "+type+")");
+    // System.err.println("RiWordNet.getPointerTargets("+synset+", "+type+")");
     PointerTarget[] pta;
     try
     {
@@ -3377,7 +3357,7 @@ public class RiWordNet implements Wordnet
     }
     catch (NullPointerException e) // a JWNL bug
     {
-      // throw new CTextException(this,e);
+      // throw new RiTaException(this,e);
       return null;
     }
 
@@ -3389,29 +3369,32 @@ public class RiWordNet implements Wordnet
     return this.randomizeResults;
   }
 
-  public void randomizeResults(boolean random)
+  public RiWordNet randomizeResults(boolean random)
   {
     this.randomizeResults = random;
+    return this;
   }
   
-  public boolean isIgnoringCompoundWords()
+  public boolean ignoreCompoundWords()
   {
     return this.ignoreCompoundWords;
   }
 
-  public void ignoreCompoundWords(boolean ignoreCompoundWords)
+  public RiWordNet ignoreCompoundWords(boolean val)
   {
-    this.ignoreCompoundWords = ignoreCompoundWords;
+    this.ignoreCompoundWords = val;
+    return this;
   }
 
-  public boolean isIgnoringUpperCaseWords()
+  public boolean ignoreUpperCaseWords()
   {
     return this.ignoreUpperCaseWords;
   }
 
-  public void ignoreUpperCaseWords(boolean ignoreUpperCaseWords)
+  public RiWordNet ignoreUpperCaseWords(boolean val)
   {
-    this.ignoreUpperCaseWords = ignoreUpperCaseWords;
+    this.ignoreUpperCaseWords = val;
+    return this;
   }
 
   private String[] getAllPointerTargets(String word, String pos, PointerType type)
@@ -3436,7 +3419,7 @@ public class RiWordNet implements Wordnet
       }
       catch (JWNLException e)
       {
-        throw new WordnetError(e);
+        throw new RiWordNetError(e);
       }
     }
     result.remove(word); // skip the original
@@ -3458,7 +3441,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(this, e);
+      throw new RiWordNetError(this, e);
     }
   }
 
@@ -3476,7 +3459,7 @@ public class RiWordNet implements Wordnet
     }
     catch (JWNLException e)
     {
-      throw new WordnetError(e);
+      throw new RiWordNetError(e);
     }
   }
   
