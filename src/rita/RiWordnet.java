@@ -1042,7 +1042,6 @@ public class RiWordNet implements Wordnet
    * Returns the id for the common parent of 2 words with unique ids <code>id1</code>,
    * <code>id2</code>, or 0 if no parent is found
    */
-   // TODO: update docs, no longer returns Synset ***
   public int getCommonParent(int id1, int id2)
   {
     Synset syn1 = getSynsetAtId(id1);
@@ -1155,17 +1154,22 @@ public class RiWordNet implements Wordnet
   public String[] getSynset(String word, String pos, boolean includeOriginal)
   {
     Synset syns = getSynsetAtIndex(word, pos, 1);
+    
     if (syns == null || syns.getWordsSize() < 1)
       return EA;
     
     List l = new LinkedList();
-    if (includeOriginal)
-      l.add(word);
-    
+
     Word[] words = syns.getWords();
     addLemmas(words, l);
+    
     // System.out.println("RiWordNet.getSynset("+word+","+pos+") -> "+l);
 
+    if (includeOriginal) 
+      l.add(word);
+    else
+      l.remove(word);
+    
     return toStrArr(l);
   }
 
@@ -1191,6 +1195,9 @@ public class RiWordNet implements Wordnet
     try
     {
       idw = lookupIndexWord(pos, word);
+
+      //System.out.println("sense-count="+idw.getSenseCount());
+
       if (idw == null || idw.getSenseCount() < 1)
         return EA;
       
@@ -1225,7 +1232,7 @@ public class RiWordNet implements Wordnet
     if (index < 1)
       throw new IllegalArgumentException("Invalid index: " + index);
 
-    if (word != null && word.getSenseCount() < 1)
+    if (word != null)// && word.getSenseCount() < 1)
       addLemmas(word.getSense(index).getWords(), l);
     
     return l;
@@ -1507,8 +1514,7 @@ public class RiWordNet implements Wordnet
       // ignore bad jwnl bug here
     }
 
-    if (ptt == null)
-      return null;
+    if (ptt == null) return null;
 
     List pointerTargetNodeLists = ptt.toList();
 
@@ -1853,7 +1859,7 @@ public class RiWordNet implements Wordnet
    */
   public boolean exists(String word)
   {
-    if (word.indexOf(' ') > -1)
+    if (ignoreCompoundWords && word.indexOf(' ') > -1)
       return false;
 
     IndexWord[] iw = null;
@@ -1976,7 +1982,7 @@ public class RiWordNet implements Wordnet
 
   private void addLemma(String lemma, Collection dest)
   {
-    if (ignoreCompoundWords && isCompound(lemma))
+    if (ignoreCompoundWords && isCompound(lemma)) 
       return;
 
     if (ignoreUpperCaseWords && WordnetUtil.startsWithUppercase(lemma))
@@ -2043,10 +2049,10 @@ public class RiWordNet implements Wordnet
 
   private String cleanLemma(String lemma)
   {
-    // / TODO!!!
     if (lemma.endsWith(")"))
       lemma = lemma.substring(0, lemma.length() - 3);
-    lemma = WordnetUtil.replace(lemma, '_', '-');
+    
+    lemma = lemma.replaceAll("_", RiTa.SP);
     return lemma;
   }
 
@@ -2211,8 +2217,10 @@ public class RiWordNet implements Wordnet
   {
     if (l == null || l.size() == 0)
       return EA;
+    
     if (randomizeResults)
       Collections.shuffle(l);
+    
     return (String[]) l.toArray(new String[l.size()]);
   }
 
@@ -2504,9 +2512,10 @@ public class RiWordNet implements Wordnet
    */
   public float getDistance(String lemma1, String lemma2, String pos)
   {
-    if (lemma1 == null || lemma1.contains(" "))
+    if (lemma1 == null || (ignoreCompoundWords && lemma1.contains(" ")))
       return -1;
-    if (lemma2 == null || lemma2.contains(" "))
+    
+    if (lemma2 == null ||(ignoreCompoundWords && lemma2.contains(" ")))
       return -1;
 
     IndexWordSet WORDSET1, WORDSET2;
@@ -3294,20 +3303,16 @@ public class RiWordNet implements Wordnet
       return null;
 
     // System.err.println("RiWordNet.getPointerTargets("+synset+", "+type+")");
-    PointerTarget[] pta;
+
     try
     {
-      pta = synset.getTargets(type);
-      if (pta == null || pta.length == 0)
-        return null;
+      PointerTarget[] pta = synset.getTargets(type);
+      return (pta == null || pta.length == 0) ? null: new PointerTargetNodeList(pta);
     }
-    catch (NullPointerException e) // a JWNL bug
+    catch (NullPointerException e) // JWNL bug
     {
-      // throw new RiTaException(this,e);
       return null;
     }
-
-    return new PointerTargetNodeList(pta);
   }
 
   public boolean randomizeResults()
