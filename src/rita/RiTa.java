@@ -1030,9 +1030,10 @@ public class RiTa implements Constants
   {
     String[] str = loadStrings(fileName, null);
     if (str == null) {
-      System.err.println("[WARN] Unable to load: " + fileName + "\n" +
+      printPAppletMessage(null, fileName);
+/*      System.err.println("[WARN] Unable to load: " + fileName + "\n\n" +
           "If you are using the Processing IDE, pass 'this' as the 2nd "+
-          "argument:  RiTa.loadStrings("+fileName+", this);");
+          "argument:  RiTa.loadStrings("+fileName+", this);");*/
     }
     return str;
   }
@@ -1172,7 +1173,7 @@ public class RiTa implements Constants
   {
     if (methodName != null) {
       System.err.println("[WARN] Unable to load: '" +  file + "', please double-check "
-        + "the filename.\nIf you are using the Processing IDE, pass 'this' as the 2nd "
+        + "the filename.\n\nIf you are using the Processing IDE, try passing 'this' as the 2nd "
         + "argument to "+methodName+":\n\n    " +methodName+"("+file+", this);\n");
     }
   }
@@ -1185,9 +1186,11 @@ public class RiTa implements Constants
         fs += DQ + files[i] + DQ;
         if (i<files.length-1) fs += ", ";
       }
-      System.err.println("[WARN] Unable to load: '" +  RiTa.asList(files) + "', please double-check "
-        + "the filename.\nIf you are using the Processing IDE, pass 'this' as the 2nd "
-        + "argument to "+methodName+":\n\n    " +methodName+"(new String[]{"+fs+"}, this);\n");
+      //printPAppletMessage(methodName, "new String[]{"+fs+"}");
+      
+      System.err.println("[WARN] Unable to load files " +  RiTa.asList(files) + ", please double-check "
+        + "the filenames.\n\nIf you are using the Processing IDE, try passing 'this' as the 2nd "
+        + "argument to "+methodName+":\n\n    " +methodName+"(new String[]{"+fs+"}, this);\n"); 
     }
   }
   
@@ -1472,10 +1475,12 @@ public class RiTa implements Constants
 
   public static void main(String[] args)
   {
+    loadString(new String[]{"a.txt","b.txt"});
+    if (1==1) return;
     System.out.println(loadStrings("pulp.json"));
     
     //PApplet.loadBytes("/User/dhowe/Desktop/times-24.json");
-    if (1==1) return;
+   
     
     String[] toks = tokenize("The boy, dressed in red, ate an apple.!?");
     toks[0] = "@#$%^#$%^";

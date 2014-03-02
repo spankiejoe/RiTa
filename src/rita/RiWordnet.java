@@ -12,6 +12,8 @@ import rita.wordnet.jwnl.dictionary.Dictionary;
 import rita.wordnet.jwnl.dictionary.FileBackedDictionary;
 
 // TODO:
+// to get sense+, do Synset(id).getWord().getIndex() ?
+// 
 // not all methods (eg filters) return nondeterministic results!
 // Check this (add tests) with and without randomizeResults flag set
 
@@ -19,19 +21,20 @@ import rita.wordnet.jwnl.dictionary.FileBackedDictionary;
  * Provides library support for access to the WordNet ontology database
  * <p>
  * 
- * You can construct this object like so, passing in the location of your installed WordNet files
+ * You can construct this object like so, passing in the location of your
+ * installed WordNet files
  * 
- *   RiWordNet wordnet = new RiWordNet(this, &quot;/Wordnet3.1\\&quot;);
- *   
- *   (Note: windows paths require double backslashes as below...)
- *   
- *   RiWordNet wordnet = new RiWordNet(this, &quot;c:\\Wordnet3.0\\&quot;);
- * </pre>
+ * RiWordNet wordnet = new RiWordNet(this, &quot;/WordNet3.1\\&quot;);
+ * 
+ * (Note: windows paths require double backslashes as below...)
+ * 
+ * RiWordNet wordnet = new RiWordNet(this, &quot;c:\\WordNet3.0\\&quot;); </pre>
  * 
  * Generally three methods are provided for each relation type (e.g.,
- * getHyponyms(int), getHyponyms(String, String), and getAllHyponyms(String, String),
- * where the 1st returns hyponyms for a specific sense (as specified by its unique id),
- * the 2nd returns the most common sense, and the 3rd returns ALL senses for the word/pos pair.
+ * getHyponyms(int), getHyponyms(String, String), and getAllHyponyms(String,
+ * String), where the 1st returns hyponyms for a specific sense (as specified by
+ * its unique id), the 2nd returns the most common sense, and the 3rd returns
+ * ALL senses for the word/pos pair.
  * <p>
  * You can also retrieve the entire tree of hyponyms (down to the leaves) for a
  * specific sense of the word. (see VariousHyponyms.pde for examples)
@@ -48,12 +51,12 @@ import rita.wordnet.jwnl.dictionary.FileBackedDictionary;
  *    RiWordNet.ADV
  * </pre>
  * <p>
- * Note: all methods return null either when the query term is not found or there
- * are no entries for the relation type being sought.
+ * Note: all methods return null either when the query term is not found or
+ * there are no entries for the relation type being sought.
  * 
  * <p>
- * For more info on the meaning of various wordnet concepts (synset, sense, hypernym, etc),
- * see: {@link http://wordnet.princeton.edu/gloss}
+ * For more info on the meaning of various wordnet concepts (synset, sense,
+ * hypernym, etc), see: {@link http://wordnet.princeton.edu/gloss}
  * 
  * <p>
  * See the accompanying documentation for license information
@@ -74,55 +77,61 @@ public class RiWordNet implements Wordnet
 
   private static final String ROOT = "entity";
 
+  private static final String[] EA = {};
+  // TODO: test that this can't be changed after being returned and then mall
+  // future returns
+
   /** @invisible */
   public static String wordNetHome;
-  
+
   /** @invisible */
   public Dictionary jwnlDict;
-  
+
   public static RiZipReader zipReader;
   protected WordnetFilters filters;
   protected int maxCharsPerWord = 10;
-  
+
   protected boolean ignoreCompoundWords = false;
-  protected boolean ignoreUpperCaseWords = true;
+  protected boolean ignoreUpperCaseWords = false;
   protected boolean randomizeResults = true;
 
   // -------------------- CONSTRUCTORS ----------------------------
 
   /**
-   * Constructs an instance of <code>RiWordNet</code> using the Wordnet
+   * Constructs an instance of <code>RiWordNet</code> using the WordNet
    * installation whose location is specified at <code>wordnetInstallDir</code>.
    * 
    * @param wordnetInstallDir
-   *          home directory for a pre-installed Wordnet installation.
+   *          home directory for a pre-installed WordNet installation.
    */
-  public RiWordNet(String wordnetInstallDir) {
-    
+  public RiWordNet(String wordnetInstallDir)
+  {
+
     this(wordnetInstallDir, null);
   }
-  
-  public RiWordNet(String wnHome, Object parent) {
-    
+
+  public RiWordNet(String wnHome, Object parent)
+  {
+
     String confFile = getDefaultConfFile();
 
     this.setWordNetHome(wnHome);
 
     if (false && !RiTa.SILENT)
-      System.err.println("RiWordNet.RiWordNet("+ wnHome + "," + confFile + ")");
+      System.err.println("RiWordNet.RiWordNet(" + wnHome + "," + confFile + ")");
 
     if (!JWNL.isInitialized())
     {
       try
       {
-        initWordnet(confFile);
+        initWordNet(confFile);
       }
       catch (Exception e)
       {
-        throw new RiWordNetError("Error loading WordNet with $WORDNET_HOME="+ wnHome);// + " & CONF_FILE=" + confFile, e);
+        throw new RiWordNetError("Error loading WordNet with $WORDNET_HOME=" + wnHome);
       }
     }
-    
+
     if (this.jwnlDict == null)
       this.jwnlDict = Dictionary.getInstance();
   }
@@ -130,9 +139,9 @@ public class RiWordNet implements Wordnet
   private static String getDefaultConfFile()
   {
     // set the locale since the default conf is only English
-    
+
     Locale.setDefault(Locale.ENGLISH);
-    
+
     return DEFAULT_CONF;
   }
 
@@ -140,11 +149,10 @@ public class RiWordNet implements Wordnet
    * for remote creation only
    * 
    * @invisible
-
-  public static RiWordNet createRemote(Map params)
-  {
-    return new RiWordNet();
-  }   */
+   * 
+   *            public static RiWordNet createRemote(Map params) { return new
+   *            RiWordNet(); }
+   */
 
   // METHODS =====================================================
 
@@ -155,7 +163,6 @@ public class RiWordNet implements Wordnet
   {
     return getFilters().lemmaIterator(jwnlDict, convertPos(pos));
   }
-
 
   /**
    * Returns up to <code>maxResults</code> full anagram matches for the
@@ -205,7 +212,7 @@ public class RiWordNet implements Wordnet
    * Returns all 'contains' matches for the specified <code>word</code> and
    * <code>pos</code>
    * <p>
-   * Example: 
+   * Example:
    * 
    * @param word
    * @param posStr
@@ -523,12 +530,12 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Return all instances of specified <code>posStr</code> matching
-   *            ALL of the filters specified with <code>filterFlags</code>.
-   *            <p>
-   *            Filter types include:
+   * Return all instances of specified <code>posStr</code> matching ALL of the
+   * filters specified with <code>filterFlags</code>.
+   * <p>
+   * Filter types include:
    * 
-   *            <pre>
+   * <pre>
    *         RiWordNet.EXACT_MATCH
    *         RiWordNet.ENDS_WITH
    *         RiWordNet.STARTS_WITH
@@ -541,6 +548,7 @@ public class RiWordNet implements Wordnet
    *         RiWordNet.WILDCARD_MATCH
    *         RiWordNet.REGEX_MATCH
    * </pre>
+   * 
    * @param word
    * @param pos
    * @param filterFlag
@@ -560,47 +568,52 @@ public class RiWordNet implements Wordnet
       if (!(path.endsWith("/") || path.endsWith("\\")))
         path += RiTa.SLASH;
     }
-    
+
     wordNetHome = path;
-    //String home = path != null ? path : "jar:/rita/wordnet/WordNet3.1";
+    // String home = path != null ? path : "jar:/rita/wordnet/WordNet3.1";
     System.out.println("[INFO] RiTa.WordNet.HOME=" + wordNetHome);
   }
 
   // -------------------------- MAIN METHODS ----------------------------
-  
+
   private List getSynsetList(int id)
   {
     Synset syns = getSynsetAtId(id);
 
     // System.out.println("getSynsetList("id+") -> "+syns);
 
-    if (syns == null || syns.getWordsSize() < 1)
-      return null;
     List l = new LinkedList();
+    if (syns == null || syns.getWordsSize() < 1)
+      return l;
+
     addLemmas(syns.getWords(), l);
+
     return l;
   }
 
   private Synset getSynsetAtId(int id)
   {
-    POS pos = null;
     String idStr = Integer.toString(id);
     int posDigit = Integer.parseInt(idStr.substring(0, 1));
     long offset = Long.parseLong(idStr.substring(1));
-    switch (posDigit) {
-    case 9:
-      pos = POS.NOUN;
-      break;
-    case 8:
-      pos = POS.VERB;
-      break;
-    case 7:
-      pos = POS.ADJECTIVE;
-      break;
-    case 6:
-      pos = POS.ADVERB;
-      break;
+
+    POS pos = null;
+    switch (posDigit)
+    {
+      case 9:
+        pos = POS.NOUN;
+        break;
+      case 8:
+        pos = POS.VERB;
+        break;
+      case 7:
+        pos = POS.ADJECTIVE;
+        break;
+      case 6:
+        pos = POS.ADVERB;
+        break;
     }
+
     try
     {
       return jwnlDict.getSynsetAt(pos, offset);
@@ -615,7 +628,7 @@ public class RiWordNet implements Wordnet
    * Returns an array of unique ids, one for each 'sense' of <code>word</code>
    * with <code>pos</code>, or null if none are found.
    * <p>
-   * A Wordnet 'sense' refers to a specific Wordnet meaning and maps 1-1 to the
+   * A WordNet 'sense' refers to a specific WordNet meaning and maps 1-1 to the
    * concept of synsets. Each 'sense' of a word exists in a different synset.
    * <p>
    * For more info, see: {@link http://wordnet.princeton.edu/gloss}
@@ -630,7 +643,7 @@ public class RiWordNet implements Wordnet
 
   /**
    * Returns an array of unique ids, one for each sense of <code>word</code>
-   * with <code>pos</code>, or null if none are found.
+   * with <code>pos</code>.
    */
   public int[] getSenseIds(IndexWord idw)
   {
@@ -639,9 +652,10 @@ public class RiWordNet implements Wordnet
     {
       int numSenses = idw.getSenseCount();
       if (idw == null || numSenses == 0)
-        return null;
+        return new int[0];
       long[] offsets = idw.getSynsetOffsets();
       result = new int[offsets.length];
+      
       for (int i = 0; i < result.length; i++)
         result[i] = toId(idw.getPOS(), offsets[i]);
     }
@@ -670,7 +684,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns full gloss for 1st sense of 'word' with 'pos' or null if not found
+   * Returns full gloss for 1st sense of 'word' with 'pos' 
    */
   public String getGloss(String word, String pos)
   {
@@ -679,7 +693,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns glosses for all senses of 'word' with 'pos', or null if not found
+   * Returns glosses for all senses of 'word' with 'pos', 
    */
   public String[] getAllGlosses(String word, String pos)
   {
@@ -701,10 +715,7 @@ public class RiWordNet implements Wordnet
    */
   public String getGloss(int senseId)
   {
-    Synset synset = getSynsetAtId(senseId);
-    if (synset == null)
-      return null;
-    return getGloss(synset);
+    return getGloss(getSynsetAtId(senseId));
   }
 
   /**
@@ -717,7 +728,7 @@ public class RiWordNet implements Wordnet
     return WordnetUtil.parseDescription(gloss);
   }
 
-  private String getGloss(Synset synset)
+  private String getGloss(Synset synset) // returns null
   {
     if (synset == null)
       return null;
@@ -736,7 +747,7 @@ public class RiWordNet implements Wordnet
 
   /**
    * Returns all examples for 1st sense of <code>word</code> with
-   * <code>pos</code>, or null if not found
+   * <code>pos</code>, 
    */
   public String[] getExamples(String word, String pos)
   {
@@ -765,19 +776,19 @@ public class RiWordNet implements Wordnet
   {
     Synset synset = getSynsetAtId(senseId);
     if (synset == null)
-      return null;
+      return EA;
     return toStrArr(getExamples(synset));
   }
 
   /**
    * Returns examples for all senses of <code>word</code> with <code>pos</code>
-   * if they contain the <code>word</code>, else null if not found
+   * if they contain the <code>word</code>.
    */
   public String[] getAllExamples(String word, String pos)
   {
     Synset[] syns = allSynsets(word, pos);
     if (syns == null || syns.length < 1)
-      return null;
+      return EA;
     List l = new LinkedList();
     for (int i = 0; i < syns.length; i++)
     {
@@ -847,7 +858,7 @@ public class RiWordNet implements Wordnet
 
     // System.err.println("=======================================");
 
-    return setToStrings(set, maxResults, randomizeResults);
+    return setToStrings(set, maxResults);
   }
 
   public String[] getSynonyms(int id)
@@ -857,49 +868,53 @@ public class RiWordNet implements Wordnet
 
   /**
    * Returns an unordered String[] containing the synset, hyponyms, similars,
-   * alsoSees, and coordinate terms (checking each in order) for the first sense of
-   * <code>word</code> with <code>pos</code>, or null if not found
+   * alsoSees, and coordinate terms (checking each in order) for the first sense
+   * of <code>word</code> with <code>pos</code>, 
    */
   public String[] getSynonyms(String word, String posStr, int maxResults)
   {
     boolean dbug = false;
-    
+
     String[] result = null;
     Set set = new TreeSet();
 
     result = getSynset(word, posStr, false);
     this.addSynsetsToSet(result, set);
-    if(dbug) System.err.println("Synsets: "+WordnetUtil.asList(result));
+    if (dbug)
+      System.err.println("Synsets: " + WordnetUtil.asList(result));
 
     result = getHyponyms(word, posStr);
     this.addSynsetsToSet(result, set);
-    if(dbug) System.err.println("Hyponyms: " + WordnetUtil.asList(result));
-
-    /*result = getHypernyms(word, posStr);
-    this.addSynsetsToSet(result, set);
-    if(dbug) System.err.println("Hypernyms: "+WordnetUtil.asList(result));*/
+    if (dbug)
+      System.err.println("Hyponyms: " + WordnetUtil.asList(result));
 
     result = getSimilar(word, posStr);
     this.addSynsetsToSet(result, set);
-    if(dbug) System.err.println("Similar: "+WordnetUtil.asList(result));
+    if (dbug)
+      System.err.println("Similar: " + WordnetUtil.asList(result));
 
     result = getAlsoSees(word, posStr);
     this.addSynsetsToSet(result, set);
-    if(dbug) System.err.println("AlsoSees: "+WordnetUtil.asList(result));
+    if (dbug)
+      System.err.println("AlsoSees: " + WordnetUtil.asList(result));
 
     result = getCoordinates(word, posStr);
     this.addSynsetsToSet(result, set);
-    if(dbug) System.err.println("Coordinates: "+WordnetUtil.asList(result));
+    if (dbug)
+      System.err.println("Coordinates: " + WordnetUtil.asList(result));
 
-    if(dbug) System.err.println("=======================================");
+    if (dbug)
+      System.err.println("=======================================");
+    
+    set.remove(word);
 
-    return setToStrings(set, maxResults, randomizeResults);
+    return setToStrings(set, maxResults);
   }
 
   /**
    * Returns an unordered String[] containing the synset, hyponyms, similars,
-   * alsoSees, and coordinate terms (checking each in order) for the first sense of
-   * <code>word</code> with <code>pos</code>, or null if not found
+   * alsoSees, and coordinate terms (checking each in order) for the first sense
+   * of <code>word</code> with <code>pos</code>
    */
   public String[] getSynonyms(String word, String posStr)
   {
@@ -909,7 +924,7 @@ public class RiWordNet implements Wordnet
   /**
    * Returns an unordered String[] containing the synset, hyponyms, similars,
    * alsoSees, and coordinate terms (checking each in order) for all senses of
-   * <code>word</code> with <code>pos</code>, or null if not found
+   * <code>word</code> with <code>pos</code>
    */
   public String[] getAllSynonyms(String word, String posStr, int maxResults)
   {
@@ -926,7 +941,8 @@ public class RiWordNet implements Wordnet
     result = getAllHyponyms(word, posStr);
     this.addSynsetsToSet(result, set);
     if (dbug)
-      System.err.println("Hyponyms: " + WordnetUtil.asList(result)+" Set: " + WordnetUtil.asList(set));
+      System.err.println("Hyponyms: " + WordnetUtil.asList(result) + " Set: "
+          + WordnetUtil.asList(set));
 
     /*
      * result = getAllHypernyms(word, posStr); this.addSynsetsToSet(result,
@@ -950,7 +966,7 @@ public class RiWordNet implements Wordnet
       System.err.println("Coordinates: " + WordnetUtil.asList(result));
 
     // System.err.println("=======================================");
-    return setToStrings(set, maxResults, randomizeResults);
+    return setToStrings(set, maxResults);
   }
 
   public String[] getAllSynonyms(String word, String posStr)
@@ -988,18 +1004,17 @@ public class RiWordNet implements Wordnet
     }
   }
 
-  private String[] setToStrings(Set set, int maxSize, boolean shuffle)
+  private String[] setToStrings(Set set, int maxSize)
   {
-
     if (set == null || set.size() == 0)
-      return null;
-    
+      return EA;
+
     List result = new ArrayList(set.size());
     result.addAll(set);
-    
-    if (shuffle)
+
+    if (randomizeResults)
       Collections.shuffle(result);
-    
+
     int size = Math.min(maxSize, set.size());
 
     int idx = 0;
@@ -1015,7 +1030,7 @@ public class RiWordNet implements Wordnet
 
   /**
    * Returns String[] of Common Parents for 1st senses of words with specified
-   * pos' or null if not found
+   * pos' 
    */
   public String[] getCommonParents(String word1, String word2, String pos)
   {
@@ -1024,17 +1039,18 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns common parent for words with unique ids <code>id1</code>,
-   * <code>id2</code>, or null if either word or no parent is found
+   * Returns the id for the common parent of 2 words with unique ids <code>id1</code>,
+   * <code>id2</code>, or 0 if no parent is found
    */
-  public Synset getCommonParent(int id1, int id2)
+   // TODO: update docs, no longer returns Synset ***
+  public int getCommonParent(int id1, int id2)
   {
     Synset syn1 = getSynsetAtId(id1);
     if (syn1 == null)
-      return null;
+      return 0;
     Synset syn2 = getSynsetAtId(id2);
     if (syn2 == null)
-      return null;
+      return 0;
     RelationshipList list;
     try
     {
@@ -1043,42 +1059,52 @@ public class RiWordNet implements Wordnet
     catch (JWNLException e)
     {
       // no relationship found
-      return null;
+      return 0;
     }
-    
+
     AsymmetricRelationship ar = (AsymmetricRelationship) list.get(0); // why 0??
     PointerTargetNodeList nl = ar.getNodeList();
     PointerTargetNode ptn = (PointerTargetNode) nl.get(ar.getCommonParentIndex());
-    
-    return ptn.getSynset();
+ 
+    return toId(ptn.getSynset());
   }
 
-  private List getCommonParentList(String word1, String word2, String pos)
+  private int toId(Synset synset)
+  {
+    return synset != null ? toId(synset.getPOS(), synset.getOffset()) : 0;
+  }
+
+  private List getCommonParentList(String word1, String word2, String pos) // returns null if not found
   {
     Synset syn = null;
     try
     {
       POS wnpos = convertPos(pos);
+      
       IndexWord iw1 = lookupIndexWord(wnpos, word1);
       if (iw1 == null)
         return null;
+      
       IndexWord iw2 = lookupIndexWord(wnpos, word2);
       if (iw2 == null)
         return null;
+      
       syn = getCommonParent(iw1, iw2);
-      if (syn == null)
-        return null;
     }
     catch (JWNLException e)
     {
       throw new RiWordNetError(this, e);
     }
+    
     List l = new ArrayList();
-    addLemmas(syn.getWords(), l);
-    return l == null || l.size() < 1 ? null : l;
+    
+    if (syn != null)
+      addLemmas(syn.getWords(), l);
+    
+    return l.size() < 1 ? null : l;
   }
 
-  private Synset getCommonParent(IndexWord start, IndexWord end) throws JWNLException
+  private Synset getCommonParent(IndexWord start, IndexWord end) throws JWNLException  // returns null if not found
   {
     if (start == null || end == null)
       return null;
@@ -1092,22 +1118,26 @@ public class RiWordNet implements Wordnet
     {
       // ignore jwnl bug
     }
+    
     if (list == null)
       return null;
+    
     // System.out.println("Hypernym relationship between \"" + start.getLemma()
     // + "\" and \"" + end.getLemma() + "\":");
     AsymmetricRelationship ar = (AsymmetricRelationship) list.get(0);
     PointerTargetNodeList nl = ar.getNodeList();
+    
     // System.out.println("Common Parent Index: "+ar.getCommonParentIndex());
     PointerTargetNode ptn = (PointerTargetNode) nl.get(ar.getCommonParentIndex());
-    return ptn.getSynset();
+    
+    return ptn == null ? null : ptn.getSynset();
   }
 
   // SYNSETS
 
   /**
    * Returns String[] of words in synset for first sense of <code>word</code>
-   * with <code>pos</code>, or null if not found.
+   * with <code>pos</code>.
    * <P>
    * Note: original word is excluded by default.
    * 
@@ -1120,19 +1150,20 @@ public class RiWordNet implements Wordnet
 
   /**
    * Returns String[] of words in synset for first sense of <code>word</code>
-   * with <code>pos</code>, or null if not found.
+   * with <code>pos</code>.
    */
   public String[] getSynset(String word, String pos, boolean includeOriginal)
   {
     Synset syns = getSynsetAtIndex(word, pos, 1);
     if (syns == null || syns.getWordsSize() < 1)
-      return null;
+      return EA;
+    
     List l = new LinkedList();
+    if (includeOriginal)
+      l.add(word);
+    
     Word[] words = syns.getWords();
     addLemmas(words, l);
-    if (!includeOriginal)
-      l.remove(word);
-
     // System.out.println("RiWordNet.getSynset("+word+","+pos+") -> "+l);
 
     return toStrArr(l);
@@ -1149,31 +1180,36 @@ public class RiWordNet implements Wordnet
 
   /**
    * Returns String[] of words in each synset for all senses of
-   * <code>word</code> with <code>pos</code>, or null if not found
+   * <code>word</code> with <code>pos</code>, 
    */
   public String[] getAllSynsets(String word, String posStr)
   {
     POS pos = convertPos(posStr);
     IndexWord idw = null;
     List result = null;
+    
     try
     {
       idw = lookupIndexWord(pos, word);
       if (idw == null || idw.getSenseCount() < 1)
-        return null;
+        return EA;
+      
       result = new LinkedList();
       for (int i = 1; i <= idw.getSenseCount(); i++)
       {
         List syns = this.getSynsetAtIndex(idw, i);
         if (syns == null || syns.size() < 1)
           continue;
+        
         for (Iterator j = syns.iterator(); j.hasNext();)
         {
           String lemma = (String) j.next();
           addLemma(lemma, result);
         }
       }
+      
       result.remove(word); // don't include original
+      
       return toStrArr(result);
     }
     catch (JWNLException e)
@@ -1184,26 +1220,27 @@ public class RiWordNet implements Wordnet
 
   private List getSynsetAtIndex(IndexWord word, int index) throws JWNLException
   {
+    List l = new ArrayList();
+    
     if (index < 1)
       throw new IllegalArgumentException("Invalid index: " + index);
 
-    if (word == null || word.getSenseCount() < 1)
-      return null;
-
-    List l = new ArrayList();
-    addLemmas(word.getSense(index).getWords(), l);
+    if (word != null && word.getSenseCount() < 1)
+      addLemmas(word.getSense(index).getWords(), l);
+    
     return l;
   }
 
-  private Synset[] allSynsets(String word, String posStr)
+  private Synset[] allSynsets(String word, String posStr) // returns null
   {
     POS pos = convertPos(posStr);
     IndexWord idw = lookupIndexWord(pos, word);
-    if (idw == null)
-      return null;
+    
+    if (idw == null) return null;
+    
     int senseCount = idw.getSenseCount();
-    if (senseCount < 1)
-      return null;
+    if (senseCount < 1) return null;
+    
     Synset[] syns = new Synset[senseCount];
     for (int i = 0; i < syns.length; i++)
     {
@@ -1211,27 +1248,30 @@ public class RiWordNet implements Wordnet
       {
         syns[i] = idw.getSense(i + 1);
         if (syns[i] == null)
-          System.err.println("[WARN] Wordnet returned null Synset for: " + word + "/" + pos);
+          System.err.println("[WARN] Null Synset for: "+word+"/"+ pos);
       }
       catch (JWNLException e)
       {
         throw new RiWordNetError(e);
       }
     }
+    
     return syns;
   }
 
-  private Synset getSynsetAtIndex(String word, String posStr, int i)
+  private Synset getSynsetAtIndex(String word, String posStr, int idx) // returns null
   {
-    if (i < 1)
-      throw new IllegalArgumentException("Invalid index: " + i);
-    POS pos = convertPos(posStr);
-    IndexWord idw = lookupIndexWord(pos, word);
-    if (idw == null || idw.getSenseCount() < i)
+    if (idx < 1)
+      throw new IllegalArgumentException("Invalid index: " + idx);
+    
+    IndexWord idw = lookupIndexWord(convertPos(posStr), word);
+    
+    if (idw == null || idw.getSenseCount() < idx)
       return null;
+    
     try
     {
-      return idw.getSense(i);
+      return idw.getSense(idx);
     }
     catch (JWNLException e)
     {
@@ -1241,27 +1281,26 @@ public class RiWordNet implements Wordnet
 
   /**
    * Return the # of senses (polysemy) for a given word/pos. A 'sense' refers to
-   * a specific Wordnet meaning and maps 1-1 to the concept of synsets. Each
+   * a specific WordNet meaning and maps 1-1 to the concept of synsets. Each
    * 'sense' of a word exists in a different synset.
    * <p>
    * For more info, see: {@link http://wordnet.princeton.edu/gloss}
    * 
-   * @return # of senses or -1 if not found
+   * @return # of senses or 0 if not found
    */
+  // TODO: check in docs (no longer returns -1)
   public int getSenseCount(String word, String pos)
   {
-    int senses = -1;
     try
     {
       IndexWord iw = lookupIndexWord(pos, word);
-      if (iw != null)
-        senses = iw.getSenseCount();
+      return (iw != null) ? iw.getSenseCount() : 0;
     }
     catch (RiWordNetError e)
     {
       System.err.println("[WARN] " + e.getMessage());
+      return 0;
     }
-    return senses;
   }
 
   /*
@@ -1274,7 +1313,7 @@ public class RiWordNet implements Wordnet
   // ANTONYMS ------------
   /**
    * Returns String[] of Antonyms for the 1st sense of <code>word</code> with
-   * <code>pos</code> or null if not found<br>
+   * <code>pos</code> <br>
    * 
    * Example: 'night' -> 'day', "full", -> "empty"
    */
@@ -1284,9 +1323,9 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns String[] of Antonyms for the specified id, or null if not found<br>
-   * Holds for adjectives only (?)
+   * Returns String[] of Antonyms for the specified id, <br>
    */
+  //Holds for adjectives only (?)
   public String[] getAntonyms(int id)
   {
     return getPointerTargetsAtId(id, PointerType.ANTONYM);
@@ -1294,33 +1333,19 @@ public class RiWordNet implements Wordnet
 
   /**
    * Returns String[] of Antonyms for the 1st sense of <code>word</code> with
-   * <code>pos</code> or null if not found<br>
-   * Holds for adjectives only (?)
+   * <code>pos</code>.
    */
+  //Holds for adjectives only (?)
   public String[] getAllAntonyms(String word, String pos)
   {
     return getAllPointerTargets(word, pos, PointerType.ANTONYM);
   }
 
-  /*
-   * Returns String[] of Antonyms for the 1st sense of 'word' with specified pos
-   * private List getAntonymsAtIndex(IndexWord idw, int index) throws
-   * JWNLException { if (idw == null) return null;
-   * 
-   * Synset[] synsets = idw.getSenses(); if (synsets == null || synsets.length
-   * <= 0) return null;
-   * 
-   * List l = new ArrayList(); PointerUtils pu = PointerUtils.getInstance();
-   * PointerTargetNodeList nodeList = pu.getAntonyms(synsets[index]);
-   * getLemmaSet(nodeList, l);
-   * 
-   * return l == null || l.size() < 1 ? null : l; }
-   */
-  
   // HYPERNYMS -- direct
+  
   /**
    * Returns Hypernym String[] for all senses of <code>word</code> with
-   * <code>pos</code> or null if not found
+   * <code>pos</code> 
    * <p>
    * X is a hyponym of Y if there exists an is-a relationship between X and Y.<br>
    * That is, if X is a subtype of Y. <br>
@@ -1356,7 +1381,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns Hypernym String[] for id, or null if not found
+   * Returns Hypernym String[] for id, 
    * <p>
    * X is a hyponym of Y if there exists an is-a relationship between X and Y.<br>
    * That is, if X is a subtype of Y. <br>
@@ -1391,29 +1416,6 @@ public class RiWordNet implements Wordnet
   }
 
   /*
-   * private List getHypernymList(String word, String posStr) { POS pos =
-   * convertPos(posStr); try { IndexWord idw = lookupIndexWord(pos, word); if
-   * (idw == null) return null; return this.getHypernyms(idw); } catch
-   * (JWNLException e) { throw new CTextError(this, e); }}
-   */
-
-  /*
-   * Adds the hypernyms for the first sense of IndexWord to List @param word -
-   * IndexWord on which to search @param l - List to which we add hypernyms
-   */
-  /*
-   * private List getHypernyms(IndexWord word) throws JWNLException { if (word
-   * == null) return null;
-   * 
-   * Synset[] synsets = word.getSenses(); if (synsets == null || synsets.length
-   * == 0) return null;
-   * 
-   * List l = new ArrayList(); // maintain order? int i = 0; // for (; i <
-   * synsets.length; i++) getHypernyms(synsets[i], l); return l == null ||
-   * l.size() < 1 ? null : l; }
-   */
-
-  /*
    * Adds the hypernyms for this 'synset' to List TODO: redo with a List,
    * checking for dups
    */
@@ -1436,8 +1438,8 @@ public class RiWordNet implements Wordnet
 
   /**
    * Returns an ordered String[] of hypernym-synsets (each a semi-colon
-   * delimited String) up to the root of Wordnet for the 1st sense of the word,
-   * or null if not found
+   * delimited String) up to the root of WordNet for the 1st sense of the word,
+   * 
    * 
    * @example VariousHypernyms
    */
@@ -1456,25 +1458,25 @@ public class RiWordNet implements Wordnet
 
   /**
    * Returns an ordered String[] of hypernym-synsets (each a semi-colon
-   * delimited String) up to the root of Wordnet for the <code>id</code>, or
-   * null if not found
+   * delimited String) up to the root of WordNet for the <code>id</code>.
    */
   public String[] getHypernymTree(int id)
   {
     Synset synset = getSynsetAtId(id);
     if (synset == null)
-      return new String[]{ROOT};
+      return new String[] { ROOT };
+    
     try
     {
       return toStrArr(getHypernymTree(synset));
     }
     catch (JWNLException e)
     {
-      return null; // not found
+      return EA; // not found
     }
   }
 
-  private List getAllHypernyms(IndexWord idw) throws JWNLException
+  private List getAllHypernyms(IndexWord idw) throws JWNLException // returns null
   {
     if (idw == null)
       return null;
@@ -1482,19 +1484,17 @@ public class RiWordNet implements Wordnet
     if (synsets == null || synsets.length <= 0)
       return null;
 
-    int i = 0;
     List result = new LinkedList();
-    for (; i < synsets.length; i++)
+    for (int i = 0; i < synsets.length; i++)
       getHypernyms(synsets[i], result);
-    
-    return result == null || result.size() < 1 ? null : result;
+
+    return result.size() < 1 ? null : result;
   }
 
-  private List getHypernymTree(Synset synset) throws JWNLException
+  private List getHypernymTree(Synset synset) throws JWNLException // returns null
   {
     // System.err.println("RiWordNet.getHypernymTree("+word+","+synset+")");
-    if (synset == null)
-      return null;
+    if (synset == null) return null;
 
     PointerTargetTree ptt = null;
     try
@@ -1511,10 +1511,11 @@ public class RiWordNet implements Wordnet
       return null;
 
     List pointerTargetNodeLists = ptt.toList();
+
     // System.err.println("#PTNLS -> "+pointerTargetNodeLists.size());
-    int count = 0; // why only one item per tree/synset?
+    
     List l = new ArrayList();
-    for (Iterator i = pointerTargetNodeLists.iterator(); i.hasNext(); count++)
+    for (Iterator i = pointerTargetNodeLists.iterator(); i.hasNext();)
     {
       PointerTargetNodeList ptnl = (PointerTargetNodeList) i.next();
       List strs = this.getLemmaStrings(ptnl, SYNSET_DELIM, false);
@@ -1527,26 +1528,17 @@ public class RiWordNet implements Wordnet
           l.add(lemma);
       }
     }
-    if (l.size() == 1)
-      l.remove(0); // ignore the current synset (is this ok??)
+    
+    l.remove(synset); // ignore the current synset (is this ok??)
 
-    return l == null || l.size() < 1 ? null : l;
+    return l.size() < 1 ? null : l;
   }
-
-  /*
-   * // HYPONYMS (direct)
-   * 
-   * private List getHyponymList(String word, String posStr) { POS pos =
-   * convertPos(posStr); try { IndexWord idw = lookupIndexWord(pos, word); if
-   * (idw == null) return null; return this.getHyponyms(idw); } catch
-   * (JWNLException e) { throw new WordnetError(this, e); } }
-   */
 
   // HYPONYMS (direct)
 
   /**
    * Returns Hyponym String[] for 1st sense of <code>word</code> with
-   * <code>pos</code> or null if not found
+   * <code>pos</code> 
    * <p>
    * X is a hyponym of Y if there exists an is-a relationship between X and Y.<br>
    * That is, if X is a subtype of Y. <br>
@@ -1587,7 +1579,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns Hyponym String[] for id, or null if not found
+   * Returns Hyponym String[] for id, 
    * <p>
    * X is a hyponym of Y if there exists an is-a relationship between X and Y.<br>
    * That is, if X is a subtype of Y. <br>
@@ -1621,19 +1613,6 @@ public class RiWordNet implements Wordnet
     return ptnlToStrings(null, ptnl);
   }
 
-  /*
-   * private List getHyponyms(IndexWord word) throws JWNLException { if (word ==
-   * null) return null;
-   * 
-   * Synset[] synsets = word.getSenses(); if (synsets == null || synsets.length
-   * <= 0) return null;
-   * 
-   * List l = new ArrayList(); int i = 0; // for (; i < synsets.length; i++)
-   * getHyponyms(synsets[i], l);
-   * 
-   * return l == null || l.size() < 1 ? null : l; }
-   */
-
   /* Adds the hyponyms for this 'synset' to List */
   private void getHyponyms(Synset syn, Collection l) throws JWNLException
   {
@@ -1657,7 +1636,7 @@ public class RiWordNet implements Wordnet
 
   /**
    * Returns an unordered String[] of hyponym-synsets (each a colon-delimited
-   * String), or null if not found
+   * String)
    * 
    * @example VariousHyponyms
    */
@@ -1665,18 +1644,12 @@ public class RiWordNet implements Wordnet
   {
     IndexWord idw = lookupIndexWord(convertPos(posStr), word);
     List l = this.getAllHyponyms(idw);
-    if (l == null)
-      return null;
+    if (l == null) return EA;
     l.remove(word);
     return toStrArr(l);
   }
 
-  /*
-   * private List getAllHyponyms(IndexWord idw) { int[] ids = getSenseIds(idw);
-   * for (int i = 0; i < ids.length; i++) { getHyponyms(ids[i]); } return null;
-   * }
-   */
-  private List getAllHyponyms(IndexWord idw)
+  private List getAllHyponyms(IndexWord idw) // returns null
   {
     if (idw == null)
       return null;
@@ -1691,6 +1664,7 @@ public class RiWordNet implements Wordnet
     {
       throw new RiWordNetError(e);
     }
+    
     if (synsets == null || synsets.length <= 0)
       return null;
 
@@ -1704,53 +1678,39 @@ public class RiWordNet implements Wordnet
       }
       catch (JWNLException e)
       {
-        e.printStackTrace();
+        throw new RiWordNetError(e);
       }
     }
     // for (Iterator i = l.iterator(); i.hasNext();)
     // System.err.println(i.next());
 
-    return l == null || l.size() < 1 ? null : l;
+    return l.size() < 1 ? null : l;
   }
 
   /**
    * Returns an unordered String[] of hyponym-synsets (each a colon-delimited
    * String) representing all paths to leaves in the ontology (the full hyponym
-   * tree), or null if not found
+   * tree)
    * <p>
    */
   public String[] getHyponymTree(int id)
   {
     Synset synset = getSynsetAtId(id);
-    if (synset == null)
-      return null;
 
-    List l = null;
+    if (synset == null)
+      return EA;
+
     try
     {
-      l = getHyponymTree(synset);
+      return toStrArr(getHyponymTree(synset));
     }
     catch (JWNLException e)
     {
-      e.printStackTrace();
+      throw new RiWordNetError(e);
     }
-    return toStrArr(l);
   }
 
-  /*
-   * private List getAllHyponyms(IndexWord idw) { if (idw == null) return null;
-   * 
-   * String lemma = idw.getLemma(); Synset[] synsets = null; try { synsets =
-   * idw.getSenses(); } catch (JWNLException e) { throw new WordnetError(e); }
-   * if (synsets == null || synsets.length <= 0) return null;
-   * 
-   * int i = 0; // ? List l = null; try { l = getHyponymTree(idw.getLemma(),
-   * synsets[i]); } catch (JWNLException e) { throw new WordnetError(e); }
-   * 
-   * return l == null || l.size() < 1 ? null : l; }
-   */
-
-  private List getHyponymTree(Synset synset) throws JWNLException
+  private List getHyponymTree(Synset synset) throws JWNLException // returns null
   {
     if (synset == null)
       return null;
@@ -1764,8 +1724,8 @@ public class RiWordNet implements Wordnet
     {
       // ignore bad jwnl bug here
     }
-    
-    if (ptt == null) 
+
+    if (ptt == null)
       return null;
 
     List pointerTargetNodeLists = ptt.toList();
@@ -1790,10 +1750,10 @@ public class RiWordNet implements Wordnet
       }
     }
 
-    // remove all the entries from the current synset (rethink)
+    // remove all the entries from the current synset (rethink?)
     Set syns = new TreeSet();
     addLemmas(synset.getWords(), syns);
-    
+
     OUTER: for (Iterator iter = l.iterator(); iter.hasNext();)
     {
       String syn = (SYNSET_DELIM + (String) iter.next() + SYNSET_DELIM); // yuck
@@ -1835,7 +1795,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns an array of all stems, or null if not found
+   * Returns an array of all stems, 
    * 
    * @param query
    * @param pos
@@ -1850,8 +1810,8 @@ public class RiWordNet implements Wordnet
    * Returns stem for <code>pos</code> with <code>pos</code>, or null if not
    * found.
    * 
-   * public String getStem(String word, String pos) { IndexWord iw = null;
-   * try { iw = dictionary.getMorphologicalProcessor()
+   * public String getStem(String word, String pos) { IndexWord iw = null; try {
+   * iw = dictionary.getMorphologicalProcessor()
    * .lookupBaseForm(convertPos(pos), word); } catch (JWNLException e) { throw
    * new CTextError(this, e); } return (iw != null) ? iw.getLemma() : null; }
    */
@@ -1893,8 +1853,8 @@ public class RiWordNet implements Wordnet
    */
   public boolean exists(String word)
   {
-    if (word.indexOf(' ') > -1) return false;
-      //throw new WordnetError(this, "expecting word, got phrase: " + word);
+    if (word.indexOf(' ') > -1)
+      return false;
 
     IndexWord[] iw = null;
     try
@@ -1936,7 +1896,7 @@ public class RiWordNet implements Wordnet
       if (!exists(word))
         i.remove();
     }
-    return this;    
+    return this;
   }
 
   // -------------------------- PRIVATE METHODS ------------------------------
@@ -1948,44 +1908,55 @@ public class RiWordNet implements Wordnet
 
   private POS convertPos(String pos)
   {
-    POS wnPos = WordnetPos.getPos(pos);
+    POS wnPos = getPOS(pos);
     if (wnPos == null)
       throw new RiWordNetError(this, "Invalid Pos-String: '" + pos + "'");
     return wnPos;
   }
   
-  /** @invisible */
-  public IndexWord lookupIndexWord(POS pos, String cs)
+  public static POS getPOS(String pos)  // returns null
+  {
+    if (pos.equalsIgnoreCase("N")) return rita.wordnet.jwnl.data.POS.NOUN;
+    if (pos.equalsIgnoreCase("V")) return rita.wordnet.jwnl.data.POS.VERB;
+    if (pos.equalsIgnoreCase("R")) return rita.wordnet.jwnl.data.POS.ADVERB;
+    if (pos.equalsIgnoreCase("A")) return rita.wordnet.jwnl.data.POS.ADJECTIVE;
+    return null;
+  }
+
+  protected IndexWord lookupIndexWord(POS pos, String cs) // returns null
   {
     // System.err.println("RiWordNet.lookupIndexWord("+cs+")");
-    if (cs == null)
-      return null;
-    String word = cs.toString().replace('-', '_');
     IndexWord iword = null;
-    try
+
+    if (cs != null)
     {
-      iword = jwnlDict.lookupIndexWord(pos, word);
+      String word = cs.toString().replace('-', '_');
+      try
+      {
+        iword = jwnlDict.lookupIndexWord(pos, word);
+      }
+      catch (JWNLException e)
+      {
+        // JWNL bug returns null here, ignore...
+      }
     }
-    catch (JWNLException e)
-    {
-      // JWNL bug returns null here, ignore...
-    }
+
     return iword;
   }
 
-  private String toLemmaString(Word[] words, String delim, boolean addStartAndEndDelims)
+  private String toLemmaString(Word[] words, String delim, boolean addStartAndEndDelims) // returns null
   {
     if (words == null || words.length == 0)
       return null;
-    
+
     List dest = new ArrayList();
     addLemmas(words, dest);
-    
+
     String result = WordnetUtil.join(dest, delim);
-    
+
     if (addStartAndEndDelims)
       result = delim + result + delim;
-    
+
     return result;
   }
 
@@ -1993,7 +1964,7 @@ public class RiWordNet implements Wordnet
   {
     if (words == null || words.length == 0)
       return;
-    
+
     for (int k = 0; k < words.length; k++)
       addLemma(words[k], dest);
   }
@@ -2007,12 +1978,12 @@ public class RiWordNet implements Wordnet
   {
     if (ignoreCompoundWords && isCompound(lemma))
       return;
-    
+
     if (ignoreUpperCaseWords && WordnetUtil.startsWithUppercase(lemma))
       return;
-    
+
     lemma = cleanLemma(lemma);
-    
+
     if (!dest.contains(lemma)) // no dups
       dest.add(lemma);
   }
@@ -2079,47 +2050,32 @@ public class RiWordNet implements Wordnet
     return lemma;
   }
 
-  /*
-   * EXPERIMENT!!!!!!!!!!!!!!!!! Adds the hypernyms for all senses of IndexWord
-   * to List @param word - IndexWord on which to search @param l - List to which
-   * we add hypernyms
-   * 
-   * private List getDerivedSynset(IndexWord word) throws JWNLException { if
-   * (word == null) return null;
-   * 
-   * Synset[] synsets = word.getSenses(); if (synsets == null || synsets.length
-   * <= 0) return null;
-   * 
-   * List l = new ArrayList(); PointerUtils pu = PointerUtils.getInstance(); for
-   * (int i = 0; i < synsets.length; i++) { PointerTargetNodeList nodeList =
-   * pu.getDerived(synsets[i]); getLemmaSet(nodeList, l); // redo with a List,
-   * checking for dups }
-   * 
-   * return l; }
-   */
-
   /**
    * Returns an array of all parts-of-speech ordered according to their polysemy
    * count, returning the pos with the most different senses in the first
    * position, etc.
    * 
    * @return String[], one element for each part of speech ("a" = adjective, "n"
-   *         = noun, "r" = adverb, "v" = verb), or null if not found.
+   *         = noun, "r" = adverb, "v" = verb).
    */
   public String[] getPos(String word)
   {
     IndexWord[] all = getIndexWords(word);
-    if (all == null)
-      return null;
+    
+    if (all == null || all.length < 1)
+      return EA;
+    
     String[] pos = new String[all.length];
+    
     for (int i = 0; i < all.length; i++)
       pos[i] = all[i].getPOS().getKey();
+    
     return pos;
   }
 
   /**
    * @return String from ("a" = adjective, "n" = noun, "r" = adverb, "v" =
-   *         verb), or null if not found.
+   *         verb), .
    */
   public String getPos(int id)
   {
@@ -2130,11 +2086,10 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * @invisible
-   * Returns a String of characters, 1 for each part of speech: ("a" =
-   * adjective, "n" = noun, "r" = adverb, "v" = verb) or an empty String if not
-   * found.
-   * <p>
+   * @invisible Returns a String of characters, 1 for each part of speech: ("a"
+   *            = adjective, "n" = noun, "r" = adverb, "v" = verb) or an empty
+   *            String if not found.
+   *            <p>
    */
   public String getPosStr(String word)
   {
@@ -2156,12 +2111,15 @@ public class RiWordNet implements Wordnet
    *         adjective, "n" = noun, "r" = adverb, "v" = verb), or null if not
    *         found.
    */
-  public String getBestPos(String word)
+  public String getBestPos(String word) // returns null
   {
     IndexWord[] all = getIndexWords(word);
+    
     if (all == null || all.length < 1)
       return null;
+    
     POS p = all[0].getPOS();
+    
     if (p == POS.NOUN)
       return NOUN;
     if (p == POS.VERB)
@@ -2170,6 +2128,7 @@ public class RiWordNet implements Wordnet
       return ADV;
     if (p == POS.ADJECTIVE)
       return ADJ;
+    
     throw new RiWordNetError("no pos for word: " + word);
   }
 
@@ -2227,18 +2186,18 @@ public class RiWordNet implements Wordnet
    *          wordnet xml-based configuration file full path.
    * @throws FileNotFoundException
    */
-  private void initWordnet(String confFile) throws JWNLException
+  private void initWordNet(String confFile) throws JWNLException
   {
     if (false)
       System.err.println("[INFO] Initializing WordNet: conf='" + confFile + "'");
-    
+
     try
     {
       InputStream is = WordnetUtil.getResourceStream(WordnetUtil.class, confFile);
-      
+
       if (false)
         System.err.println("[INFO] Initializing WordNet: stream='" + is + "'");
-      
+
       JWNL.initialize(is);
     }
     catch (RuntimeException e)
@@ -2248,31 +2207,30 @@ public class RiWordNet implements Wordnet
     }
   }
 
-  /**
-   * @param query
-   * @invisible
-   * @param l
-   */
-  public static String[] toStrArr(List l)
+  String[] toStrArr(List l)
   {
     if (l == null || l.size() == 0)
-      return null;
+      return EA;
+    if (randomizeResults)
+      Collections.shuffle(l);
     return (String[]) l.toArray(new String[l.size()]);
   }
 
-  /**
-   * @invisible
-   * @param l
-   */
-  /* public */String[] ptnlToStrings(String query, PointerTargetNodeList ptnl)
+  String[] ptnlToStrings(String query, PointerTargetNodeList ptnl)
   {
     if (ptnl == null || ptnl.size() == 0)
-      return null;
+      return EA;
+    
     List l = new LinkedList();
     getLemmaSet(ptnl, l);
+    
     // ??? (remove this? what if we dont know the original?)
     if (query != null)
       l.remove(query); // remove original
+    
+    if (randomizeResults)
+      Collections.shuffle(l);
+    
     return toStrArr(l);
   }
 
@@ -2303,7 +2261,8 @@ public class RiWordNet implements Wordnet
       try
       {
         IndexWord iw = null;
-        while (iw == null || !ignoreCompoundWords && WordnetUtil.contains(iw.getLemma(), " "))
+        while (iw == null || !ignoreCompoundWords
+            && WordnetUtil.contains(iw.getLemma(), " "))
           iw = jwnlDict.getRandomIndexWord(convertPos(pos));
 
         Synset syn = iw.getSenses()[0];
@@ -2455,7 +2414,8 @@ public class RiWordNet implements Wordnet
       return;
     Set syns = new TreeSet();
     addLemmas(syn.getWords(), syns);
-    ps.println("\nHyponyms of synset" + syns + ":\n-------------------------------------------");
+    ps.println("\nHyponyms of synset" + syns
+        + ":\n-------------------------------------------");
 
     hyponyms.print(ps);
     ps.println();
@@ -2510,13 +2470,14 @@ public class RiWordNet implements Wordnet
     {
       // ignore jwnl bug
     }
-    
+
     if (hypernyms == null)
       return this;
-    
+
     Set syns = new TreeSet();
     addLemmas(syn.getWords(), syns);
-    ps.println("\nHypernyms of synset" + syns + ":\n-------------------------------------------");
+    ps.println("\nHypernyms of synset" + syns
+        + ":\n-------------------------------------------");
     hypernyms.print(ps);
     ps.println();
     return this;
@@ -2547,7 +2508,7 @@ public class RiWordNet implements Wordnet
       return -1;
     if (lemma2 == null || lemma2.contains(" "))
       return -1;
-    
+
     IndexWordSet WORDSET1, WORDSET2;
     IndexWord WORD1, WORD2;
 
@@ -2603,8 +2564,9 @@ public class RiWordNet implements Wordnet
   }
 
   // get distance between words that are the same POS
-  private float getWordDistance(IndexWord start, IndexWord end) 
-    throws JWNLException, NullPointerException // on                                                                                                        // bug
+  private float getWordDistance(IndexWord start, IndexWord end) throws JWNLException, NullPointerException // on
+                                                                                                           // //
+                                                                                                           // bug
   {
     RelationshipList relList;
     AsymmetricRelationship rel;
@@ -2626,13 +2588,12 @@ public class RiWordNet implements Wordnet
         // get list of relationships between words (usually only one)
         try
         {
-          //System.out.println(i+","+j+": "+start.getSense(i)+","+end.getSense(j));
-          relList = RelationshipFinder.getInstance().findRelationships
-            (start.getSense(i), end.getSense(j), PointerType.HYPERNYM);
+          // System.out.println(i+","+j+": "+start.getSense(i)+","+end.getSense(j));
+          relList = RelationshipFinder.getInstance().findRelationships(start.getSense(i), end.getSense(j), PointerType.HYPERNYM);
         }
         catch (Exception e)
         {
-          //System.out.println("RiWordNet.getWordDistance().exception="+e.getMessage());
+          // System.out.println("RiWordNet.getWordDistance().exception="+e.getMessage());
           continue;
         }
 
@@ -2707,7 +2668,8 @@ public class RiWordNet implements Wordnet
     {
       Synset synset = getSynsetAtIndex(query, pos, 1);
       if (synset == null)
-        return null;
+        return EA;
+      
       PointerTargetNodeList ptnl = null;
       try
       {
@@ -2728,7 +2690,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns array of whole-to-part relationships for id, or null if not found<br>
+   * Returns array of whole-to-part relationships for id, <br>
    * X is a meronym of Y if Y has X as a part.<br>
    * X is a holonym of Y if X has Y as a part. That is, if Y is a meronym of X. <br>
    * Holds between: Nouns and nouns<br>
@@ -2741,7 +2703,7 @@ public class RiWordNet implements Wordnet
     {
       Synset synset = getSynsetAtId(id);
       if (synset == null)
-        return null;
+        return EA;
       PointerTargetNodeList ptnl = null;
       try
       {
@@ -2779,7 +2741,7 @@ public class RiWordNet implements Wordnet
     {
       Synset[] synsets = allSynsets(query, pos);
       if (synsets == null)
-        return null;
+        return EA;
       List l = new LinkedList();
       for (int i = 0; i < synsets.length; i++)
       {
@@ -2825,7 +2787,7 @@ public class RiWordNet implements Wordnet
     {
       Synset synset = getSynsetAtIndex(query, pos, 1);
       if (synset == null)
-        return null;
+        return EA;
       ptnl = PointerUtils.getInstance().getHolonyms(synset);
     }
     catch (NullPointerException e)
@@ -2859,7 +2821,7 @@ public class RiWordNet implements Wordnet
     {
       Synset synset = getSynsetAtId(id);
       if (synset == null)
-        return null;
+        return EA;
       ptnl = PointerUtils.getInstance().getHolonyms(synset);
     }
     catch (NullPointerException e)
@@ -2891,7 +2853,7 @@ public class RiWordNet implements Wordnet
     {
       Synset[] synsets = allSynsets(query, pos);
       if (synsets == null)
-        return null;
+        return EA;
       List l = new LinkedList();
       for (int i = 0; i < synsets.length; i++)
       {
@@ -2918,7 +2880,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns coordinate terms for 1st sense of word/pos, or null if not found<br>
+   * Returns coordinate terms for 1st sense of word/pos, <br>
    * X is a coordinate term of Y if there exists a term Z which is the hypernym
    * of both X and Y.<br>
    * Examples:
@@ -2944,7 +2906,7 @@ public class RiWordNet implements Wordnet
     {
       Synset synset = getSynsetAtIndex(query, pos, 1);
       if (synset == null)
-        return null;
+        return EA;
       PointerTargetNodeList ptnl = PointerUtils.getInstance().getCoordinateTerms(synset);
       if (ptnl != null)
         result = ptnlToStrings(query, ptnl);
@@ -2961,7 +2923,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns String[] of Coordinates for the specified id, or null if not found<br>
+   * Returns String[] of Coordinates for the specified id, <br>
    */
   public String[] getCoordinates(int id)
   {
@@ -2970,7 +2932,7 @@ public class RiWordNet implements Wordnet
     {
       Synset synset = getSynsetAtId(id);
       if (synset == null)
-        return null;
+        return EA;
       PointerTargetNodeList ptnl = PointerUtils.getInstance().getCoordinateTerms(synset);
       if (ptnl != null)
         result = ptnlToStrings(null, ptnl);
@@ -2987,7 +2949,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns coordinate terms for all sense of word/pos, or null if not found<br>
+   * Returns coordinate terms for all sense of word/pos, <br>
    * X is a coordinate term of Y if there exists a term Z which is the hypernym
    * of both X and Y.<br>
    * Examples:
@@ -3012,7 +2974,7 @@ public class RiWordNet implements Wordnet
     {
       Synset[] synsets = allSynsets(query, pos);
       if (synsets == null)
-        return null;
+        return EA;
       List l = new LinkedList();
       for (int i = 0; i < synsets.length; i++)
       {
@@ -3039,7 +3001,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns verb group for 1st sense of verb or null if not found<br>
+   * Returns verb group for 1st sense of verb <br>
    * Example: live -> [dwell, inhabit]<br>
    * Holds for verbs
    * 
@@ -3053,7 +3015,7 @@ public class RiWordNet implements Wordnet
     {
       Synset synset = getSynsetAtIndex(query, pos, 1);
       if (synset == null)
-        return null;
+        return EA;
       try
       {
         ptnl = PointerUtils.getInstance().getVerbGroup(synset);
@@ -3062,19 +3024,17 @@ public class RiWordNet implements Wordnet
       {
         // ignore jwnl bug
       }
-      if (ptnl == null)
-        return null;
-
     }
     catch (JWNLException e)
     {
       throw new RiWordNetError(this, e);
     }
+    
     return ptnlToStrings(query, ptnl);
   }
 
   /**
-   * Returns verb group for id, or null if not found<br>
+   * Returns verb group for id, <br>
    * Example: live -> [dwell, inhabit]<br>
    * Holds for verbs
    */
@@ -3085,7 +3045,7 @@ public class RiWordNet implements Wordnet
     {
       Synset synset = getSynsetAtId(id);
       if (synset == null)
-        return null;
+        return EA;
       try
       {
         ptnl = PointerUtils.getInstance().getVerbGroup(synset);
@@ -3094,9 +3054,6 @@ public class RiWordNet implements Wordnet
       {
         // ignore jwnl bug
       }
-      if (ptnl == null)
-        return null;
-
     }
     catch (JWNLException e)
     {
@@ -3106,7 +3063,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns verb group for all senses of verb or null if not found<br>
+   * Returns verb group for all senses of verb <br>
    * Example: live -> [dwell, inhabit]<br>
    * Holds for verbs
    * 
@@ -3119,7 +3076,7 @@ public class RiWordNet implements Wordnet
     {
       Synset[] synsets = allSynsets(query, pos);
       if (synsets == null)
-        return null;
+        return EA;
       List l = new LinkedList();
       for (int i = 0; i < synsets.length; i++)
       {
@@ -3146,7 +3103,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns derived terms for 1st sense of word/pos or null if not found<br>
+   * Returns derived terms for 1st sense of word/pos <br>
    * Holds for adverbs <br>
    * Example: happily -> [jubilant, blithe, gay, mirthful, merry, happy]
    * 
@@ -3159,7 +3116,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns derived terms for the id, or null if not found<br>
+   * Returns derived terms for the id, <br>
    * Holds for adverbs <br>
    * Example: happily -> [jubilant, blithe, gay, mirthful, merry, happy]
    */
@@ -3169,7 +3126,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns derived terms forall senses of word/pos or null if not found<br>
+   * Returns derived terms forall senses of word/pos <br>
    * Holds for adverbs <br>
    * Example: happily -> [jubilant, blithe, gay, mirthful, merry, happy]
    * 
@@ -3182,7 +3139,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns also-see terms for 1st sense of word/pos or null if not found<br>
+   * Returns also-see terms for 1st sense of word/pos <br>
    * Holds for nouns (?) & adjectives<br>
    * Example: happy -> [cheerful, elated, euphoric, felicitous, joyful,
    * joyous...]
@@ -3196,7 +3153,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns also-see terms for seseId or null if not found<br>
+   * Returns also-see terms for senseId <br>
    * Holds for nouns (?) & adjectives<br>
    * Example: happy -> [cheerful, elated, euphoric, felicitous, joyful,
    * joyous...]
@@ -3209,7 +3166,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns also-see terms for all senses ofword/pos or null if not found<br>
+   * Returns also-see terms for all senses of word/pos <br>
    * Holds for nouns (?) & adjectives<br>
    * Example: happy -> [cheerful, elated, euphoric, felicitous, joyful,
    * joyous...]
@@ -3236,7 +3193,7 @@ public class RiWordNet implements Wordnet
    */
 
   /**
-   * Returns nominalized terms for 1st sense of word/pos or null if not found<br>
+   * Returns nominalized terms for 1st sense of word/pos <br>
    * Refers to the use of a verb or an adjective as a noun. Holds for nouns,
    * verbs & adjecstives(?)<br>
    * Example: happiness(n) -> [happy, unhappy]<br>
@@ -3251,7 +3208,7 @@ public class RiWordNet implements Wordnet
   }
 
   /*
-   * Returns attribute terms for word/pos or null if not found<br> Holds for
+   * Returns attribute terms for word/pos <br> Holds for
    * nouns & adjectives<br> Example: happiness(n) -> [happy, unhappy]<br>
    * happy(a) -> [happiness, felicity]<br>
    * 
@@ -3263,7 +3220,7 @@ public class RiWordNet implements Wordnet
    */
 
   /**
-   * Returns nominalized terms for id, or null if not found<br>
+   * Returns nominalized terms for id, <br>
    * Refers to the use of a verb or an adjective as a noun. Holds for nouns,
    * verbs & adjecstives(?)<br>
    * Example: happiness(n) -> [happy, unhappy]<br>
@@ -3275,7 +3232,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns nominalized terms for all sense of word/pos or null if not found<br>
+   * Returns nominalized terms for all sense of word/pos <br>
    * Refers to the use of a verb or an adjective as a noun. Holds for nouns,
    * verbs & adjecstives(?)<br>
    * Example: happiness(n) -> [happy, unhappy]<br>
@@ -3290,7 +3247,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns similar-to list for first sense of word/pos or null if not found<br>
+   * Returns similar-to list for first sense of word/pos <br>
    * Holds for adjectives<br>
    * Example:<br>
    * happy(a) -> [blessed, blissful, bright, golden, halcyon, prosperous...]<br>
@@ -3304,7 +3261,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns similar-to list for id, or null if not found<br>
+   * Returns similar-to list for id, <br>
    * Holds for adjectives<br>
    * Example:<br>
    * happy(a) -> [blessed, blissful, bright, golden, halcyon, prosperous...]<br>
@@ -3315,7 +3272,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns similar-to list for all sense of word/pos or null if not found<br>
+   * Returns similar-to list for all sense of word/pos <br>
    * Holds for adjectives<br>
    * Example:<br>
    * happy(a) -> [blessed, blissful, bright, golden, halcyon, prosperous...]<br>
@@ -3330,18 +3287,7 @@ public class RiWordNet implements Wordnet
 
   // PRIVATES --------------------------------------------------------
 
-  /**
-   * Returns cause terms for word/pos or null if not found<br>
-   * Holds for verbs<br>
-   * Example:<br>
-   * 
-   * @param query
-   * @param pos
-   *          public String[] getCauseTerms(String query, String pos) { return
-   *          getPointerTargets(query, pos, PointerType.SIMILAR_TO); }
-   */
-
-  /* Get all the pointer targets of <var>synset</var> of type <var>type</var>. */
+  /* Get all the pointer targets of <var>synset</var> of type <var>type</var>, or null if not found*/
   private PointerTargetNodeList getPointerTargets(Synset synset, PointerType type) throws JWNLException
   {
     if (synset == null)
@@ -3374,7 +3320,7 @@ public class RiWordNet implements Wordnet
     this.randomizeResults = random;
     return this;
   }
-  
+
   public boolean ignoreCompoundWords()
   {
     return this.ignoreCompoundWords;
@@ -3397,11 +3343,12 @@ public class RiWordNet implements Wordnet
     return this;
   }
 
-  private String[] getAllPointerTargets(String word, String pos, PointerType type)
+  private String[] getAllPointerTargets(String word, String pos, PointerType type) 
   {
     Synset[] syns = allSynsets(word, pos);
     if (syns == null || syns.length < 1)
-      return null;
+      return EA;
+    
     List result = new LinkedList();
     for (int i = 0; i < syns.length; i++)
     {
@@ -3422,21 +3369,22 @@ public class RiWordNet implements Wordnet
         throw new RiWordNetError(e);
       }
     }
+
     result.remove(word); // skip the original
+    
     return toStrArr(result);
   }
 
   /*
    * Get a String[] from the pointer targets of <var>synset</var> of type
-   * <var>type</var>.
+   * <var>type</var>,
    */
-  private String[] getPointerTargetsAtIndex(String word, String pos, PointerType type, int index)
+  private String[] getPointerTargetsAtIndex(String word, String pos, PointerType type, int index) 
   {
     try
     {
       Synset synset = getSynsetAtIndex(word, pos, index);
-      if (synset == null)
-        return null;
+
       return ptnlToStrings(word, getPointerTargets(synset, type));
     }
     catch (JWNLException e)
@@ -3448,11 +3396,10 @@ public class RiWordNet implements Wordnet
   /*
    * Get a String[] from the pointer <var>id</var> of type <var>type</var>.
    */
-  private String[] getPointerTargetsAtId(int id, PointerType type)
+  private String[] getPointerTargetsAtId(int id, PointerType type) 
   {
     Synset synset = getSynsetAtId(id);
-    if (synset == null)
-      return null;
+
     try
     {
       return ptnlToStrings(null, getPointerTargets(synset, type));
@@ -3462,19 +3409,17 @@ public class RiWordNet implements Wordnet
       throw new RiWordNetError(e);
     }
   }
-  
+
   public static void main(String[] args)
   {
     String result = "No WordNet in JS";
     if (RiTa.env() == RiTa.JAVA)
     {
-
       RiWordNet w = new RiWordNet("/WordNet-3.1");
-      String test = "night";
-      String[] s = w.getAntonyms(test, "n");
-      result = test + " != " + s[0];
+      String[] s = w.getAllSynsets("dog", "n");
+      result = s == null ? null : RiTa.asList(s).toString();
     }
     System.out.println(result);
   }
-  
+
 }

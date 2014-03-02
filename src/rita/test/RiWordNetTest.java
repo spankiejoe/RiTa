@@ -11,11 +11,14 @@ import org.junit.Test;
 import rita.RiWordNet;
 import rita.wordnet.jwnl.data.Synset;
 
+// NEXT: DCH: fix filters, finish test, add HTML method and page
+
 /*
  * Compare results to: http://wordnetweb.princeton.edu/perl/webwn
  * 
  * (KENNY)
  * TODO: add cases for: w.ignoreCompoundWords(false);
+ * TODO: add cases for: w.ignoreUpperCaseWords(false);
  * TODO: Add all negative cases (where there is no match in db)
  * TODO: Make sure all methods return non-deterministic arrays
  * TODO: Documentation (JSON) for all methods 
@@ -30,6 +33,7 @@ public class RiWordNetTest
     long ts = System.currentTimeMillis();
     w = new RiWordNet("/WordNet-3.1");
     w.ignoreCompoundWords(true);
+    w.ignoreUpperCaseWords(true);
     System.out.println("[INFO] Loaded in "+(System.currentTimeMillis()-ts)+"ms");
   }
   
@@ -53,10 +57,12 @@ public class RiWordNetTest
   @Test
   public void testGetHypernymsStringString()
   {
+    // TODO: More tests here
+    
 	  String[] expected = { "root" };
 	  String[] result = w.getHypernyms("carrot", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //ok(1);
 	  //fail("Not yet implemented");
   }
@@ -64,34 +70,34 @@ public class RiWordNetTest
   @Test
   public void testGetAnagramsStringStringInt()
   {
-	  //Expteced 1 result? without the original word?
-	  String[] expected = { "night", "thing" };
+	  String[] expected = { "thing" };
 	  String[] result = w.getAnagrams("night", "n", 2);
 	  //println(result);
-	  deepEqual(expected, result);
-	  String[] expected2 = { "night"};
+	  setContains(expected, result);
+	  String[] expected2 = { "thing" };
 	  String[] result2 = w.getAnagrams("night", "n", 1);
 	  //println(result2);
-	  deepEqual(expected2, result2);
+	  setContains(expected2, result2);
 	  //fail("Not yet implemented");
   }
 
   @Test
   public void testGetAnagramsStringString()
   {
-    String[] expected = { "night", "thing" };
+    String[] expected = { "thing" };
     String[] result = w.getAnagrams("night", "n");
     //println(result);
-    deepEqual(expected, result);
-    String[] expected2 = { "dog", "god" };
+    
+    setContains(expected, result);
+    String[] expected2 = {  "god" };
     String[] result2 = w.getAnagrams("dog", "n");
     //println(result2);
-    deepEqual(expected2, result2);
+    setContains(expected2, result2);
 
-    String[] expected3 = { "bleat", "table" };
+    String[] expected3 = { "bleat", };
     String[] result3 = w.getAnagrams("table", "n");
     //println(result2);
-    deepEqual(expected2, result2);
+    setContains(expected2, result2);
   }
 
   @Test
@@ -100,23 +106,23 @@ public class RiWordNetTest
 	  String[] expected = { "activeness", "activewear", "attractiveness" };
 	  String[] result = w.getContains("active", "n", 3);
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  
 	  String[] expected2 = { "avalokiteshvara", "avalokitesvara" };
 	  String[] result2 = w.getContains("kite", "n", 2);
 	  //printArr(result2);
-	  deepEqual(expected2, result2);
+	  setContains(expected2, result2);
 	  //fail("Not yet implemented");
 	  
 	  w.ignoreCompoundWords(false);
     String[] expected3 = { "active agent", "active air defense", "active application" };
     String[] result3 = w.getContains("active", "n", 3);
     //println(result3);
-    deepEqual(expected3, result3);
+    setContains(expected3, result3);
     
     String[] expected4 = { "avalokiteshvara", "avalokitesvara" };
     String[] result4 = w.getContains("kite", "n", 2);
-    deepEqual(expected4, result4);
+    setContains(expected4, result4);
     w.ignoreCompoundWords(true);
 
   }
@@ -127,13 +133,13 @@ public class RiWordNetTest
 	  String[] expected = { "activeness", "activewear", "attractiveness", "inactiveness", "refractiveness", "unattractiveness" };
 	  String[] result = w.getContains("active", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  
 	  
 	  String[] expected2 = { "avalokiteshvara", "avalokitesvara", "blatherskite", "greenockite", "kitembilla", "melkite", "samarskite" };
 	  String[] result2 = w.getContains("kite", "n");
 	  //println(result2);
-	  deepEqual(expected2, result2);
+	  setContains(expected2, result2);
 	  //fail("Not yet implemented");
   }
 
@@ -143,7 +149,7 @@ public class RiWordNetTest
 	  String[] expected = { "collectable", "constable", "eatable", "inevitable"};
 	  String[] result = w.getEndsWith("table", "n", 4);
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //fail("Not yet implemented");
   }
 
@@ -153,7 +159,7 @@ public class RiWordNetTest
 	  String[] expected = { "collectable", "constable", "eatable", "inevitable", "notable", "portable", "potable", "roundtable", "stable", "timetable", "turntable", "vegetable", "worktable" };
 	  String[] result = w.getEndsWith("table", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //fail("Not yet implemented");
   }
 
@@ -163,7 +169,7 @@ public class RiWordNetTest
 	  String[] expected = { "turnabout", "turnaround", "turnbuckle", "turncoat", "turncock"};
 	  String[] result = w.getStartsWith("turn", "n", 5);
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //fail("Not yet implemented");
   }
 
@@ -173,7 +179,7 @@ public class RiWordNetTest
 	  String[] expected = { "wearable", "wearer", "weariness", "wearing"};
 	  String[] result = w.getStartsWith("wear", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //fail("Not yet implemented");
   }
 
@@ -183,7 +189,7 @@ public class RiWordNetTest
 	  String[] expected = { "collectable", "constable", "eatable", "inevitable"};
 	  String[] result = w.getRegexMatch(".*table", "n", 4);
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //fail("Not yet implemented");
   }
 
@@ -193,7 +199,7 @@ public class RiWordNetTest
 	  String[] expected = { "collectable", "constable", "eatable", "inevitable", "notable", "portable", "potable", "roundtable", "stable", "table", "timetable", "turntable", "vegetable", "worktable" };
 	  String[] result = w.getRegexMatch(".*table", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //fail("Not yet implemented");
   }
 
@@ -203,7 +209,7 @@ public class RiWordNetTest
 	  String[] expected = { "tabbouleh", "tableau", "tabooli"};
 	  String[] result = w.getSoundsLike("table", "n", 3);
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -212,7 +218,7 @@ public class RiWordNetTest
 	  String[] expected = { "tabbouleh", "tableau", "tabooli", "tepal", "tiepolo", "tipple", "tivoli", "tubful", "tubule", "tupelo", "tuvalu" };
 	  String[] result = w.getSoundsLike("table", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -221,7 +227,7 @@ public class RiWordNetTest
 	  String[] expected = { "tale", "tile"};
 	  String[] result = w.getWildcardMatch("t?le", "n", 2);
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -230,7 +236,7 @@ public class RiWordNetTest
 	  String[] expected = { "tale", "tile", "tole"};
 	  String[] result = w.getWildcardMatch("t?le", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -239,7 +245,7 @@ public class RiWordNetTest
 	  String[] expected = { "tabbouleh", "tableau", "tabooli"};
 	  String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n", 3);
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -248,7 +254,7 @@ public class RiWordNetTest
 	  String[] expected = { "tabbouleh", "tableau", "tabooli", "tepal", "tiepolo", "tipple", "tivoli", "tubful", "tubule", "tupelo", "tuvalu" };
 	  String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -263,11 +269,15 @@ public class RiWordNetTest
   @Test
   public void testGetAllGlosses()
   {
-	  String[] expected = {"impairment resulting from long use; "+'"'+"the tires showed uneven wear"+'"', "a covering designed to be worn on a person's body", 
-			  "the act of having on your person as a covering or adornment; "+'"'+"she bought it for everyday wear"+'"'};
+	  String[] expected = {"impairment resulting from long use; "+
+	      '"'+"the tires showed uneven wear"+'"', 
+	      "a covering designed to be worn on a person's body", 
+			  "the act of having on your person as a covering or adornment; "+
+	      '"'+"she bought it for everyday wear"+'"'
+	  };
 	  String[] result = w.getAllGlosses("wear", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -303,7 +313,7 @@ public class RiWordNetTest
 	  String[] expected = {"the tires showed uneven wear"};
 	  String[] result = w.getExamples("wear", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -316,7 +326,7 @@ public class RiWordNetTest
 	  //println(result);
 	  //ssertTrue(Arrays.asList(expected).contains(result));
 	  setContains(expected, result);
-	  //deepEqual(expected, result);
+	  //setContains(expected, result);
   }
 
   @Test
@@ -325,7 +335,7 @@ public class RiWordNetTest
 	  String[] expected = {"the tires showed uneven wear"};
 	  String[] result = w.getExamples(914586275);
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -336,7 +346,7 @@ public class RiWordNetTest
 			  "The police searched the suspect", "We searched the whole house for the missing keys"};
 	  String[] result = w.getAllExamples("search", "v");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -368,11 +378,7 @@ public class RiWordNetTest
   {
 	  String[] expected = { "surf", "seek", "divine", "fish", "pursue", "browse", "feel", "scour", "want", "drag", "gather", "shop", "angle", "grope", "hunt", "dredge", "grub", "fumble", "finger" };
 	  String[] result = w.getSynonyms("search", "v");
-	  //println(w.getSenseIds("search", "v"));
-	  //printArr(result);
-	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
 	  setContains(expected, result);
-    //deepEqual(expected, result);
   }
 
   @Test
@@ -412,16 +418,16 @@ public class RiWordNetTest
 	  String[] result = w.getCommonParents("activewear", "beachwear", "n");
 	  //println(w.getSenseIds("search", "v"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
   public void testGetCommonParent()
   {
 	  int expected = 3055525; // offset for expected synset
-	  Synset result = w.getCommonParent(94292941, 92817909);
+	  int result = w.getCommonParent(94292941, 92817909);
 	  ///println(result.getOffset());
-    equal(expected, result.getOffset());
+    equal(expected, result); // DCH: changed from KENNY's version
   }
 
   @Test
@@ -429,12 +435,12 @@ public class RiWordNetTest
   {
     String[] result = w.getSynset("medicare", "n");
     //println(result);
-    deepEqual(null, result);
+    setContains(null, result);
     
     String[] expected = {};
     result = w.getSynset("health insurance", "n");
     //println(result);
-    deepEqual(null, result);
+    setContains(null, result);
 
     // assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
     expected = new String[] { "sportswear" };
@@ -443,7 +449,7 @@ public class RiWordNetTest
 
     //println(w.getSenseIds("search", "v"));
     
-    deepEqual(expected, result);
+    setContains(expected, result);
   }
 
   @Test
@@ -453,7 +459,7 @@ public class RiWordNetTest
 	  String[] result = w.getSynset("activewear", "n", true);
 	  //println(w.getSenseIds("search", "v"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
   }
 
@@ -464,7 +470,7 @@ public class RiWordNetTest
 	  String[] result = w.getSynset(94292941);
 	  //println(w.getSenseIds("activewear", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
   }
 
@@ -475,7 +481,7 @@ public class RiWordNetTest
 	  String[] result = w.getAllSynsets("activewear", "n");
 	  //println(w.getSenseIds("activewear", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
   }
 
@@ -486,23 +492,23 @@ public class RiWordNetTest
 	  int result = w.getSenseCount("table", "n");
 	  //println(w.getSenseIds("activewear", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  equal(expected, result);
   }
   
   @Test
   public void testGetAntonymsStringString()
   {
-    deepEqual(w.getAntonyms("day","n"), null);
-    deepEqual(w.getAntonyms("night","n"), new String[]{"day"});
+    setContains(w.getAntonyms("day","n"), null);
+    setContains(w.getAntonyms("night","n"), new String[]{"day"});
     
-    deepEqual(w.getAntonyms("left", "a"), new String[]{"right"});
-    deepEqual(w.getAntonyms("right", "a"), new String[]{"left"});
+    setContains(w.getAntonyms("left", "a"), new String[]{"right"});
+    setContains(w.getAntonyms("right", "a"), new String[]{"left"});
     
-    deepEqual(w.getAntonyms("full", "a"), new String[]{"empty"});
-    deepEqual(w.getAntonyms("empty", "a"), new String[]{"full"});
+    setContains(w.getAntonyms("full", "a"), new String[]{"empty"});
+    setContains(w.getAntonyms("empty", "a"), new String[]{"full"});
     
-    deepEqual(w.getAntonyms("quickly", "r"), new String[]{"slowly"});
-    deepEqual(w.getAntonyms("slowly", "r"), new String[]{"quickly"});
+    setContains(w.getAntonyms("quickly", "r"), new String[]{"slowly"});
+    setContains(w.getAntonyms("slowly", "r"), new String[]{"quickly"});
   }
 
   @Test
@@ -512,7 +518,7 @@ public class RiWordNetTest
 	  String[] result = w.getAntonyms(915192074);
 	  //println(w.getSenseIds("night", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
   }
 
@@ -523,7 +529,7 @@ public class RiWordNetTest
 	  String[] result = w.getAllAntonyms("night", "n");
 	  //println(w.getSenseIds("night", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
   }
 
@@ -534,7 +540,7 @@ public class RiWordNetTest
 	  String[] result = w.getHypernyms(915192074);
 	  //println(w.getSenseIds("night", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
   }
 
@@ -545,7 +551,7 @@ public class RiWordNetTest
 	  String[] result = w.getAllHypernyms("night", "n");
 	  //println(w.getSenseIds("night", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
   }
 
@@ -574,7 +580,7 @@ public class RiWordNetTest
 	  String[] result = w.getHyponyms("night", "n");
 	  //println(w.getSenseIds("night", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
   }
 
@@ -585,7 +591,7 @@ public class RiWordNetTest
 	  String[] result = w.getHyponyms(915192074);
 	  //println(w.getSenseIds("night", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
   }
 
@@ -596,7 +602,7 @@ public class RiWordNetTest
 	  String[] result = w.getAllHyponyms("night", "n");
 	  //println(w.getSenseIds("night", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
   }
 
@@ -614,41 +620,41 @@ public class RiWordNetTest
   @Test
   public void testIsAdjective()
   {
-	  deepEqual(true, w.isAdjective("big"));
-	  deepEqual(true, w.isAdjective("bigger"));
-	  deepEqual(true, w.isAdjective("biggest"));
-	  deepEqual(true, w.isAdjective("old"));
-	  deepEqual(true, w.isAdjective("elder"));
-	  deepEqual(true, w.isAdjective("eldest"));
-	  deepEqual(false, w.isAdjective("slowly"));
-	  deepEqual(false, w.isAdjective("quite"));
+	  equal(true, w.isAdjective("big"));
+	  equal(true, w.isAdjective("bigger"));
+	  equal(true, w.isAdjective("biggest"));
+	  equal(true, w.isAdjective("old"));
+	  equal(true, w.isAdjective("elder"));
+	  equal(true, w.isAdjective("eldest"));
+	  equal(false, w.isAdjective("slowly"));
+	  equal(false, w.isAdjective("quite"));
   }
 
   @Test
   public void testIsAdverb()
   {
-	  deepEqual(false, w.isAdverb("mary"));
-	  deepEqual(true, w.isAdverb("slowly"));
-	  deepEqual(true, w.isAdverb("quite"));
-	  deepEqual(true, w.isAdverb("together"));
+	  equal(false, w.isAdverb("mary"));
+	  equal(true, w.isAdverb("slowly"));
+	  equal(true, w.isAdverb("quite"));
+	  equal(true, w.isAdverb("together"));
   }
 
   @Test
   public void testIsVerb()
   {
-	  deepEqual(false, w.isVerb("mary"));
-	  deepEqual(true, w.isVerb("run"));
-	  deepEqual(true, w.isVerb("walk"));
-	  deepEqual(true, w.isVerb("sing"));
+	  equal(false, w.isVerb("mary"));
+	  equal(true, w.isVerb("run"));
+	  equal(true, w.isVerb("walk"));
+	  equal(true, w.isVerb("sing"));
   }
 
   @Test
   public void testIsNoun()
   {
-	  deepEqual(true, w.isNoun("mary"));
-	  deepEqual(true, w.isNoun("run"));
-	  deepEqual(false, w.isNoun("slowly"));
-	  deepEqual(false, w.isNoun("together"));
+	  equal(true, w.isNoun("mary"));
+	  equal(true, w.isNoun("run"));
+	  equal(false, w.isNoun("slowly"));
+	  equal(false, w.isNoun("together"));
   }
 
   @Test
@@ -658,23 +664,23 @@ public class RiWordNetTest
 	  String[] result = w.getStems("produced", "v");
 	  //println(w.getSenseIds("night", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
   }
 
   @Test
   public void testIsStem()
   {
-	  deepEqual(false, w.isStem("waiting", "v"));
-	  deepEqual(true, w.isStem("wait", "n"));
+    equal(false, w.isStem("waiting", "v"));
+    equal(true, w.isStem("wait", "n"));
   }
 
   @Test
   public void testExists()
   {
-	  deepEqual(true, w.exists("abc"));
-	  deepEqual(true, w.exists("wait"));
-	  deepEqual(false, w.exists("tesxx"));
+    equal(true, w.exists("abc"));
+    equal(true, w.exists("wait"));
+    equal(false, w.exists("tesxx"));
   }
 
   @Test
@@ -686,12 +692,6 @@ public class RiWordNetTest
 	  List<String> expectedlist = new ArrayList<String>(Arrays.asList(expected));
 	  w.removeNonExistent(testlist);
 	  deepEqual(testlist, expectedlist);
-  }
-
-  @Test
-  public void testLookupIndexWord()
-  {
-	//fail("Not yet implemented");
   }
 
   @Test
@@ -708,12 +708,12 @@ public class RiWordNetTest
   @Test
   public void testGetPosInt()
   {
-	  deepEqual("n", w.getPos(915297015));
-	  deepEqual("n", w.getPos(91065863));
-	  deepEqual("v", w.getPos(82644022));
-	  deepEqual("v", w.getPos(82647547));
-	  deepEqual("v", w.getPos(8721987));
-	  deepEqual("v", w.getPos(82418420));
+    equal("n", w.getPos(915297015));
+    equal("n", w.getPos(91065863));
+    equal("v", w.getPos(82644022));
+    equal("v", w.getPos(82647547));
+    equal("v", w.getPos(8721987));
+    equal("v", w.getPos(82418420));
   }
 
   @Test
@@ -723,15 +723,15 @@ public class RiWordNetTest
 	  String result = w.getPosStr("wait");
 	  //println(w.getSenseIds("night", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  equal(expected, result);
 	  //assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
   }
 
   @Test
   public void testGetBestPos()
   {
-	  deepEqual("v", w.getBestPos("wait"));
-	  deepEqual("n", w.getBestPos("dog"));
+    equal("v", w.getBestPos("wait"));
+    equal("n", w.getBestPos("dog"));
   }
 
   @Test
@@ -776,7 +776,7 @@ public class RiWordNetTest
   {
 	  float expected = (float) 0.2;
 	  float result = w.getDistance("table", "chair", "n");
-	  deepEqual(expected, result);
+	  equal(expected, result);
   }
 
   @Test
@@ -785,7 +785,7 @@ public class RiWordNetTest
 	  String[] expected = {"row", "column"};
 	  String[] result = w.getMeronyms("table", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -794,7 +794,7 @@ public class RiWordNetTest
 	  String[] expected = {"row", "column"};
 	  String[] result = w.getMeronyms(98283156);
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -803,7 +803,7 @@ public class RiWordNetTest
 	  String[] expected = {"row", "column", "leg", "tabletop", "tableware"};
 	  String[] result = w.getAllMeronyms("table", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -812,7 +812,7 @@ public class RiWordNetTest
 	  String[] expected = {"body", "homo", "man", "human"};
 	  String[] result = w.getHolonyms("arm", "n");
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -822,7 +822,7 @@ public class RiWordNetTest
 	  String[] result = w.getHolonyms(95571403);
 	  //println(w.getSenseIds("arm", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -832,7 +832,7 @@ public class RiWordNetTest
 	  String[] result = w.getAllHolonyms("arm", "n");
 	  //println(w.getSenseIds("arm", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -842,7 +842,7 @@ public class RiWordNetTest
 	  String[] result = w.getCoordinates("arm", "n");
 	  //println(w.getSenseIds("arm", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -852,7 +852,7 @@ public class RiWordNetTest
 	  String[] result = w.getCoordinates(95571403);
 	  //println(w.getSenseIds("arm", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -864,7 +864,7 @@ public class RiWordNetTest
 	  String[] result = w.getAllCoordinates("coordinate", "n");
 	  //println(w.getSenseIds("arm", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
 	  
 	  String[] expected2 = {"stretch", "attend", "occupy", "fill", "populate", "dwell", "inhabit", "reach", "touch", "run", "go",
 			  "pass", "lead", "extend", "cover", "continue", "lie", "sit", "face", "straddle", "follow", "rest", "belong", "come", "know", "experience", "suffer",
@@ -872,7 +872,7 @@ public class RiWordNetTest
 	  String[] result2 = w.getAllCoordinates("live", "v");
 	  //println(w.getSenseIds("arm", "n"));
 	  //println(result2);
-	  deepEqual(expected2, result2);
+	  setContains(expected2, result2);
   }
 
   @Test
@@ -882,7 +882,7 @@ public class RiWordNetTest
 	  String[] result = w.getVerbGroup("live", "v");
 	  //println(w.getSenseIds("arm", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -892,7 +892,7 @@ public class RiWordNetTest
 	  String[] result = w.getVerbGroup(82655932);
 	  //println(w.getSenseIds("live", "v"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -902,7 +902,7 @@ public class RiWordNetTest
 	  String[] result = w.getAllVerbGroups("live", "v");
 	  //println(w.getSenseIds("arm", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -912,7 +912,7 @@ public class RiWordNetTest
 	  String[] result = w.getDerivedTerms("happily", "r");
 	  //println(w.getSenseIds("arm", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -922,7 +922,7 @@ public class RiWordNetTest
 	  String[] result = w.getDerivedTerms(650835);
 	  //println(w.getSenseIds("happily", "r"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -932,7 +932,7 @@ public class RiWordNetTest
 	  String[] result = w.getAllDerivedTerms("happily", "r");
 	  //println(w.getSenseIds("arm", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -942,7 +942,7 @@ public class RiWordNetTest
 	  String[] result = w.getAlsoSees("happy", "a");
 	  //println(w.getSenseIds("arm", "n"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -952,7 +952,7 @@ public class RiWordNetTest
 	  String[] result = w.getAlsoSees(71151786);
 	  //println(w.getSenseIds("happy", "a"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -962,7 +962,7 @@ public class RiWordNetTest
 	  String[] result = w.getAllAlsoSees("happy", "a");
 	  //println(w.getSenseIds("happy", "a"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -972,7 +972,7 @@ public class RiWordNetTest
 	  String[] result = w.getNominalizations("happy", "a");
 	  //println(w.getSenseIds("happy", "a"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -982,7 +982,7 @@ public class RiWordNetTest
 	  String[] result = w.getNominalizations(71151786);
 	  //println(w.getSenseIds("happy", "a"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -992,7 +992,7 @@ public class RiWordNetTest
 	  String[] result = w.getAllNominalizations("happy", "a");
 	  //println(w.getSenseIds("happy", "a"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -1002,7 +1002,7 @@ public class RiWordNetTest
 	  String[] result = w.getSimilar("happy", "a");
 	  //println(w.getSenseIds("happy", "a"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -1012,7 +1012,7 @@ public class RiWordNetTest
 	  String[] result = w.getSimilar(71151786);
 	  //println(w.getSenseIds("happy", "a"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -1022,7 +1022,7 @@ public class RiWordNetTest
 	  String[] result = w.getAllSimilar("happy", "a");
 	  //println(w.getSenseIds("happy", "a"));
 	  //println(result);
-	  deepEqual(expected, result);
+	  setContains(expected, result);
   }
 
   @Test
@@ -1088,6 +1088,13 @@ public class RiWordNetTest
 
   @Test
   public void testIsCompound()
+  {
+    fail("Not yet implemented");
+  }
+  
+
+  @Test
+  public void testLookupIndexWord()
   {
     fail("Not yet implemented");
   }
