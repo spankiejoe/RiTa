@@ -351,7 +351,7 @@ public class RiWordNet implements Wordnet
    */
   public String[] getWildcardMatch(String pattern, String posStr, int maxResults)
   {
-    return filter(WILDCARD_MATCH, pattern, (posStr), maxResults);
+    return filter(WILDCARD_MATCH, pattern, posStr, maxResults);
   }
 
   /**
