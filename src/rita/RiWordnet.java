@@ -5,62 +5,12 @@ import java.util.*;
 
 import rita.wordnet.*;
 import rita.wordnet.jwnl.*;
-import rita.wordnet.jwnl.data.*;
-import rita.wordnet.jwnl.data.list.*;
-import rita.wordnet.jwnl.data.relationship.*;
 import rita.wordnet.jwnl.dictionary.Dictionary;
 import rita.wordnet.jwnl.dictionary.FileBackedDictionary;
+import rita.wordnet.jwnl.wndata.*;
+import rita.wordnet.jwnl.wndata.list.*;
+import rita.wordnet.jwnl.wndata.relationship.*;
 
-// TODO:
-// to get sense+, do Synset(id).getWord().getIndex() ?
-// 
-// not all methods (eg filters) return nondeterministic results!
-// Check this (add tests) with and without randomizeResults flag set
-
-/**
- * Provides library support for access to the WordNet ontology database
- * <p>
- * 
- * You can construct this object like so, passing in the location of your
- * installed WordNet files
- * 
- * RiWordNet wordnet = new RiWordNet(this, &quot;/WordNet3.1\\&quot;);
- * 
- * (Note: windows paths require double backslashes as below...)
- * 
- * RiWordNet wordnet = new RiWordNet(this, &quot;c:\\WordNet3.0\\&quot;); </pre>
- * 
- * Generally three methods are provided for each relation type (e.g.,
- * getHyponyms(int), getHyponyms(String, String), and getAllHyponyms(String,
- * String), where the 1st returns hyponyms for a specific sense (as specified by
- * its unique id), the 2nd returns the most common sense, and the 3rd returns
- * ALL senses for the word/pos pair.
- * <p>
- * You can also retrieve the entire tree of hyponyms (down to the leaves) for a
- * specific sense of the word. (see VariousHyponyms.pde for examples)
- * 
- * <p>
- * Note: Valid wordnet parts-of-speech include (noun="n",verb="v",adj="a", and
- * adverb="r"). <br>
- * These can be specified either as literals or using the String constants:
- * 
- * <pre>
- *    RiWordNet.NOUN
- *    RiWordNet.VERB
- *    RiWordNet.ADJ
- *    RiWordNet.ADV
- * </pre>
- * <p>
- * Note: all methods return null either when the query term is not found or
- * there are no entries for the relation type being sought.
- * 
- * <p>
- * For more info on the meaning of various wordnet concepts (synset, sense,
- * hypernym, etc), see: {@link http://wordnet.princeton.edu/gloss}
- * 
- * <p>
- * See the accompanying documentation for license information
- */
 public class RiWordNet implements Wordnet
 {
   /** String constant for Noun part-of-speech */
@@ -128,7 +78,7 @@ public class RiWordNet implements Wordnet
       }
       catch (Exception e)
       {
-        throw new RiWordNetError("Error loading WordNet with $WORDNET_HOME=" + wnHome);
+        throw new RiWordNetError("Error loading WordNet with WORDNET_HOME=" + wnHome,e);
       }
     }
 
@@ -1922,10 +1872,10 @@ public class RiWordNet implements Wordnet
   
   public static POS getPOS(String pos)  // returns null
   {
-    if (pos.equalsIgnoreCase("N")) return rita.wordnet.jwnl.data.POS.NOUN;
-    if (pos.equalsIgnoreCase("V")) return rita.wordnet.jwnl.data.POS.VERB;
-    if (pos.equalsIgnoreCase("R")) return rita.wordnet.jwnl.data.POS.ADVERB;
-    if (pos.equalsIgnoreCase("A")) return rita.wordnet.jwnl.data.POS.ADJECTIVE;
+    if (pos.equalsIgnoreCase("N")) return rita.wordnet.jwnl.wndata.POS.NOUN;
+    if (pos.equalsIgnoreCase("V")) return rita.wordnet.jwnl.wndata.POS.VERB;
+    if (pos.equalsIgnoreCase("R")) return rita.wordnet.jwnl.wndata.POS.ADVERB;
+    if (pos.equalsIgnoreCase("A")) return rita.wordnet.jwnl.wndata.POS.ADJECTIVE;
     return null;
   }
 

@@ -9,7 +9,7 @@ import java.util.*;
 import org.junit.Test;
 
 import rita.RiWordNet;
-import rita.wordnet.jwnl.data.Synset;
+import rita.wordnet.jwnl.wndata.Synset;
 
 // NEXT: DCH: fix filters, finish test, add HTML method and page
 
