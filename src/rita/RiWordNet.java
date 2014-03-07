@@ -113,7 +113,7 @@ public class RiWordNet implements Wordnet
   {
     return getFilters().lemmaIterator(jwnlDict, convertPos(pos));
   }
-
+  
   /**
    * Returns up to <code>maxResults</code> full anagram matches for the
    * specified <code>word</code> and <code>pos</code>

@@ -9,18 +9,20 @@ import java.util.*;
 import org.junit.Test;
 
 import rita.RiWordNet;
-import rita.wordnet.jwnl.wndata.Synset;
-
-// NEXT: DCH: fix filters, finish test, add HTML method and page
 
 /*
  * Compare results to: http://wordnetweb.princeton.edu/perl/webwn
  * 
  * KENNY:
+ * 
  * TODO: add cases for: w.ignoreCompoundWords(false); see testGetAllSynsets()
+ * 
  * TODO: add cases for: w.ignoreUpperCaseWords(false);
+ * 
  * TODO: Add all negative cases (where there is no match in db)
+ * 
  * TODO: Make sure all methods return non-deterministic arrays
+ * 
  * TODO: Documentation (JSON) for all methods 
  */
 public class RiWordNetTest
