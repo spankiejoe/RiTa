@@ -377,29 +377,30 @@ public class RiWordNetTest
 
 		String[] expected2 = { "yodeling", "yodeller", "young", "yogacara", "youthfulness", "yolk", "yottabit", "youth", "yoke", "yokohama", "yogurt", "yobo", "yodh", "yodel", "yogi", "yob", "yorkshire", "yoga", "yobbo", "yowl", "younker", "yobibit", "yokel", "yoghurt", "youngness", "yore", "yottabyte", "yoghourt", "yorktown", "youngstown", "youngster", "yosemite", "yoruba", "yokuts", "york", "yobibyte" };
 		String[] result2 = w.getStartsWith("yo", "n");
-		printArr(result2);
-		//setEqual(expected2, result2);
+		//		printArr(result2);
+		setEqual(expected2, result2);
 
 		String[] expected3 = { "yoke", "yowl", "yodel" };
 		String[] result3 = w.getStartsWith("yo", "v");
-		printArr(result3);
-		//setEqual(expected3, result3);
+		//		printArr(result3);
+		setEqual(expected3, result3);
 
 		String[] expected4 = { "yogic", "young", "yokelish", "yon", "yonder", "yogistic", "younger", "youthful", "youngish" };
 		String[] result4 = w.getStartsWith("yo", "a");
-		printArr(result4);
-		//setEqual(expected4, result4);
+		//		printArr(result4);
+		setEqual(expected4, result4);
 
 		String[] expected5 = { "yonder", "yon", "youthfully" };
 		String[] result5 = w.getStartsWith("yo", "r");
-		printArr(result5);
-		//setEqual(expected5, result5);
+		//		printArr(result5);
+		setEqual(expected5, result5);
 
-		String[] expected6 = { "wearable", "wearer", "weariness", "wearing"};
-		String[] result6 = w.getStartsWith("yo", "z");
-		printArr(result6);
-		//setEqual(expected6, result6);
-
+		try{
+			String[] result6 = w.getStartsWith("yo", "z");
+		}
+		catch(Exception e){
+			ok(e);
+		}
 	}
 
 	@Test
@@ -485,30 +486,30 @@ public class RiWordNetTest
 		String[] result = w.getSoundsLike("table", "n");
 		//printArr(result);
 		setEqual(expected, result);
-		
+
 		String[] expected2 ={ "pouf", "pep", "papaya", "phoebe", "peeve", "pave", "pavo", "poppy", "pupa", "papa", "peavy", "pipe", "pap", "pib", "paba", "poof", "pipa", "poop", "pob", "piaffe", "poove", "papio", "peavey", "papaw", "pub", "payoff", "puff", "peep", "pope", "papaia", "pip", "pawpaw", "pappa", "papua", "pup", "pouffe", "peba", "phobia", "piaf", "pop" };
 		String[] result2 = w.getSoundsLike("puppy", "n");
-//		printArr(result2);
+		//		printArr(result2);
 		setEqual(expected2, result2);
 
 		String[] expected3 ={ "peeve", "puff", "pipe", "peep", "pup", "pip", "pop", "pave" };
 		String[] result3 = w.getSoundsLike("puppy", "v");
-//		printArr(result3);
+		//		printArr(result3);
 		setEqual(expected3, result3);
 
 		String[] expected5 = { "pop", "puff", "puffy", "peppy" };
 		String[] result5 = w.getSoundsLike("puppy", "a");
-//		printArr(result5);
+		//		printArr(result5);
 		setEqual(expected5, result5);
 
 		String[] expected6 = { "pop" };
 		String[] result6 = w.getSoundsLike("puppy", "r");
-//		printArr(result6);
+		//		printArr(result6);
 		setEqual(expected6, result6);
 
 		String[] expected7 = { };
 		String[] result7 = w.getSoundsLike("dacszff", "r");
-//		printArr(result7);
+		//		printArr(result7);
 		setEqual(expected7, result7);
 		try{
 			String[] result8 = w.getSoundsLike("table", "o");
@@ -533,7 +534,7 @@ public class RiWordNetTest
 		String[] result = w.getWildcardMatch("t?le", "n", 2);
 		//println(result);
 		setEqual(expected, result);
-		
+
 		//TODO
 	}
 
@@ -544,7 +545,7 @@ public class RiWordNetTest
 		String[] result = w.getWildcardMatch("t?le", "n");
 		//println(result);
 		setEqual(expected, result);
-		
+
 		//TODO
 	}
 
@@ -555,68 +556,68 @@ public class RiWordNetTest
 		String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n", 3);
 		//println(result);
 		setEqual(expected, result);
-		
+
 		String[] expected2 = { "tablecloth", "tablefork", "tableau"};
 		String[] result2 = w.filter(RiWordNet.STARTS_WITH, "table", "n", 3);
-//		printArr(result2);
+		//		printArr(result2);
 		setEqual(expected2, result2);
-		
+
 		String[] expected3 = { "bleat" };
 		String[] result3 = w.filter(RiWordNet.ANAGRAMS, "table", "n", 3);
-//		printArr(result3);
+		//		printArr(result3);
 		setEqual(expected3, result3);
-		
+
 		String[] expected4 = { "collectable", "acceptableness", "charitableness" };
 		String[] result4 = w.filter(RiWordNet.CONTAINS, "table", "n", 3);
-//		printArr(result4);
+		//		printArr(result4);
 		setEqual(expected4, result4);
-		
+
 		String[] expected5 = {};
 		String[] result5 = w.filter(RiWordNet.CONTAINS, "tableauu", "n", 3);
-//		printArr(result5);
+		//		printArr(result5);
 		setEqual(expected5, result5);
-		
+
 		String[] expected6 = { "constable", "collectable", "eatable" };
 		String[] result6 = w.filter(RiWordNet.ENDS_WITH, "table", "n", 3);
-//		printArr(result6);
+		//		printArr(result6);
 		setEqual(expected6, result6);
-		
+
 		String[] expected8 = { "table" }; //TODO
 		String[] result8 = w.filter(RiWordNet.REGEX_MATCH, "table", "n", 3);
 		printArr(result8);
-//		setEqual(expected8, result8);
-		
+		//		setEqual(expected8, result8);
+
 		String[] expected9 = { ".22", "0", "'hood" }; //TODO is the result normal?
 		String[] result9 = w.filter(RiWordNet.SIMILAR_TO, "table", "n", 3);
-//		printArr(result9);
+		//		printArr(result9);
 		setEqual(expected9, result9);
-		
+
 		String[] expected10 = { "tabbouleh", "tableau", "tabooli"};//TODO
 		String[] result10 = w.filter(RiWordNet.WILDCARD_MATCH, "table", "n", 3);
 		printArr(result10);
-//		setEqual(expected10, result10);
+		//		setEqual(expected10, result10);
 
 		String[] expected12 = { };
 		String[] result12 = w.filter(RiWordNet.CONTAINS, "nahsuchword", "n", 3);
-//		printArr(result12);
+		//		printArr(result12);
 		setEqual(expected12, result12);
-		
+
 
 		String[] expected14 = { "unstableness", "tablecloth", "tractableness", "habitableness", "tabletop", "excitableness", "inevitable", "stable", "hospitableness", "disreputableness", "immutableness", "ratables", "tablespoonful", "suitableness", "worktable", "stableman", "notable", "mutableness", "tablet", "vegetable", "profitableness", "palatableness", "unacceptableness", "inhospitableness", "charitableness", "unpalatableness", "tableau", "stableness", "intractableness", "inevitableness", "uncomfortableness", "comfortableness", "collectable", "acceptableness", "roundtable", "tableland", "permutableness", "unprofitableness", "constable", "eatable", "tablespoon", "stableboy", "potable", "timetable", "tableware", "turntable", "tablefork", "tablemate", "portable", "stablemate", "unsuitableness" };
 		String[] result14 = w.filter(RiWordNet.CONTAINS, "table", "n", 30000);
-//		printArr(result14);
+		//		printArr(result14);
 		setEqual(expected14, result14);
-		
-		
+
+
 		try{
-		String[] result13 = w.filter(RiWordNet.CONTAINS, "table", "e", 3);
-		equal(1,2);
+			String[] result13 = w.filter(RiWordNet.CONTAINS, "table", "e", 3);
+			equal(1,2);
 		}
 		catch(Exception e)
 		{
 			ok(e);
 		}
-		
+
 	}
 
 	@Test
@@ -1418,7 +1419,7 @@ public class RiWordNetTest
 		//println(result2);
 		setEqual(expected2, result2);
 
-//		String[] expected3 = { "bleat", };
+		//		String[] expected3 = { "bleat", };
 		String[] result3 = w.getAnagrams("table", "n");
 		//println(result2);
 		setEqual(expected2, result2);
