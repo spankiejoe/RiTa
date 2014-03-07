@@ -1288,11 +1288,7 @@ public class RiTa implements Constants
         return true;
     return false;
   }
-  
-  /** 
-   * Returns time since 'start' of program in ms
-   * @exclude  
-   */
+
   public static int millis() {
     return (int)(System.currentTimeMillis()-millisOffset);
   }  
@@ -1302,25 +1298,28 @@ public class RiTa implements Constants
     return (int)(System.currentTimeMillis()-startTime);
   }
   
-  /** @exclude */
+  public static List asList(Set s)
+  {
+    List l = new ArrayList();
+    if (s != null) l.addAll(s);
+    return Arrays.asList(l);
+  }
+  
   public static List asList(Object[] o)
   {    
     return (o == null) ? new ArrayList() : Arrays.asList(o);
   }
   
-  /** @exclude */
   public static List asList(float[] o)
   {    
     return (o == null) ? new ArrayList() : Arrays.asList(o);
   }
   
-  /** @exclude */
   public static List asList(int[] o)
   {    
     return (o == null) ? new ArrayList() : Arrays.asList(o);
   }
   
-  /** @exclude */
   public static String shortName(Class c)
   {
     String name = c.getName();    
@@ -1328,7 +1327,6 @@ public class RiTa implements Constants
     return name.substring(idx+1);
   }
   
-  /** @exclude */
   public static String shortName(Object c)
   {
     return shortName(c.getClass());   

@@ -440,13 +440,13 @@ public class RiWordNet implements Wordnet
    *         RiWordNet.WILDCARD_MATCH
    *         RiWordNet.REGEX_MATCH
    * </pre>
-   * @param word
+   * @param words
    * @param pos
    * @param filterFlag
    */
-  public String[] orFilter(int[] filterFlag, String[] word, String pos)
+  public String[] orFilter(int[] filterFlag, String[] words, String pos)
   {
-    return orFilter(filterFlag, word, pos, Integer.MAX_VALUE);
+    return orFilter(filterFlag, words, pos, Integer.MAX_VALUE);
   }
 
   /**
@@ -783,28 +783,28 @@ public class RiWordNet implements Wordnet
 
     result = getSynset(senseId);
     this.addSynsetsToSet(result, set);
-    // System.err.println("Synsets: "+WordnetUtil.asList(result));
+    // System.err.println("Synsets: "+RiTa.asList(result));
 
     result = getHyponymTree(senseId);
     this.addSynsetsToSet(result, set);
-    // System.err.println("Hypornyms: "+WordnetUtil.asList(result));
+    // System.err.println("Hypornyms: "+RiTa.asList(result));
 
     /*
      * result = getHypernyms(senseId); this.addSynsetsToSet(result, set);
      */
-    // System.err.println("Hypernyms: "+WordnetUtil.asList(result));
+    // System.err.println("Hypernyms: "+RiTa.asList(result));
 
     result = getSimilar(senseId);
     this.addSynsetsToSet(result, set);
-    // System.err.println("Similar: "+WordnetUtil.asList(result));
+    // System.err.println("Similar: "+RiTa.asList(result));
 
     result = getCoordinates(senseId);
     this.addSynsetsToSet(result, set);
-    // System.err.println("Coordinates: "+WordnetUtil.asList(result));
+    // System.err.println("Coordinates: "+RiTa.asList(result));
 
     result = getAlsoSees(senseId);
     this.addSynsetsToSet(result, set);
-    // System.err.println("AlsoSees: "+WordnetUtil.asList(result));
+    // System.err.println("AlsoSees: "+RiTa.asList(result));
 
     // System.err.println("=======================================");
 
@@ -831,27 +831,27 @@ public class RiWordNet implements Wordnet
     result = getSynset(word, posStr, false);
     this.addSynsetsToSet(result, set);
     if (dbug)
-      System.err.println("Synsets: " + WordnetUtil.asList(result));
+      System.err.println("Synsets: " + RiTa.asList(result));
 
     result = getHyponyms(word, posStr);
     this.addSynsetsToSet(result, set);
     if (dbug)
-      System.err.println("Hyponyms: " + WordnetUtil.asList(result));
+      System.err.println("Hyponyms: " + RiTa.asList(result));
 
     result = getSimilar(word, posStr);
     this.addSynsetsToSet(result, set);
     if (dbug)
-      System.err.println("Similar: " + WordnetUtil.asList(result));
+      System.err.println("Similar: " + RiTa.asList(result));
 
     result = getAlsoSees(word, posStr);
     this.addSynsetsToSet(result, set);
     if (dbug)
-      System.err.println("AlsoSees: " + WordnetUtil.asList(result));
+      System.err.println("AlsoSees: " + RiTa.asList(result));
 
     result = getCoordinates(word, posStr);
     this.addSynsetsToSet(result, set);
     if (dbug)
-      System.err.println("Coordinates: " + WordnetUtil.asList(result));
+      System.err.println("Coordinates: " + RiTa.asList(result));
 
     if (dbug)
       System.err.println("=======================================");
@@ -886,34 +886,34 @@ public class RiWordNet implements Wordnet
     result = getAllSynsets(word, posStr);
     this.addSynsetsToSet(result, set);
     if (dbug)
-      System.err.println("Synsets: " + WordnetUtil.asList(result));
+      System.err.println("Synsets: " + RiTa.asList(result));
 
     result = getAllHyponyms(word, posStr);
     this.addSynsetsToSet(result, set);
     if (dbug)
-      System.err.println("Hyponyms: " + WordnetUtil.asList(result) + " Set: "
-          + WordnetUtil.asList(set));
+      System.err.println("Hyponyms: " + RiTa.asList(result) + " Set: "
+          + RiTa.asList(set));
 
     /*
      * result = getAllHypernyms(word, posStr); this.addSynsetsToSet(result,
      * set); if
-     * (dbug)System.err.println("Hypernyms: "+WordnetUtil.asList(result));
+     * (dbug)System.err.println("Hypernyms: "+RiTa.asList(result));
      */
 
     result = getAllSimilar(word, posStr);
     this.addSynsetsToSet(result, set);
     if (dbug)
-      System.err.println("Similar: " + WordnetUtil.asList(result));
+      System.err.println("Similar: " + RiTa.asList(result));
 
     result = getAllAlsoSees(word, posStr);
     this.addSynsetsToSet(result, set);
     if (dbug)
-      System.err.println("AlsoSees: " + WordnetUtil.asList(result));
+      System.err.println("AlsoSees: " + RiTa.asList(result));
 
     result = getAllCoordinates(word, posStr);
     this.addSynsetsToSet(result, set);
     if (dbug)
-      System.err.println("Coordinates: " + WordnetUtil.asList(result));
+      System.err.println("Coordinates: " + RiTa.asList(result));
 
     // System.err.println("=======================================");
     return setToStrings(set, maxResults);
@@ -1328,7 +1328,7 @@ public class RiWordNet implements Wordnet
     catch (NullPointerException e)
     {
       // ignore jwnl bug
-      System.err.println("[WARN] JWNL Error: " + word + "/" + posStr);
+      //System.err.println("[WARN] JWNL Error: " + word + "/" + posStr);
     }
     catch (JWNLException e)
     {
@@ -1908,7 +1908,7 @@ public class RiWordNet implements Wordnet
     List dest = new ArrayList();
     addLemmas(words, dest);
 
-    String result = WordnetUtil.join(dest, delim);
+    String result = RiTa.join(dest, delim);
 
     if (addStartAndEndDelims)
       result = delim + result + delim;
@@ -1935,11 +1935,17 @@ public class RiWordNet implements Wordnet
     if (ignoreCompoundWords && isCompound(lemma)) 
       return;
 
-    if (ignoreUpperCaseWords && WordnetUtil.startsWithUppercase(lemma))
+    if (ignoreUpperCaseWords && WordnetUtil.startsWithUppercase(lemma)) {
+      //System.out.println("RWN: Ignoring: "+lemma);
       return;
+    }
 
-    lemma = cleanLemma(lemma);
-
+   // lemma = cleanLemma(lemma);
+    if (lemma.endsWith(")")) 
+      lemma = lemma.substring(0, lemma.length() - 3);
+    
+    lemma = lemma.replaceAll("_", RiTa.SP);
+    
     if (!dest.contains(lemma)) // no dups
       dest.add(lemma);
   }
@@ -1997,14 +2003,14 @@ public class RiWordNet implements Wordnet
     return s.substring(1, s.length() - 1);
   }
 
-  private String cleanLemma(String lemma)
+/*  private String cleanLemma(String lemma)
   {
-    if (lemma.endsWith(")"))
+    if (lemma.endsWith(")")) 
       lemma = lemma.substring(0, lemma.length() - 3);
     
     lemma = lemma.replaceAll("_", RiTa.SP);
     return lemma;
-  }
+  }*/
 
   /**
    * Returns an array of all parts-of-speech ordered according to their polysemy
@@ -2204,7 +2210,7 @@ public class RiWordNet implements Wordnet
     return getRandomExamples(pos, 1)[0];
   }
 
-  /**
+  /**o
    * Returns <code>numExamples</code> random examples from random words w'
    * <code>pos</code>
    * 
@@ -2219,8 +2225,7 @@ public class RiWordNet implements Wordnet
       try
       {
         IndexWord iw = null;
-        while (iw == null || !ignoreCompoundWords
-            && WordnetUtil.contains(iw.getLemma(), " "))
+        while (iw == null || (!ignoreCompoundWords && iw.getLemma().indexOf(' ') > -1))
           iw = jwnlDict.getRandomIndexWord(convertPos(pos));
 
         Synset syn = iw.getSenses()[0];
@@ -3373,6 +3378,13 @@ public class RiWordNet implements Wordnet
       RiWordNet w = new RiWordNet("/WordNet-3.1");
       String[] s = w.getAllSynsets("dog", "n");
       result = s == null ? null : RiTa.asList(s).toString();
+      int i = 0;
+      for (Iterator it = w.iterator("n"); it.hasNext();i++)
+      {
+        if (i > 100) break;
+        System.out.println(it.next());
+        
+      }
     }
     System.out.println(result);
   }

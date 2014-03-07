@@ -8,6 +8,7 @@ import java.util.*;
 
 import org.junit.Test;
 
+import rita.RiTa;
 import rita.RiWordNet;
 import rita.wordnet.jwnl.wndata.Synset;
 
@@ -61,7 +62,7 @@ public class RiWordNetTest
 
 		try{
 			int[] result2 = w.getSenseIds("caz", "n");
-			equal(1, 2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -70,7 +71,7 @@ public class RiWordNetTest
 		try{
 			int[] result3 = w.getSenseIds("cat", "u");
 			ok(result3.length == 0);
-			equal(1, 2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -109,7 +110,7 @@ public class RiWordNetTest
 		try{
 			String[] result6 = w.getHypernyms("root", "j");
 			//println(result6);
-			equal(1, 2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -118,7 +119,7 @@ public class RiWordNetTest
 		try{
 			String[] result7 = w.getHypernyms("rootttt", "j");
 			//println(result7);
-			equal(1, 2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -164,7 +165,7 @@ public class RiWordNetTest
 			//wrong result
 			String[] result6 = w.getContains("kite", "j", 2);
 			//println(result6);
-			equal(1, 2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -174,7 +175,7 @@ public class RiWordNetTest
 			//wrong result
 			String[] result8 = w.getContains("kitxx", "j", 2000);
 			//println(result8);
-			equal(1, 2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -184,12 +185,11 @@ public class RiWordNetTest
 	@Test
 	public void testGetContainsStringString()
 	{
-
 		w.ignoreCompoundWords(true);
 
 		String[] expected = { "activeness", "activewear", "attractiveness", "inactiveness", "refractiveness", "unattractiveness" };
 		String[] result = w.getContains("active", "n");
-		printArr(result);
+		//printArr(result);
 		setEqual(expected, result);
 
 		String[] expected2 = { "avalokiteshvara", "avalokitesvara", "blatherskite", "greenockite", "kitembilla", "melkite", "samarskite" };
@@ -206,7 +206,7 @@ public class RiWordNetTest
 			//wrong result
 			String[] result3 = w.getContains("kite", "j");
 			//println(result3);
-			equal(1, 2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -215,7 +215,7 @@ public class RiWordNetTest
 		try{
 			String[] result5 = w.getContains("kitxx", "j");
 			//println(result5);
-			equal(1, 2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -263,7 +263,7 @@ public class RiWordNetTest
 		try{
 			String[] result8 = w.getEndsWith("razilll", "j", 40);
 			println(result8);
-			equal(1, 2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -303,13 +303,13 @@ public class RiWordNetTest
 		// it got the previous result
 		String[] expected6 = {};
 		String[] result6 = w.getEndsWith("qwes", "r");
-		printArr(result5);
-		//setEqual(expected6, result6);
+		//printArr(result5);
+		setEqual(expected6, result6);
 
 		try{
 			String[] result8 = w.getEndsWith("razilll", "j");
 			//println(result8);
-			equal(1, 2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -352,7 +352,7 @@ public class RiWordNetTest
 
 		try{
 			String[] result7 = w.getStartsWith("turn", "j", 5);
-			equal(1,2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -360,7 +360,7 @@ public class RiWordNetTest
 
 		try{
 			String[] result8 = w.getStartsWith("ttturn", "j", 5);
-			equal(1,2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -397,6 +397,7 @@ public class RiWordNetTest
 
 		try{
 			String[] result6 = w.getStartsWith("yo", "z");
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -465,14 +466,14 @@ public class RiWordNetTest
 		setEqual(expected7, result7);
 		try{
 			String[] result8 = w.getSoundsLike("table", "o", 3);
-			equal(1, 2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
 		}
 		try{
 			String[] result9 = w.getSoundsLike("table", "o", 3);
-			equal(1, 2);
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -512,15 +513,8 @@ public class RiWordNetTest
 		//		printArr(result7);
 		setEqual(expected7, result7);
 		try{
-			String[] result8 = w.getSoundsLike("table", "o");
-			equal(1, 2);
-		}
-		catch(Exception e){
-			ok(e);
-		}
-		try{
-			String[] result9 = w.getSoundsLike("table", "o");
-			equal(1, 2);
+			w.getSoundsLike("table", "o");
+			ok(false);
 		}
 		catch(Exception e){
 			ok(e);
@@ -531,9 +525,15 @@ public class RiWordNetTest
 	public void testGetWildcardMatchStringStringInt()
 	{
 		String[] expected = { "tale", "tile"};
-		String[] result = w.getWildcardMatch("t?le", "n", 2);
-		//println(result);
+		String[] result = w.getWildcardMatch("t?le", "n", 2); // single-letter
+		println(result);
 		setEqual(expected, result);
+		
+    String[] expected2 = { "teasdale", "teakettle", }; 
+    String[] result2 = w.getWildcardMatch("tea*le", "n", 2); // multiple-letter
+    println(result2);
+    setEqual(expected2, result2);
+
 
 		//TODO
 	}
@@ -542,16 +542,29 @@ public class RiWordNetTest
 	public void testGetWildcardMatchStringString()
 	{
 		String[] expected = { "tale", "tile", "tole"};
-		String[] result = w.getWildcardMatch("t?le", "n");
-		//println(result);
+		String[] result = w.getWildcardMatch("t?le", "n"); // single-letter
 		setEqual(expected, result);
 
-		//TODO
+    String[] expected2 = { "teasdale", "teakettle", "teasle"};  
+    String[] result2 = w.getWildcardMatch("tea*le", "n"); // multiple-letter
+    println(result2);
+    setEqual(expected2, result2);
+    
+    //TODO
 	}
 
 	@Test
 	public void testFilterIntStringStringInt()
 	{
+    String[] expected10 = { "tablet" };
+    String[] result10 = w.filter(RiWordNet.WILDCARD_MATCH, "table?", "n", 3);
+    setEqual(expected10, result10);
+    
+    String[] expected11 = { "collectable", "charitableness", "acceptableness" };
+    String[] result11 = w.filter(RiWordNet.WILDCARD_MATCH, "*table*", "n", 3);
+    //printArr(result11);
+    setEqual(expected11, result11);
+
 		String[] expected = { "tabbouleh", "tableau", "tabooli"};
 		String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n", 3);
 		//println(result);
@@ -584,24 +597,20 @@ public class RiWordNetTest
 
 		String[] expected8 = { "table" }; //TODO
 		String[] result8 = w.filter(RiWordNet.REGEX_MATCH, "table", "n", 3);
-		printArr(result8);
-		//		setEqual(expected8, result8);
+		//printArr(result8);
+		setEqual(expected8, result8);
 
 		String[] expected9 = { ".22", "0", "'hood" }; //TODO is the result normal?
 		String[] result9 = w.filter(RiWordNet.SIMILAR_TO, "table", "n", 3);
 		//		printArr(result9);
 		setEqual(expected9, result9);
 
-		String[] expected10 = { "tabbouleh", "tableau", "tabooli"};//TODO
-		String[] result10 = w.filter(RiWordNet.WILDCARD_MATCH, "table", "n", 3);
-		printArr(result10);
-		//		setEqual(expected10, result10);
+
 
 		String[] expected12 = { };
 		String[] result12 = w.filter(RiWordNet.CONTAINS, "nahsuchword", "n", 3);
 		//		printArr(result12);
 		setEqual(expected12, result12);
-
 
 		String[] expected14 = { "unstableness", "tablecloth", "tractableness", "habitableness", "tabletop", "excitableness", "inevitable", "stable", "hospitableness", "disreputableness", "immutableness", "ratables", "tablespoonful", "suitableness", "worktable", "stableman", "notable", "mutableness", "tablet", "vegetable", "profitableness", "palatableness", "unacceptableness", "inhospitableness", "charitableness", "unpalatableness", "tableau", "stableness", "intractableness", "inevitableness", "uncomfortableness", "comfortableness", "collectable", "acceptableness", "roundtable", "tableland", "permutableness", "unprofitableness", "constable", "eatable", "tablespoon", "stableboy", "potable", "timetable", "tableware", "turntable", "tablefork", "tablemate", "portable", "stablemate", "unsuitableness" };
 		String[] result14 = w.filter(RiWordNet.CONTAINS, "table", "n", 30000);
@@ -610,8 +619,8 @@ public class RiWordNetTest
 
 
 		try{
-			String[] result13 = w.filter(RiWordNet.CONTAINS, "table", "e", 3);
-			equal(1,2);
+			w.filter(RiWordNet.CONTAINS, "table", "e", 3);
+			ok(false);
 		}
 		catch(Exception e)
 		{
@@ -854,6 +863,7 @@ public class RiWordNetTest
 		w.ignoreCompoundWords(false);
 		expected = new String[]{ "sportswear", "athletic wear" };
 		result = w.getAllSynsets("activewear", "n");
+		//RiTa.out(result);
 		setEqual(expected, result);
 		w.ignoreCompoundWords(reset);
 		//assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
@@ -1366,7 +1376,7 @@ public class RiWordNetTest
 		String[] expected = {"blessed", "blissful", "bright", "golden", "halcyon", "prosperous", "laughing", "riant"};
 		String[] result = w.getSimilar("happy", "a");
 		//println(w.getSenseIds("happy", "a"));
-		//println(result);
+		println(result);
 		setEqual(expected, result);
 	}
 
@@ -1419,10 +1429,10 @@ public class RiWordNetTest
 		//println(result2);
 		setEqual(expected2, result2);
 
-		//		String[] expected3 = { "bleat", };
+		String[] expected3 = { "bleat", };
 		String[] result3 = w.getAnagrams("table", "n");
 		//println(result2);
-		setEqual(expected2, result2);
+		setEqual(expected3, result3);
 	}
 
 	@Test
@@ -1455,13 +1465,14 @@ public class RiWordNetTest
 	@Test
 	public void testIgnoreUpperCaseWordsBoolean() //all the words are lower case
 	{
-
-		String[] expected = { ""};
+		String[] expected = { "Washington"};
 		//booker t. washington,booker taliaferro washington,capital of washington,george washington
 		w.ignoreUpperCaseWords(false);
 		String[] result = w.getEndsWith("ashington", "n", 4);
+		//RiTa.out(result);
+    setEqual(expected, result);
 
-		String[] expected2 = { ""};
+		String[] expected2 = { "washington" };
 		w.ignoreUpperCaseWords(true);
 		String[] result2 = w.getEndsWith("ashington", "n", 4);
 
@@ -1478,49 +1489,29 @@ public class RiWordNetTest
 		w.ignoreUpperCaseWords(false);
 		boolean b2 = w.ignoreUpperCaseWords();
 		ok(!b2);
-
 	}
 
 	@Test
 	public void testIteratorString()
 	{
-		/*  
-	  for(int i=0; i< result.length ; i++){
-		  System.out.print(result[i] +"\n");
-	  }
-	  //setEqual(expected, result);
-
-	  System.out.print("========="+"\n");
-	  for(int i=0; i< result2.length ; i++){
-		  System.out.print(result2[i] +"\n");
-	  }*/
-
-		//w.getRandomExample("v");
-		Iterator i = w.iterator("n");
-		int numOfItems =0;
-		while(i.hasNext()) {
-			ok(i.next());
-			numOfItems++;
-		}
-		ok(numOfItems > 50);
-
-		Iterator i2 = w.iterator("v");
-		int numOfItems2 =0;
-		while(i2.hasNext()) {
-			ok(i2.next());
-			numOfItems2++;
-		}
-		ok(numOfItems2 > 50);
-		try{
-			//
-			ok(false);
-		}
-		catch (Exception e){
-
-
-		}
-
-
+	  String[] pos = {"n","a","r","v",};
+    Set s = new HashSet();
+    for (int i = 0; i < pos.length; i++)
+    {
+      Iterator it = w.iterator(pos[i]);
+      int numOfItems = 0;
+      while (it.hasNext())
+      {
+        String word = (String) it.next();
+        String wpos = w.getPosStr(word);
+        s.add(wpos);
+        ok(word);
+        ok(wpos.contains(pos[i]));
+        numOfItems++;
+      }
+//System.out.println(numOfItems+" of "+pos[i]);
+      ok(numOfItems > 50);
+    }
 	}
 
 	@Test
@@ -1541,60 +1532,44 @@ public class RiWordNetTest
 	@Test
 	public void testOrFilterIntArrayStringArrayString()
 	{
+	  int[] filters = { RiWordNet.STARTS_WITH, RiWordNet.ENDS_WITH };
+	  String[] patterns = { "ax", "ax" };
+	  String[] result = w.orFilter(filters, patterns , "n");
+RiTa.out(result);
 		fail("Not yet implemented");
 	}
 
 
 	@Test
-	public void testSetWordNetHome()
-	{
-		// w.setWordNetHome(); //setWordNetHome is protected
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetSenseIdsIndexWord()
-	{
-		// w.getSenseIds();
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testPtnlToStrings()
-	{
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testIsCompound() //wrong result all false for now?
+	public void testIsCompound()  // DCH: ok now...
 	{
 		String[] input = {"grand", "father", "grandfather"};
-		boolean[] expected = {false, false, true};
+		boolean[] expected = {false, false, false};
 		for(int i=0; i< input.length; i++){
 			//println(w.isCompound(input[i]));
 			deepEqual(w.isCompound(input[i]),expected[i]);
 		}
 
-		String[] input2 = {"foot", "ball", "football"};
-		boolean[] expected2 = {false, false, true};
-		for(int i=0; i< input.length; i++){
-			//println(w.isCompound(input2[i]));
-			deepEqual(w.isCompound(input2[i]),expected2[i]);
-		}
-
-		String[] input3 = {"back", "space", "backspace"};
-		boolean[] expected3 = {false, false, true};
-		for(int i=0; i< input3.length; i++){
-			//println(w.isCompound(input3[i]));
-			deepEqual(w.isCompound(input3[i]),expected3[i]);
-		}
-	}
-
-
-	@Test
-	public void testLookupIndexWord()
-	{
-		fail("Not yet implemented");
+    String[] input3 = {"back", "space", "back space"};
+    boolean[] expected3 = {false, false, true};
+    for(int i=0; i< input3.length; i++){
+      //println(w.isCompound(input3[i]));
+      deepEqual(w.isCompound(input3[i]),expected3[i]);
+    }
+    
+    String[] input4 = {"back", "space", "back-space"};
+    boolean[] expected4 = {false, false, true};
+    for(int i=0; i< input4.length; i++){
+      //println(w.isCompound(input3[i]));
+      deepEqual(w.isCompound(input4[i]),expected4[i]);
+    }
+    
+    input4 = new String[] {"back", "space", "back_space"};
+    expected4 = new boolean[] {false, false, true};
+    for(int i=0; i< input4.length; i++){
+      //println(w.isCompound(input3[i]));
+      deepEqual(w.isCompound(input4[i]),expected4[i]);
+    }
 	}
 
 	/*
