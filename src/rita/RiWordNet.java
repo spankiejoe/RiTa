@@ -56,13 +56,24 @@ public class RiWordNet implements Wordnet
    */
   public RiWordNet(String wordnetInstallDir)
   {
-
-    this(wordnetInstallDir, null);
+    this(wordnetInstallDir, null, false, false);
+  }
+  
+  public RiWordNet(String wordnetInstallDir, Object parent)
+  {
+    this(wordnetInstallDir, parent, false, false);
+  }
+  
+  public RiWordNet(String wordnetInstallDir, boolean ignoreCompoundWords, boolean ignoreUpperCaseWords)
+  {
+    this(wordnetInstallDir, null, ignoreCompoundWords, ignoreUpperCaseWords);
   }
 
-  public RiWordNet(String wnHome, Object parent)
+  public RiWordNet(String wnHome, Object parent, boolean ignoreCompoundWords, boolean ignoreUpperCaseWords)
   {
-
+    this.ignoreCompoundWords = ignoreCompoundWords;
+    this.ignoreUpperCaseWords = ignoreUpperCaseWords;
+    
     String confFile = getDefaultConfFile();
 
     this.setWordNetHome(wnHome);
@@ -78,7 +89,8 @@ public class RiWordNet implements Wordnet
       }
       catch (Exception e)
       {
-        throw new RiWordNetError("Error loading WordNet with WORDNET_HOME=" + wnHome,e);
+        throw new RiWordNetError("Unable to find WordNet at " + 
+            wnHome+" -- have you downloaded & installed it?", e);
       }
     }
 
@@ -520,8 +532,9 @@ public class RiWordNet implements Wordnet
     }
 
     wordNetHome = path;
+    
     // String home = path != null ? path : "jar:/rita/wordnet/WordNet3.1";
-    System.out.println("[INFO] RiTa.WordNet.HOME=" + wordNetHome);
+    //if (!RiTa.SILENT) System.out.println("[INFO] RiTa.WordNet.HOME=" + wordNetHome);
   }
 
   // -------------------------- MAIN METHODS ----------------------------

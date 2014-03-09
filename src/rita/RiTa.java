@@ -28,14 +28,6 @@ public class RiTa implements Constants
    
   static { if (!INITD) RiTa.init(); }
   
-  static void init()
-  {
-    if (!SILENT && !INITD) {
-      INITD = true;
-      System.out.println("[INFO] RiTa.version ["+VERSION+"]");
-    }
-  }
-  
   // METHODS ///////////////////////////////////////////////////////////
   
   public static String stem(String s)                 { return Stemmer.getInstance().stem(s); }
@@ -1470,16 +1462,25 @@ public class RiTa implements Constants
   {
     System.out.println(l);
   }
+  
+  static void init()
+  {
+    new Thread() { // hack for silencing
+        public void run()
+        {
+          if (!INITD) {
+            INITD = true;
+            if (!SILENT)
+              System.out.println("[INFO] RiTa.version ["+VERSION+"]");
+          }        
+        }
+    }.start();
+  }
 
   public static void main(String[] args)
   {
-    loadString(new String[]{"a.txt","b.txt"});
-    if (1==1) return;
-    System.out.println(loadStrings("pulp.json"));
-    
-    //PApplet.loadBytes("/User/dhowe/Desktop/times-24.json");
-   
-    
+    RiTa.SILENT = true;
+
     String[] toks = tokenize("The boy, dressed in red, ate an apple.!?");
     toks[0] = "@#$%^#$%^";
     toks[1] = "can't";

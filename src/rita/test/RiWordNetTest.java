@@ -526,12 +526,12 @@ public class RiWordNetTest
 	{
 		String[] expected = { "tale", "tile"};
 		String[] result = w.getWildcardMatch("t?le", "n", 2); // single-letter
-		println(result);
+		//println(result);
 		setEqual(expected, result);
 		
     String[] expected2 = { "teasdale", "teakettle", }; 
     String[] result2 = w.getWildcardMatch("tea*le", "n", 2); // multiple-letter
-    println(result2);
+    //println(result2);
     setEqual(expected2, result2);
 
 
@@ -547,7 +547,7 @@ public class RiWordNetTest
 
     String[] expected2 = { "teasdale", "teakettle", "teasle"};  
     String[] result2 = w.getWildcardMatch("tea*le", "n"); // multiple-letter
-    println(result2);
+    //println(result2);
     setEqual(expected2, result2);
     
     //TODO
@@ -777,6 +777,7 @@ public class RiWordNetTest
 	{
 		String[] expected = { "explore", "rake", "drag", "comb", "divine", "inspect", "scrutinize", "survey", "skim", "probe", "shop", "dredge", "prospect", "want", "intrude", "grub", "fumble", "pursue", "poke", "seek", "raid", "rummage", "browse", "rifle", "nose", "hunt", "candle", "go", "cruise", "feel", "google", "autopsy", "scour", "peruse", "fish", "look", "mapquest", "check", "finger", "scan", "experiment", "frisk", "gather", "examine", "angle", "research", "scrutinise", "auscultate", "surf", "ransack", "pry", "grope" };
 		String[] result = w.getAllSynonyms("search", "v", 10);
+		ok(!Arrays.asList(result).contains("search"));
 		setContains(expected, result);
 	}
 
@@ -788,6 +789,7 @@ public class RiWordNetTest
 		/*for (int i = 0; i < result.length; i++)
       System.out.print("\""+result[i]+"\", ");
 	  System.out.println();*/
+		ok(!Arrays.asList(result).contains("search"));
 		setEqual(expected, result);
 	}
 
