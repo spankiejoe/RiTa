@@ -551,7 +551,7 @@ public class RiText implements RiTextIF
   public boolean contains(float mx, float my)
   {
     // System.out.println("Testing: ("+mx+","+my+") vs ("+x1+","+y1+")");
-    this.updateBoundingBox(pApplet.g);
+    this.updateBoundingBox();
     return (boundingBox.contains(mx - x, my - y));
   }
 
@@ -782,7 +782,7 @@ public class RiText implements RiTextIF
     this.updateBehaviors();
 
     if (boundingBoxVisible && text.text() != null)
-      this.updateBoundingBox(p);
+      this.updateBoundingBox();
   }
 
   /**
@@ -1205,20 +1205,11 @@ public class RiText implements RiTextIF
             System.err.println("[WARN] Error unregistering draw() for "+rt.text());
           }
       }
-        /*try {
-          //p.unregisterMethod("dispose", rt);
-          p.unregisterMethod("mouseEvent", rt);
-        }
-        catch (Throwable e)
-        {
-          System.err.println("[WARN] Error unregistering: "+rt.text());
-        }*/
-      
       ((RiText)rt)._dispose();
     }
   }
   
-  protected void _dispose()
+  protected synchronized void _dispose()
   {
     visible(false);
 
@@ -1235,7 +1226,6 @@ public class RiText implements RiTextIF
       behaviors.clear();
       behaviors = null;
     }
-    boundingBox = null;
 
     instances.remove(this);
   }
@@ -1721,18 +1711,24 @@ public class RiText implements RiTextIF
     this.alignment = align;
   }
 
-  /**
-   * Returns a rectangle representing the current screen position of the
-   * bounding box
-   */
+  /** Returns a rectangle representing the current screen position of the bounding box */
   public float[] boundingBox()
   {
-    updateBoundingBox(pApplet.g);
+    updateBoundingBox();
     
     if (screenBoundingBox == null)
       screenBoundingBox = new Rect();
 
-    screenBoundingBox.set((x + boundingBox.x),  (y + boundingBox.y),  (boundingBox.w*scaleX),  (boundingBox.h*scaleY));
+    try
+    {
+      screenBoundingBox.set((x + boundingBox.x),  (y + boundingBox.y),  (boundingBox.w*scaleX),  (boundingBox.h*scaleY));
+    }
+    catch (Throwable e)
+    {
+      System.err.println(screenBoundingBox);
+      System.err.println(boundingBox);
+      e.printStackTrace();
+    }
 
     return screenBoundingBox.asArray();
   }
@@ -2252,12 +2248,14 @@ public class RiText implements RiTextIF
   /*
    * TODO: add lazy(er) updates
    */
-  protected void updateBoundingBox(PGraphics pg)
+  protected void updateBoundingBox()
   {
-    verifyFont(); // need this here (really!)
+    verifyFont(); // we need this here (really!)
 
     if (boundingBox == null)
       boundingBox = new Rect();
+    
+    if (font == null) return;
     
     float ascent = font.ascent() * font.getSize(); // fix for P5 bug
     float descent = font.descent() * font.getSize();
@@ -2280,8 +2278,8 @@ public class RiText implements RiTextIF
         break;
     }
 
-    if (boundingBox != null)
-      boundingBox.set(bbx, bby, bbw, bbh);
+
+    boundingBox.set(bbx, bby, bbw, bbh);
   }
 
   // ughh, need to rethink, maybe reflection?

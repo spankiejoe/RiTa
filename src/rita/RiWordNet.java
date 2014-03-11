@@ -11,7 +11,7 @@ import rita.wordnet.jwnl.wndata.*;
 import rita.wordnet.jwnl.wndata.list.*;
 import rita.wordnet.jwnl.wndata.relationship.*;
 
-public class RiWordNet implements Wordnet
+public class RiWordNet
 {
   /** String constant for Noun part-of-speech */
   public final static String NOUN = "n";
@@ -25,6 +25,33 @@ public class RiWordNet implements Wordnet
   /** String constant for Adverb part-of-speech */
   public final static String ADV = "r";
 
+  // Filter flags ----------------------------------
+  public static final int ANAGRAMS =       1; 
+  public static final int CONTAINS =       8; 
+  public static final int ENDS_WITH =      16;
+  public static final int REGEX_MATCH  =   64;
+  public static final int STARTS_WITH =    128;  
+  public static final int SIMILAR_TO =     256;
+  public static final int SOUNDS_LIKE =    512;
+  public static final int WILDCARD_MATCH = 1024;
+  public static final int HAS_EXAMPLE    = 2048;
+  
+  //static final int CONTAINS_ALL =   2;  // later
+  //static final int CONTAINS_SOME =  4;  // later
+  //static final int EXACT_MATCH =    32; // not used
+  
+  public static final String WORDNET_ARCHIVE = "wdict.dat";
+  
+  public static final String SYNSET_DELIM=":", QQ="";
+  public static final String DEFAULT_CONF = "file_properties.xml";      
+   
+  public static final int[] ALL_FILTERS = {    
+    ENDS_WITH,STARTS_WITH, ANAGRAMS,
+    CONTAINS,SIMILAR_TO, SOUNDS_LIKE,
+    WILDCARD_MATCH,REGEX_MATCH// HAS_EXAMPLE
+    //CONTAINS_ALL,CONTAINS_SOME
+  };
+  
   private static final String ROOT = "entity";
 
   private static final String[] EA = {};
@@ -33,6 +60,7 @@ public class RiWordNet implements Wordnet
 
   /** @invisible */
   public static String wordNetHome;
+  public static boolean useMorphologicalProcessor;
 
   /** @invisible */
   public Dictionary jwnlDict;
@@ -62,6 +90,11 @@ public class RiWordNet implements Wordnet
   public RiWordNet(String wordnetInstallDir, Object parent)
   {
     this(wordnetInstallDir, parent, false, false);
+  }
+  
+  public RiWordNet(String wordnetInstallDir, boolean ignoreCompoundWords)
+  {
+    this(wordnetInstallDir, null, ignoreCompoundWords, false);
   }
   
   public RiWordNet(String wordnetInstallDir, boolean ignoreCompoundWords, boolean ignoreUpperCaseWords)
@@ -589,7 +622,7 @@ public class RiWordNet implements Wordnet
 
   /**
    * Returns an array of unique ids, one for each 'sense' of <code>word</code>
-   * with <code>pos</code>, or null if none are found.
+   * with <code>pos</code>, or an empty int[] array if none are found.
    * <p>
    * A WordNet 'sense' refers to a specific WordNet meaning and maps 1-1 to the
    * concept of synsets. Each 'sense' of a word exists in a different synset.
@@ -613,9 +646,11 @@ public class RiWordNet implements Wordnet
     int[] result = null;
     try
     {
+      if (idw == null) return new int[0];
+      
       int numSenses = idw.getSenseCount();
-      if (idw == null || numSenses == 0)
-        return new int[0];
+      if (numSenses == 0) return new int[0];
+      
       long[] offsets = idw.getSynsetOffsets();
       result = new int[offsets.length];
       
@@ -626,7 +661,9 @@ public class RiWordNet implements Wordnet
     {
       throw new RiWordNetError(e);
     }
+    
     // System.err.println("ids: "+Util.asList(result));
+    
     return result;
   }
 
@@ -724,16 +761,16 @@ public class RiWordNet implements Wordnet
    * <code>word</code> with <code>pos</code>, assuming they contain
    * <code>word</code>, or else null if not found
    */
-  public String getAnyExample(String word, String pos)
+  public String getRandomExample(String word, String pos) // returns null;
   {
     String[] all = getAllExamples(word, pos);
+    if (all == null || all.length <1) return null;
     int rand = (int) (Math.random() * all.length);
     return all[rand];
   }
 
   /**
-   * Returns examples for word with unique <code>senseId</code>, or null if not
-   * found
+   * Returns examples for word with unique <code>senseId</code>
    */
   public String[] getExamples(int senseId)
   {
@@ -786,8 +823,7 @@ public class RiWordNet implements Wordnet
 
   /**
    * Returns an unordered String[] containing the synset, hyponyms, similars,
-   * alsoSees, and coordinate terms (checking each in order), or null if not
-   * found.
+   * alsoSees, and coordinate terms (checking each in order)
    */
   public String[] getSynonyms(int senseId, int maxResults)
   {
@@ -1137,8 +1173,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns String[] of Synsets for unique id <code>id</code> or null if not
-   * found.
+   * Returns String[] of Synsets for unique id <code>id</code> 
    */
   public String[] getSynset(int id)
   {
@@ -1776,8 +1811,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns stem for <code>pos</code> with <code>pos</code>, or null if not
-   * found.
+   * Returns stem for <code>pos</code> with <code>pos</code>
    * 
    * public String getStem(String word, String pos) { IndexWord iw = null; try {
    * iw = dictionary.getMorphologicalProcessor()
@@ -1822,28 +1856,27 @@ public class RiWordNet implements Wordnet
    */
   public boolean exists(String word)
   {
-    if (ignoreCompoundWords && word.indexOf(' ') > -1)
-      return false;
-
     IndexWord[] iw = null;
     try
     {
       if (jwnlDict == null)
-      {
-        System.err.println("NULL DICT");
-        System.exit(1);
-      }
+        throw new RiWordNetError("Dictionary is null!");
+      
       IndexWordSet iws = jwnlDict.lookupAllIndexWords(word);
 
       if (iws == null || iws.size() < 1)
         return false;
 
       iw = iws.getIndexWordArray();
+//for (int i = 0; i < iw.length; i++)
+  //System.out.println(i+")"+iw[i].getLemma());
+
     }
     catch (JWNLException e)
     {
       System.err.println("[WARN] " + e.getMessage()); // throw?
     }
+    
     return (iw != null && iw.length > 0);
   }
 
@@ -1895,22 +1928,15 @@ public class RiWordNet implements Wordnet
   protected IndexWord lookupIndexWord(POS pos, String cs) // returns null
   {
     // System.err.println("RiWordNet.lookupIndexWord("+cs+")");
-    IndexWord iword = null;
-
-    if (cs != null)
+    try
     {
-      String word = cs.toString().replace('-', '_');
-      try
-      {
-        iword = jwnlDict.lookupIndexWord(pos, word);
-      }
-      catch (JWNLException e)
-      {
-        // JWNL bug returns null here, ignore...
-      }
+      return (cs != null) ? jwnlDict.lookupIndexWord(pos, cs) : null;
     }
-
-    return iword;
+    catch (JWNLException e)
+    {
+      // JWNL bug returns null here, ignore...
+      return null;
+    }
   }
 
   private String toLemmaString(Word[] words, String delim, boolean addStartAndEndDelims) // returns null
@@ -1931,8 +1957,7 @@ public class RiWordNet implements Wordnet
 
   private void addLemmas(Word[] words, Collection dest)
   {
-    if (words == null || words.length == 0)
-      return;
+    if (words == null) return;
 
     for (int k = 0; k < words.length; k++)
       addLemma(words[k], dest);
@@ -1945,22 +1970,26 @@ public class RiWordNet implements Wordnet
 
   private void addLemma(String lemma, Collection dest)
   {
-    if (ignoreCompoundWords && isCompound(lemma)) 
-      return;
+    if (_ignorable(lemma)) return;
 
-    if (ignoreUpperCaseWords && WordnetUtil.startsWithUppercase(lemma)) {
-      //System.out.println("RWN: Ignoring: "+lemma);
-      return;
-    }
-
-   // lemma = cleanLemma(lemma);
     if (lemma.endsWith(")")) 
       lemma = lemma.substring(0, lemma.length() - 3);
     
-    lemma = lemma.replaceAll("_", RiTa.SP);
+    lemma = lemma.replaceAll(RiTa.USC, RiTa.SP);
     
     if (!dest.contains(lemma)) // no dups
       dest.add(lemma);
+  }
+
+  public boolean _ignorable(String lemma)
+  {
+    if (ignoreCompoundWords && isCompound(lemma)) 
+      return true;
+
+    if (ignoreUpperCaseWords && WordnetUtil.startsWithUppercase(lemma)) 
+      return true;
+
+    return false;
   }
 
   private void getLemmaSet(PointerTargetNodeList source, Collection dest)
@@ -2078,13 +2107,13 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Finds the most-common part-of-speech for the word, according to its
-   * polysemy count, returning the pos for the version of the word with the most
-   * different senses.
+   * Finds the most common part-of-speech for a word based on its
+   * polysemy count, returning the pos for the version of the word 
+   * with the most different senses.
    * 
-   * @return single-char String for the most common part of speech ("a" =
-   *         adjective, "n" = noun, "r" = adverb, "v" = verb), or null if not
-   *         found.
+   * @return single character String for the most common part-of-speech ("a" =
+   *         adjective, "n" = noun, "r" = adverb, "v" = verb), or null if the 
+   *         word is not found.
    */
   public String getBestPos(String word) // returns null
   {
@@ -2293,7 +2322,7 @@ public class RiWordNet implements Wordnet
    * Returns a random word with <code>pos</code> and a maximum of
    * <code>maxChars</code>.
    * 
-   * @return a random word or null if none is found
+   * @return a random word or null if none are found
    */
   public String getRandomWord(String pos, boolean stemsOnly, int maxChars)
   {
@@ -2303,7 +2332,6 @@ public class RiWordNet implements Wordnet
     {
       try
       {
-        FileBackedDictionary d;
         iw = jwnlDict.getRandomIndexWord(wnPos);
       }
       catch (JWNLRuntimeException e)
@@ -2318,13 +2346,14 @@ public class RiWordNet implements Wordnet
       {
         throw new RiWordNetError(e);
       }
+      
       String word = iw.getLemma();
-      if (ignoreCompoundWords && isCompound(word))
+      
+      if (_ignorable(word) || word.length() > maxChars)
         continue;
-      if (word.length() > maxChars)
-        continue;
+      
       if (!stemsOnly || isStem(word, pos))
-        return iw.getLemma();
+        return word;
     }
   }
 
@@ -2334,7 +2363,7 @@ public class RiWordNet implements Wordnet
    */
   public static boolean isCompound(String word)
   {
-    return word.indexOf(' ') > 0 || word.indexOf('-') > 0 || word.indexOf('_') > 0;
+    return word.indexOf(RiTa.USC) > 0 || word.indexOf(' ') > 0;
   }
 
   /** @invisible */
@@ -3157,7 +3186,7 @@ public class RiWordNet implements Wordnet
   }
 
   /**
-   * Returns attribute terms for word/pos or null if not found<br>
+   * Returns attribute terms for word/pos<br>
    * Holds for nouns & adjectives<br>
    * Example: happiness(n) -> [happy, unhappy]<br>
    * happy(a) -> [happiness, felicity]<br>
@@ -3265,7 +3294,8 @@ public class RiWordNet implements Wordnet
   // PRIVATES --------------------------------------------------------
 
   /* Get all the pointer targets of <var>synset</var> of type <var>type</var>, or null if not found*/
-  private PointerTargetNodeList getPointerTargets(Synset synset, PointerType type) throws JWNLException
+  private PointerTargetNodeList getPointerTargets(Synset synset, PointerType type)
+      throws JWNLException // returns null
   {
     if (synset == null)
       return null;
