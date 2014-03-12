@@ -1567,18 +1567,23 @@ public class RiWordNet
       PointerUtils pu = PointerUtils.getInstance();
       ptnl = pu.getDirectHyponyms(synset);
 
-      if (ptnl == null)
-        throw new RuntimeException("JWNL ERR: " + word + "/" + posStr);
-      // System.out.println(word+"/"+posStr+" -> "+ptnl.size());
+      if (ptnl == null) {
+        //throw new RuntimeException("JWNL ERR: " + word + "/" + posStr);
+        System.err.println("JWNL ERR1: " + word+"/"+posStr);
+        return EA;
+      }
     }
     catch (NullPointerException e)
     {
-      throw new RuntimeException("JWNL BUG: " + word + "/" + posStr);
+      System.err.println("JWNL ERR2: " + word + "/" + posStr);
+      return EA;
     }
     catch (JWNLException e)
     {
-      throw new RiWordNetError(e);
+      System.err.println("JWNL ERR3: " + word + "/" + posStr);
+      return EA;
     }
+    
     return ptnlToStrings(word, ptnl);
   }
 
@@ -1628,9 +1633,8 @@ public class RiWordNet
     }
     catch (NullPointerException e)
     {
-      // bug in jwnl, throws null-pointer instead of returning null or 0-size
-      // list
-      System.out.println("JWNL BUG: " + e);
+      // bug in jwnl, throws null-pointer instead of returning null or 0-size list
+      //System.out.println("JWNL BUG: " + e);
       return;
     }
     getLemmaSet(ptnl, l);

@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static rita.support.QUnitStubs.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 import org.junit.Test;
@@ -11,48 +13,176 @@ import org.junit.Test;
 import rita.RiTa;
 import rita.RiWordNet;
 import rita.wordnet.WordnetUtil;
-import rita.wordnet.jwnl.wndata.Synset;
 
 /*
  * Compare results to: http://wordnetweb.princeton.edu/perl/webwn
  * 
  * KENNY:
- * TODO: MAke others like combinatoric case below: testGetSynonymsXXX();
- * TODO: Add all negative cases (where there is no match in db)
+ * TODO: Make others like combinatoric case below: testGetSynonymsXXX() and testGetAllSynonymsXXX
+ * TODO: Add negative cases (where there is no match in db)
  * TODO: Make sure all methods return non-deterministic arrays
  */
 public class RiWordNetTest
 {
 	////////////////////////////////// Example-tests ///////////////////////////////////////
 	// Each of these tests all 4 permutations of ignoreUpperCaseWords and ignoreCompundWords
+  //   and verifies the original search term is not present in the result.
   /////////////////////////////////////////////////////////////////////////////////////////
-
+  
   @Test
   public void testGetSynonymsInt()
   {
-    String[] expected = { "scour","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
-    String[] result = w.getSynonyms(81318273);
-    setEqualMulti(expected, result);
+    String[] expected = { "scout","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
+    setEqualMulti(expected, "getSynonyms", 81318273);
   }
-
+  
+  @Test
+  public void testGetSynonymsIntInt()
+  {
+    String[] expected = { "scour","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
+    setContainsMulti(expected, "getSynonyms", 81318273, 4);
+  }
+  
   @Test
   public void testGetSynonymsStringString()
   {
     String[] expected = { "shop","grope","seek","want","fumble","scour","grub","gather","seek out","leave no stone unturned","divine","hunt","quest after","feel","angle","go after","fish","browse","quest for","finger","dredge","look for","surf","drag","pursue", };
-    String[] result = w.getSynonyms("search", "v");
-    ok(!Arrays.asList(result).contains("search")); // verify no original
-    setEqualMulti(expected, result);
+    setEqualMulti(expected, "getSynonyms", "search", "v");
   }
 
   @Test
   public void testGetSynonymsStringStringInt()
   {
     String[] expected = { "shop","grope","seek","want","fumble","scour","grub","gather","seek out","leave no stone unturned","divine","hunt","quest after","feel","angle","go after","fish","browse","quest for","finger","dredge","look for","surf","drag","pursue", };
-    String[] result = w.getSynonyms("search", "v", 4);
-    ok(!Arrays.asList(result).contains("search")); // verify no original
-    //println(result,true);                       // println(x,true) gives cut/paste array format
-    setContainsMulti(expected, result);
+    setContainsMulti(expected, "getSynonyms", "search", "v", 4);
   }
+  
+  @Test
+  public void testGetAllSynonymsStringString()
+  {
+    String[] expected = { "check","pursue","experiment","re-explore","grub","research","peruse","prospect","mapquest","look for","comb","skim","nose","explore","glance over","look","cruise","poke","hunt","scan","candle","drag","seek","angle","browse","take stock", "x-ray","autopsy","fumble","want","cast around","quest after","rake","size up","examine","strip-search","divine","frisk","inspect","gather","horn in","beat about","run down","rifle","cast about","fish","google","dredge","raid","intrude","go","grope","rummage","scour","ransack","probe","scrutinise","survey","pry","scrutinize","shop","seek out","auscultate","finger","surf","go after","quest for","feel","leave no stone unturned", };
+    //println(w.getAllSynonyms("search", "v"), true);
+    setEqualMulti(expected, "getAllSynonyms", "search", "v");
+  }
+  
+  @Test
+  public void testGetAllSynonymsStringStringInt()
+  {
+    String[] expected = { "check","pursue","experiment","re-explore","grub","research","peruse","prospect","mapquest","look for","comb","skim","nose","explore","glance over","look","cruise","poke","hunt","scan","candle","drag","seek","angle","browse","take stock", "x-ray","autopsy","fumble","want","cast around","quest after","rake","size up","examine","strip-search","divine","frisk","inspect","gather","horn in","beat about","run down","rifle","cast about","fish","google","dredge","raid","intrude","go","grope","rummage","scour","ransack","probe","scrutinise","survey","pry","scrutinize","shop","seek out","auscultate","finger","surf","go after","quest for","feel","leave no stone unturned", };
+    setContainsMulti(expected, "getAllSynonyms", "search", "v", 10);
+  }
+  
+  
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  void setContainsMulti(String[] expected, String methodNm, int id, int count) {
+    setContainsMulti(expected, methodNm, 
+        new Class[] { int.class, int.class }, new Object[]{ id, count } );
+  }
+  void setContainsMulti(String[] expected, String methodNm, String word, String pos, int count) {
+    setContainsMulti(expected, methodNm, 
+        new Class[] { String.class, String.class, int.class }, new Object[]{ word, pos, count } );
+  }
+  void setContainsMulti(String[] expected, String methodNm, Class[] argTypes, Object[] args)
+  {
+    boolean ignoreCompoundsOrig = w.ignoreCompoundWords();
+    boolean ignoreUppersOrig = w.ignoreUpperCaseWords();
+    String[] result;
+    Method m = RiTa._findMethod(w, methodNm, argTypes );
+    try
+    {
+      w.ignoreCompoundWords(false);
+      w.ignoreUpperCaseWords(false);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setContains(expected, result);
+
+      
+      w.ignoreCompoundWords(true);
+      w.ignoreUpperCaseWords(false);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setContains(removeCompoundWords(expected), result);
+
+      
+      w.ignoreCompoundWords(false);
+      w.ignoreUpperCaseWords(true);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setContains(removeUpperCaseWords(expected), result);
+
+      
+      w.ignoreCompoundWords(true);
+      w.ignoreUpperCaseWords(true);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setContains(removeCompoundWords(removeUpperCaseWords(expected)), result);
+
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+    w.ignoreCompoundWords(ignoreCompoundsOrig);
+    w.ignoreUpperCaseWords(ignoreUppersOrig);
+  }
+  
+  void setEqualMulti(String[] expected, String methodNm, int id)
+  {
+    setEqualMulti(expected, methodNm, new Class[] { int.class }, new Object[]{ id });
+  }
+  void setEqualMulti(String[] expected, String methodNm, String word, String pos)
+  {
+    setEqualMulti(expected, methodNm, new Class[] { String.class, String.class }, new Object[]{ word, pos });
+  }
+  void setEqualMulti(String[] expected, String methodNm, Class[] argTypes, Object[] args)
+  {
+    boolean ignoreCompoundsOrig = w.ignoreCompoundWords();
+    boolean ignoreUppersOrig = w.ignoreUpperCaseWords();
+    String[] result;
+    Method m = RiTa._findMethod(w, methodNm, argTypes );
+    try
+    {
+      w.ignoreCompoundWords(false);
+      w.ignoreUpperCaseWords(false);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setEqual(expected, result);
+      
+      w.ignoreCompoundWords(true);
+      w.ignoreUpperCaseWords(false);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setEqual(removeCompoundWords(expected), result);
+      
+      w.ignoreCompoundWords(false);
+      w.ignoreUpperCaseWords(true);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setEqual(removeUpperCaseWords(expected), result);
+      
+      w.ignoreCompoundWords(true);
+      w.ignoreUpperCaseWords(true);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setEqual(removeCompoundWords(removeUpperCaseWords(expected)), result);
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+    w.ignoreCompoundWords(ignoreCompoundsOrig);
+    w.ignoreUpperCaseWords(ignoreUppersOrig);
+  }
+
   
   /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -741,35 +871,6 @@ public class RiWordNetTest
 	}
 
 	@Test
-	public void testGetSynonymsIntInt()
-	{
-		String[] expected = { "fumble","pursue","comparison-shop","browse","grope","grub","fish","divine","scrabble","hunt","dowse","dredge","drag","want","shop","window-shop","angle","feel","finger","seek","antique","shell","search","gather","scour","surf", };
-    String[] result = w.getSynonyms(81318273, 4);
-    setContainsWithAndWithoutCompounds(expected, result);
-
-		result = w.getSynonyms(81318273);
-		setEqualWithAndWithoutCompounds(expected, result);
-	}
-	
-	@Test
-	public void testGetAllSynonymsStringStringInt()
-	{
-		String[] expected = { "explore", "rake", "drag", "comb", "divine", "inspect", "scrutinize", "survey", "skim", "probe", "shop", "dredge", "prospect", "want", "intrude", "grub", "fumble", "pursue", "poke", "seek", "raid", "rummage", "browse", "rifle", "nose", "hunt", "candle", "go", "cruise", "feel", "google", "autopsy", "scour", "peruse", "fish", "look", "mapquest", "check", "finger", "scan", "experiment", "frisk", "gather", "examine", "angle", "research", "scrutinise", "auscultate", "surf", "ransack", "pry", "grope" };
-		String[] result = w.getAllSynonyms("search", "v", 10);
-		ok(!Arrays.asList(result).contains("search"));
-		setContainsWithAndWithoutCompounds(expected, result);
-	}
-
-	@Test
-	public void testGetAllSynonymsStringString()
-	{
-		String[] expected = { "pry", "seek", "nose", "re-explore", "scour", "look", "inspect", "experiment", "survey", "raid", "autopsy", "intrude", "scan", "angle", "scrutinise", "hunt", "auscultate", "rifle", "rummage", "probe", "grope", "peruse", "pursue", "divine", "rake", "grub", "browse", "surf", "cruise", "dredge", "candle", "fish", "skim", "scrutinize", "mapquest", "fumble", "drag", "feel", "google", "poke", "check", "explore", "frisk", "strip-search", "go", "research", "want", "finger", "examine", "x-ray", "comb", "prospect", "gather", "ransack", "shop" };
-		String[] result = w.getAllSynonyms("search", "v");
-		ok(!Arrays.asList(result).contains("search"));
-		setEqual(expected, result);
-	}
-
-	@Test
 	public void testGetCommonParents() {
 
 		String[] expected = {"clothing", "vesture", "wear", "wearable", "habiliment"};
@@ -834,7 +935,7 @@ public class RiWordNetTest
 	{
 		String[] expected = new String[]{ "sportswear", "athletic wear" };
 		String[] result = w.getAllSynsets("activewear", "n");
-		setEqualWithAndWithoutCompounds(expected, result);
+		setEqual(expected, result);
 	}
 
 	@Test
@@ -1434,9 +1535,10 @@ public class RiWordNetTest
 	}
 
 	@Test
-	public void testIgnoreUpperCaseWordsBoolean() // TODO: why is this failing when tested in a group (must be some side-effects; maybe from caching?)
+	public void testIgnoreUpperCaseWordsBoolean() 
 	{
 	  w.ignoreUpperCaseWords(false);
+    w.ignoreCompoundWords(true);
 
 	  String[] expected = { "Dulles"};
     String[] result = w.getSynset("dulles", "n");
@@ -1454,9 +1556,10 @@ public class RiWordNetTest
 	}
 
 	@Test
-	public void testIgnoreUpperCaseWords() // TODO: why is this failing when tested in a group (must be some side-effects; maybe from caching?)
+	public void testIgnoreUpperCaseWords()
 	{
 		w.ignoreUpperCaseWords(true);
+    w.ignoreCompoundWords(true);
     ok(w.ignoreUpperCaseWords());
     
 		String[] expected = new String[] { };
@@ -1532,7 +1635,7 @@ RiTa.out(result);
       deepEqual(w.isCompound(input3[i]),expected3[i]);
     }
 	}
-
+/*
 	static void setEqualMulti(String[] expected, String[] result) {
 	  setEqualCombi(expected, result, false, false);
 	  setEqualCombi(expected, result, true, false);
@@ -1646,7 +1749,7 @@ RiTa.out(result);
     w.ignoreUpperCaseWords(true);
     setContains(expected, result);
     w.ignoreUpperCaseWords(origValue); // w'out compound words
-  }
+  }*/
   
   private static String[] removeUpperCaseWords(String[] s)
   {
