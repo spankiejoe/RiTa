@@ -33,7 +33,8 @@ public class RiWordNetTest
   public void testGetSynonymsInt()
   {
     String[] expected = { "scout","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
-    setEqualMulti(expected, "getSynonyms", 81318273);
+    //println(w.getSynonyms(81318273), true);
+    setEqualMulti(expected, "getSynonyms", 81318273); 
   }
   
   @Test
@@ -47,6 +48,7 @@ public class RiWordNetTest
   public void testGetSynonymsStringString()
   {
     String[] expected = { "shop","grope","seek","want","fumble","scour","grub","gather","seek out","leave no stone unturned","divine","hunt","quest after","feel","angle","go after","fish","browse","quest for","finger","dredge","look for","surf","drag","pursue", };
+    //println(w.getSynonyms("search", "v"), true);
     setEqualMulti(expected, "getSynonyms", "search", "v");
   }
 
@@ -71,119 +73,7 @@ public class RiWordNetTest
     String[] expected = { "check","pursue","experiment","re-explore","grub","research","peruse","prospect","mapquest","look for","comb","skim","nose","explore","glance over","look","cruise","poke","hunt","scan","candle","drag","seek","angle","browse","take stock", "x-ray","autopsy","fumble","want","cast around","quest after","rake","size up","examine","strip-search","divine","frisk","inspect","gather","horn in","beat about","run down","rifle","cast about","fish","google","dredge","raid","intrude","go","grope","rummage","scour","ransack","probe","scrutinise","survey","pry","scrutinize","shop","seek out","auscultate","finger","surf","go after","quest for","feel","leave no stone unturned", };
     setContainsMulti(expected, "getAllSynonyms", "search", "v", 10);
   }
-  
-  
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  void setContainsMulti(String[] expected, String methodNm, int id, int count) {
-    setContainsMulti(expected, methodNm, 
-        new Class[] { int.class, int.class }, new Object[]{ id, count } );
-  }
-  void setContainsMulti(String[] expected, String methodNm, String word, String pos, int count) {
-    setContainsMulti(expected, methodNm, 
-        new Class[] { String.class, String.class, int.class }, new Object[]{ word, pos, count } );
-  }
-  void setContainsMulti(String[] expected, String methodNm, Class[] argTypes, Object[] args)
-  {
-    boolean ignoreCompoundsOrig = w.ignoreCompoundWords();
-    boolean ignoreUppersOrig = w.ignoreUpperCaseWords();
-    String[] result;
-    Method m = RiTa._findMethod(w, methodNm, argTypes );
-    try
-    {
-      w.ignoreCompoundWords(false);
-      w.ignoreUpperCaseWords(false);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setContains(expected, result);
-
-      
-      w.ignoreCompoundWords(true);
-      w.ignoreUpperCaseWords(false);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setContains(removeCompoundWords(expected), result);
-
-      
-      w.ignoreCompoundWords(false);
-      w.ignoreUpperCaseWords(true);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setContains(removeUpperCaseWords(expected), result);
-
-      
-      w.ignoreCompoundWords(true);
-      w.ignoreUpperCaseWords(true);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setContains(removeCompoundWords(removeUpperCaseWords(expected)), result);
-
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    w.ignoreCompoundWords(ignoreCompoundsOrig);
-    w.ignoreUpperCaseWords(ignoreUppersOrig);
-  }
-  
-  void setEqualMulti(String[] expected, String methodNm, int id)
-  {
-    setEqualMulti(expected, methodNm, new Class[] { int.class }, new Object[]{ id });
-  }
-  void setEqualMulti(String[] expected, String methodNm, String word, String pos)
-  {
-    setEqualMulti(expected, methodNm, new Class[] { String.class, String.class }, new Object[]{ word, pos });
-  }
-  void setEqualMulti(String[] expected, String methodNm, Class[] argTypes, Object[] args)
-  {
-    boolean ignoreCompoundsOrig = w.ignoreCompoundWords();
-    boolean ignoreUppersOrig = w.ignoreUpperCaseWords();
-    String[] result;
-    Method m = RiTa._findMethod(w, methodNm, argTypes );
-    try
-    {
-      w.ignoreCompoundWords(false);
-      w.ignoreUpperCaseWords(false);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setEqual(expected, result);
-      
-      w.ignoreCompoundWords(true);
-      w.ignoreUpperCaseWords(false);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setEqual(removeCompoundWords(expected), result);
-      
-      w.ignoreCompoundWords(false);
-      w.ignoreUpperCaseWords(true);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setEqual(removeUpperCaseWords(expected), result);
-      
-      w.ignoreCompoundWords(true);
-      w.ignoreUpperCaseWords(true);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setEqual(removeCompoundWords(removeUpperCaseWords(expected)), result);
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    w.ignoreCompoundWords(ignoreCompoundsOrig);
-    w.ignoreUpperCaseWords(ignoreUppersOrig);
-  }
-
-  
   /////////////////////////////////////////////////////////////////////////////////////////
 
   @Test
@@ -1635,121 +1525,120 @@ RiTa.out(result);
       deepEqual(w.isCompound(input3[i]),expected3[i]);
     }
 	}
-/*
-	static void setEqualMulti(String[] expected, String[] result) {
-	  setEqualCombi(expected, result, false, false);
-	  setEqualCombi(expected, result, true, false);
-	  setEqualCombi(expected, result, false, true);
-	  setEqualCombi(expected, result, true, true);
-	}
-	
-  static void setContainsMulti(String[] expected, String[] result)
-  {
-    setContainsCombi(expected, result, false, false);    
-    setContainsCombi(expected, result, true, false);
-    setContainsCombi(expected, result, false, true);
-    setContainsCombi(expected, result, true, true);
+
+  
+  
+  /////////////////////////////  Dynamics ///////////////////////////////
+
+  void setContainsMulti(String[] expected, String methodNm, int id, int count) {
+    setContainsMulti(expected, methodNm, 
+        new Class[] { int.class, int.class }, new Object[]{ id, count } );
   }
-	
-  static void setContainsCombi(String[] a1, String[] a2, boolean ignoreCompounds, boolean ignoreUppers)
+  void setContainsMulti(String[] expected, String methodNm, String word, String pos, int count) {
+    setContainsMulti(expected, methodNm, 
+        new Class[] { String.class, String.class, int.class }, new Object[]{ word, pos, count } );
+  }
+  void setContainsMulti(String[] expected, String methodNm, Class[] argTypes, Object[] args)
   {
-    String[] b1 = new String[a1.length];
-    System.arraycopy(a1, 0, b1, 0, a1.length);
-    String[] b2 = new String[a2.length];
-    System.arraycopy(a2, 0, b2, 0, a2.length);
-    boolean ignoreCompoundWordsOrig = w.ignoreCompoundWords();
-    boolean ignoreUpperCaseWordsOrig = w.ignoreUpperCaseWords();
-    w.ignoreCompoundWords(ignoreCompounds);
-    w.ignoreUpperCaseWords(ignoreUppers);
-    if (ignoreCompounds) {
-      b1 = removeCompoundWords(b1);
-      b2 = removeCompoundWords(b2);
+    boolean ignoreCompoundsOrig = w.ignoreCompoundWords();
+    boolean ignoreUppersOrig = w.ignoreUpperCaseWords();
+    String[] result;
+    Method m = RiTa._findMethod(w, methodNm, argTypes );
+    try
+    {
+      w.ignoreCompoundWords(false);
+      w.ignoreUpperCaseWords(false);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setContains(expected, result);
+
+      
+      w.ignoreCompoundWords(true);
+      w.ignoreUpperCaseWords(false);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setContains(removeCompoundWords(expected), result);
+
+      
+      w.ignoreCompoundWords(false);
+      w.ignoreUpperCaseWords(true);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setContains(removeUpperCaseWords(expected), result);
+
+      
+      w.ignoreCompoundWords(true);
+      w.ignoreUpperCaseWords(true);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setContains(removeCompoundWords(removeUpperCaseWords(expected)), result);
+
     }
-    if (ignoreUppers) {
-      b1 = removeUpperCaseWords(b1);
-      b2 = removeUpperCaseWords(b2);
+    catch (Exception e)
+    {
+      e.printStackTrace();
     }
-    setContains(b1, b2);
-    w.ignoreCompoundWords(ignoreCompoundWordsOrig); // no side-effects 
-    w.ignoreUpperCaseWords(ignoreUpperCaseWordsOrig); // no side-effects
+    w.ignoreCompoundWords(ignoreCompoundsOrig);
+    w.ignoreUpperCaseWords(ignoreUppersOrig);
   }
   
-	static void setEqualCombi(String[] a1, String[] a2, boolean ignoreCompounds, boolean ignoreUppers)
+  void setEqualMulti(String[] expected, String methodNm, int id)
   {
-	  String[] b1 = new String[a1.length];
-	  System.arraycopy(a1, 0, b1, 0, a1.length);
-	  String[] b2 = new String[a2.length];
-    System.arraycopy(a2, 0, b2, 0, a2.length);
-	  boolean ignoreCompoundWordsOrig = w.ignoreCompoundWords();
-	  boolean ignoreUpperCaseWordsOrig = w.ignoreUpperCaseWords();
-	  w.ignoreCompoundWords(ignoreCompounds);
-	  w.ignoreUpperCaseWords(ignoreUppers);
-	  if (ignoreCompounds) {
-	    b1 = removeCompoundWords(b1);
-	    b2 = removeCompoundWords(b2);
-	  }
-	  if (ignoreUppers) {
-	    b1 = removeUpperCaseWords(b1);
-	    b2 = removeUpperCaseWords(b2);
+    setEqualMulti(expected, methodNm, new Class[] { int.class }, new Object[]{ id });
+  }
+  void setEqualMulti(String[] expected, String methodNm, String word, String pos)
+  {
+    setEqualMulti(expected, methodNm, new Class[] { String.class, String.class }, new Object[]{ word, pos });
+  }
+  void setEqualMulti(String[] expected, String methodNm, Class[] argTypes, Object[] args)
+  {
+    boolean ignoreCompoundsOrig = w.ignoreCompoundWords();
+    boolean ignoreUppersOrig = w.ignoreUpperCaseWords();
+    String[] result;
+    Method m = RiTa._findMethod(w, methodNm, argTypes );
+    try
+    {
+      w.ignoreCompoundWords(false);
+      w.ignoreUpperCaseWords(false);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setEqual(expected, result);
+      
+      w.ignoreCompoundWords(true);
+      w.ignoreUpperCaseWords(false);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setEqual(removeCompoundWords(expected), result);
+      
+      w.ignoreCompoundWords(false);
+      w.ignoreUpperCaseWords(true);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setEqual(removeUpperCaseWords(expected), result);
+      
+      w.ignoreCompoundWords(true);
+      w.ignoreUpperCaseWords(true);
+      result = (String[]) m.invoke(w, args);
+      if (args[0] instanceof String) // make sure we don't have the search term
+        ok(!Arrays.asList(result).contains(args[0]));
+      setEqual(removeCompoundWords(removeUpperCaseWords(expected)), result);
     }
-	  setEqual(b1, b2);
-	  w.ignoreCompoundWords(ignoreCompoundWordsOrig); // no side-effects 
-	  w.ignoreUpperCaseWords(ignoreUpperCaseWordsOrig); // no side-effects
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+    w.ignoreCompoundWords(ignoreCompoundsOrig);
+    w.ignoreUpperCaseWords(ignoreUppersOrig);
   }
 
-  // TODO: make these combinatoric with booleans (true/true,true/false,false/true,false/false)
-  static void setContainsWithAndWithoutCompounds(String[] expected, String[] result)
-  {
-    boolean origValue = w.ignoreCompoundWords(); // no side-effects
-    w.ignoreCompoundWords(false);
-    setContains(expected, result); // w' compound words
-    
-    w.ignoreCompoundWords(true);
-    expected = removeCompoundWords(expected);
-    result = removeCompoundWords(result);
-    setContains(expected, result);
-    w.ignoreCompoundWords(origValue); // w'out compound words
-  }
-  
-  // TODO: make these combinatoric with booleans (true/true,true/false,false/true,false/false)
-  static void setEqualWithAndWithoutCompounds(String[] expected, String[] result)
-  {
-    boolean origValue = w.ignoreCompoundWords(); // no side-effects
-    w.ignoreCompoundWords(false);
-    setEqual(expected, result); // w' compound words
-    
-    expected = removeCompoundWords(expected);
-    result = removeCompoundWords(result);
-    w.ignoreCompoundWords(true);
-    setEqual(expected, result);
-    w.ignoreCompoundWords(origValue); // w'out compound words
-  }
-  
-  static void setEqualWithAndWithoutUpperCases(String[] expected, String[] result)
-  {
-    boolean origValue = w.ignoreUpperCaseWords(); // no side-effects
-    w.ignoreUpperCaseWords(false);
-    setEqual(expected, result); // w' compound words
-    
-    expected = removeUpperCaseWords(expected);
-    result = removeUpperCaseWords(result);
-    w.ignoreUpperCaseWords(true);
-    setEqual(expected, result);
-    w.ignoreUpperCaseWords(origValue); // w'out compound words
-  }
-  
-  static void setContainsWithAndWithoutUpperCases(String[] expected, String[] result)
-  {
-    boolean origValue = w.ignoreUpperCaseWords(); // no side-effects
-    w.ignoreUpperCaseWords(false);
-    setContains(expected, result); // w' compound words
-    
-    expected = removeUpperCaseWords(expected);
-    result = removeUpperCaseWords(result);
-    w.ignoreUpperCaseWords(true);
-    setContains(expected, result);
-    w.ignoreUpperCaseWords(origValue); // w'out compound words
-  }*/
+  //////////////////////////////// Helpers ///////////////////////////////////
   
   private static String[] removeUpperCaseWords(String[] s)
   {
