@@ -26,93 +26,95 @@ public class RiWordNetTest
 {
 	////////////////////////////////// Example-tests ///////////////////////////////////////
 	// Each of these tests all 4 permutations of ignoreUpperCaseWords and ignoreCompundWords
-  //   and verifies the original search term is not present in the result.
-  /////////////////////////////////////////////////////////////////////////////////////////
-  
-  @Test
-  public void testGetSynonymsInt()
-  {
-    String[] expected = { "scout","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
-    //println(w.getSynonyms(81318273), true);
-    setEqualMulti(expected, "getSynonyms", 81318273); 
-  }
-  
-  @Test
-  public void testGetSynonymsIntInt()
-  {
-    String[] expected = { "scour","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
-    setContainsMulti(expected, "getSynonyms", 81318273, 4);
-  }
-  
-  @Test
-  public void testGetSynonymsStringString()
-  {
-    String[] expected = { "shop","grope","seek","want","fumble","scour","grub","gather","seek out","leave no stone unturned","divine","hunt","quest after","feel","angle","go after","fish","browse","quest for","finger","dredge","look for","surf","drag","pursue", };
-    //println(w.getSynonyms("search", "v"), true);
-    setEqualMulti(expected, "getSynonyms", "search", "v");
-  }
+	//   and verifies the original search term is not present in the result.
+	/////////////////////////////////////////////////////////////////////////////////////////
 
-  @Test
-  public void testGetSynonymsStringStringInt()
-  {
-    String[] expected = { "shop","grope","seek","want","fumble","scour","grub","gather","seek out","leave no stone unturned","divine","hunt","quest after","feel","angle","go after","fish","browse","quest for","finger","dredge","look for","surf","drag","pursue", };
-    setContainsMulti(expected, "getSynonyms", "search", "v", 4);
-  }
-  
-  @Test
-  public void testGetAllSynonymsStringString()
-  {
-    String[] expected = { "check","pursue","experiment","re-explore","grub","research","peruse","prospect","mapquest","look for","comb","skim","nose","explore","glance over","look","cruise","poke","hunt","scan","candle","drag","seek","angle","browse","take stock", "x-ray","autopsy","fumble","want","cast around","quest after","rake","size up","examine","strip-search","divine","frisk","inspect","gather","horn in","beat about","run down","rifle","cast about","fish","google","dredge","raid","intrude","go","grope","rummage","scour","ransack","probe","scrutinise","survey","pry","scrutinize","shop","seek out","auscultate","finger","surf","go after","quest for","feel","leave no stone unturned", };
-    //println(w.getAllSynonyms("search", "v"), true);
-    setEqualMulti(expected, "getAllSynonyms", "search", "v");
-  }
-  
-  @Test
-  public void testGetAllSynonymsStringStringInt()
-  {
-    String[] expected = { "check","pursue","experiment","re-explore","grub","research","peruse","prospect","mapquest","look for","comb","skim","nose","explore","glance over","look","cruise","poke","hunt","scan","candle","drag","seek","angle","browse","take stock", "x-ray","autopsy","fumble","want","cast around","quest after","rake","size up","examine","strip-search","divine","frisk","inspect","gather","horn in","beat about","run down","rifle","cast about","fish","google","dredge","raid","intrude","go","grope","rummage","scour","ransack","probe","scrutinise","survey","pry","scrutinize","shop","seek out","auscultate","finger","surf","go after","quest for","feel","leave no stone unturned", };
-    setContainsMulti(expected, "getAllSynonyms", "search", "v", 10);
-  }
+	@Test
+	public void testGetSynonymsInt()
+	{
+		String[] expected = { "scout","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
+		//println(w.getSynonyms(81318273), true);
+		setEqualMulti(expected, "getSynonyms", 81318273); 
+	}
 
-  /////////////////////////////////////////////////////////////////////////////////////////
+	@Test
+	public void testGetSynonymsIntInt()
+	{
+		String[] expected = { "scour","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
+		setContainsMulti(expected, "getSynonyms", 81318273, 4);
+	}
 
-  @Test
-  public void testRiWordNetString()
-  {
-    RiWordNet.useMorphologicalProcessor = false;
-    
-    ok(!w.exists("healthXXX"));
-    ok(w.exists("health"));
+	@Test
+	public void testGetSynonymsStringString()
+	{
+		String[] expected = { "shop","grope","seek","want","fumble","scour","grub","gather","seek out","leave no stone unturned","divine","hunt","quest after","feel","angle","go after","fish","browse","quest for","finger","dredge","look for","surf","drag","pursue", };
+		//println(w.getSynonyms("search", "v"), true);
+		setEqualMulti(expected, "getSynonyms", "search", "v");
+	}
 
-    ok(w.exists("medicare"));
-    ok(w.exists("health insurance"));
-    ok(!w.exists("health ignorance"));
-    ok(!w.exists("health XXX"));
+	@Test
+	public void testGetSynonymsStringStringInt()
+	{
+		String[] expected = { "shop","grope","seek","want","fumble","scour","grub","gather","seek out","leave no stone unturned","divine","hunt","quest after","feel","angle","go after","fish","browse","quest for","finger","dredge","look for","surf","drag","pursue", };
+		setContainsMulti(expected, "getSynonyms", "search", "v", 4);
+	}
 
-    ok(w); // see above
-    ok(w.exists("hello"));
-    ok(!w.exists("caz"));
+	@Test
+	public void testGetAllSynonymsStringString()
+	{
+		String[] expected = { "check","pursue","experiment","re-explore","grub","research","peruse","prospect","mapquest","look for","comb","skim","nose","explore","glance over","look","cruise","poke","hunt","scan","candle","drag","seek","angle","browse","take stock", "x-ray","autopsy","fumble","want","cast around","quest after","rake","size up","examine","strip-search","divine","frisk","inspect","gather","horn in","beat about","run down","rifle","cast about","fish","google","dredge","raid","intrude","go","grope","rummage","scour","ransack","probe","scrutinise","survey","pry","scrutinize","shop","seek out","auscultate","finger","surf","go after","quest for","feel","leave no stone unturned", };
+		//println(w.getAllSynonyms("search", "v"), true);
+		setEqualMulti(expected, "getAllSynonyms", "search", "v");
+	}
 
-    ok(!w.exists(""));
-    ok(!w.exists("||"));
-    ok(!w.exists("!@#$%^&*("));
-  }
+	@Test
+	public void testGetAllSynonymsStringStringInt()
+	{
+		String[] expected = { "check","pursue","experiment","re-explore","grub","research","peruse","prospect","mapquest","look for","comb","skim","nose","explore","glance over","look","cruise","poke","hunt","scan","candle","drag","seek","angle","browse","take stock", "x-ray","autopsy","fumble","want","cast around","quest after","rake","size up","examine","strip-search","divine","frisk","inspect","gather","horn in","beat about","run down","rifle","cast about","fish","google","dredge","raid","intrude","go","grope","rummage","scour","ransack","probe","scrutinise","survey","pry","scrutinize","shop","seek out","auscultate","finger","surf","go after","quest for","feel","leave no stone unturned", };
+		setContainsMulti(expected, "getAllSynonyms", "search", "v", 10);
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+
+	@Test
+	public void testRiWordNetString()
+	{
+		RiWordNet.useMorphologicalProcessor = false;
+
+		ok(!w.exists("healthXXX"));
+		ok(w.exists("health"));
+
+		ok(w.exists("medicare"));
+		ok(w.exists("health insurance"));
+		ok(!w.exists("health ignorance"));
+		ok(!w.exists("health XXX"));
+
+		ok(w); // see above
+		ok(w.exists("hello"));
+		ok(!w.exists("caz"));
+
+		ok(!w.exists(""));
+		ok(!w.exists("||"));
+		ok(!w.exists("!@#$%^&*("));
+	}
 
 	@Test
 	public void testGetSenseIdsStringString()
 	{
+
+		//TODO cannot use setEqualMulti as it is int[]
 		int[] expected = { 92124272, 910172934, 99919605, 93614083, 92989061, 92986962, 92130460, 9903174 };
 		int[] result = w.getSenseIds("cat", "n");
 		deepEqual(expected, result);
-		
-    int[] expected1 = { 913367788 };
-    int[] result1 = w.getSenseIds("health insurance", "n");
-    deepEqual(expected1, result1);
-		
-    int[] expected2 = { };
-    int[] result2 = w.getSenseIds("caz", "n");
-    deepEqual(expected2, result2);
-		
+
+		int[] expected1 = { 913367788 };
+		int[] result1 = w.getSenseIds("health insurance", "n");
+		deepEqual(expected1, result1);
+
+		int[] expected2 = { };
+		int[] result2 = w.getSenseIds("caz", "n");
+		deepEqual(expected2, result2);
+
 		try{
 			w.getSenseIds("cat", "u");
 			ok(false);
@@ -125,21 +127,16 @@ public class RiWordNetTest
 	@Test
 	public void testGetHypernymsStringString()
 	{
-    String[] expected2 = { "canid" ,"canine"};
-    String[] result2 = w.getHypernyms("dog", "n");
-    //println(result2);
-    setEqual(expected2, result2);
-    
-		String[] expected = { "root" };
-		String[] result = w.getHypernyms("carrot", "n");
-		//println(result);
-		setEqual(expected, result);
 
+		String[] expected = { "root" };
+		setEqualMulti(expected,"getHypernyms","carrot","n");
+
+		String[] expected2 = { "canid" ,"canine"};    
+		setEqualMulti(expected2,"getHypernyms","dog","n");
 
 		String[] expected3 = { "bush" ,"shrub"};
-		String[] result3 = w.getHypernyms("rose", "n");
-		setEqual(expected3, result3);
-		//println(result3);
+		setEqualMulti(expected3,"getHypernyms","rose","n");
+
 
 		String[] expected4 = { };
 		String[] result4 = w.getHypernyms("root", "n");
@@ -163,38 +160,26 @@ public class RiWordNetTest
 	@Test
 	public void testGetContainsStringStringInt()
 	{
-	  w.ignoreCompoundWords(true);
-	  
+		w.ignoreCompoundWords(true);
 		String[] expected = { "activeness", "activewear", "attractiveness" };
-		String[] result = w.getContains("active", "n", 3);
-		//println(result);
-		setEqual(expected, result);
+		setContainsMulti(expected,"getContains","active","n",3);
 
 		String[] expected2 = { "avalokiteshvara", "avalokitesvara" };
-		String[] result2 = w.getContains("kite", "n", 2);
 		//printArr(result2);
-		setEqual(expected2, result2);
-		//fail("Not yet implemented");
+		setContainsMulti(expected2,"getContains","kite","n",2);
 
 		w.ignoreCompoundWords(false);
 		String[] expected3 = { "active agent", "active air defense", "active application" };
-		String[] result3 = w.getContains("active", "n", 3);
-		//println(result3);
-		setEqual(expected3, result3);
+		setContainsMulti(expected3,"getContains","active","n",3);
 
 		String[] expected4 = { "avalokiteshvara", "avalokitesvara" };
-		String[] result4 = w.getContains("kite", "n", 2);
-		setEqual(expected4, result4);
+		setContainsMulti(expected4,"getContains","kite","n",2);
 
 		String[] expected5 = { };
-		String[] result5 = w.getContains("kittxx", "n", 2);
-		//println(result5);
-		setEqual(expected5, result5);
+		setContainsMulti(expected5,"getContains","kittxx","n",2);
 
-		String[] expected7 = { "hell-kite","avalokitesvara", "black kite", "blatherskite", "avalokiteshvara", "white-tailed kite", "sport kite", "stunt kite", "kite balloon", "kite tail", "box kite", "hell-kite", "samarskite", "kitembilla", "melkite", "greenockite", "swallow-tailed kite" };
-		String[] result7 = w.getContains("kite", "n", 2000);
-		//printArr(result7);
-		setEqual(expected7, result7);
+		String[] expected6 = { "hell-kite","avalokitesvara", "black kite", "blatherskite", "avalokiteshvara", "white-tailed kite", "sport kite", "stunt kite", "kite balloon", "kite tail", "box kite", "hell-kite", "samarskite", "kitembilla", "melkite", "greenockite", "swallow-tailed kite" };
+		setContainsMulti(expected6,"getContains","kite","n",2000);
 
 		try{
 			//wrong result
@@ -437,11 +422,48 @@ public class RiWordNetTest
 	@Test
 	public void testGetRegexMatchStringStringInt()
 	{
+		w.ignoreCompoundWords(true);
 		String[] expected = { "collectable", "constable", "eatable", "inevitable"};
-		String[] result = w.getRegexMatch(".*table", "n", 4);
-		//println(result);
-		setEqual(expected, result);
-		//TODO later
+		setContainsMulti(expected,"getRegexMatch",".*table","n", 4);
+
+		String[] expected2 = { "ayin", "cain", "chin", "asin" };
+		setContainsMulti(expected2,"getRegexMatch",".[^A-Z]in","n",4);
+
+		String[] expected3 = {  };
+		setContainsMulti(expected3,"getRegexMatch","in[du]","n",40);
+
+		String[] expected4 = { "coin", "gain", "grin", "chin" };
+		setContainsMulti(expected4,"getRegexMatch",".[^A-Z]in","v",4);
+
+		String[] expected5 = { "altogether", "further", "farther", "either" };
+		setContainsMulti(expected5,"getRegexMatch",".*ther","r",4);
+
+		String[] expected6 = { "akin", "main", "jain", "fain" };
+		setContainsMulti(expected6,"getRegexMatch",".[^A-Z]in","a",4);
+
+		try{
+			String[] result7 = w.getRegexMatch("[^A-Z]in", "o",4);
+			ok(false);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+
+		try{
+			String[] result8 = w.getRegexMatch("*****ther","n",4);
+			ok(false);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+
+		try{
+			String[] result9 = w.getRegexMatch("*****ther","p",4);
+			ok(false);
+		}
+		catch(Exception e){
+			ok(e);
+		}
 
 	}
 
@@ -449,12 +471,47 @@ public class RiWordNetTest
 	public void testGetRegexMatchStringString()
 	{
 		String[] expected = { "collectable", "constable", "eatable", "inevitable", "notable", "portable", "potable", "roundtable", "stable", "table", "timetable", "turntable", "vegetable", "worktable" };
-		String[] result = w.getRegexMatch(".*table", "n");
-		//println(result);
-		setEqual(expected, result);
-		//fail("Not yet implemented");
+		setEqualMulti(expected,"getRegexMatch",".*table","n");
 
-		//TODO later
+		String[] expected2 = { "fin", "tin", "pin", "lin", "yin", "sin", "win", "din", "min", "kin", "hin", "qin", "bin", "gin" };
+		setEqualMulti(expected2,"getRegexMatch",".[^A-Z]in","n");
+
+		String[] expected3 = {  };
+		setEqualMulti(expected3,"getRegexMatch","in[du]","n");
+
+		String[] expected4 = { "sin", "din", "win", "gin", "pin", "tin", "fin", "bin" };
+		setEqualMulti(expected4,"getRegexMatch","[^A-Z]in","v");
+
+		String[] expected5 = { "hell-for-leather", "either", "hither and thither", "one after the other", "altogether", "rather", "hither", "farther", "all together", "together", "thither", "further", "one after another" };
+		setEqualMulti(expected5,"getRegexMatch",".*ther","r");
+
+		String[] expected6 = { "ain", "kin" };
+		setEqualMulti(expected6,"getRegexMatch","[^A-Z]in","a");
+
+		try{
+			String[] result7 = w.getRegexMatch("[^A-Z]in", "o");
+			ok(false);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+
+		try{
+			String[] result8 = w.getRegexMatch("*****ther","n");
+			ok(false);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+
+		try{
+			String[] result9 = w.getRegexMatch("*****ther","p");
+			ok(false);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+
 	}
 
 	@Test
@@ -494,6 +551,7 @@ public class RiWordNetTest
 		String[] result7 = w.getSoundsLike("dacszff", "r", 3);
 		//printArr(result7);
 		setEqual(expected7, result7);
+
 		try{
 			String[] result8 = w.getSoundsLike("table", "o", 3);
 			ok(false);
@@ -558,11 +616,11 @@ public class RiWordNetTest
 		String[] result = w.getWildcardMatch("t?le", "n", 2); // single-letter
 		//println(result);
 		setEqual(expected, result);
-		
-    String[] expected2 = { "teasdale", "teakettle", }; 
-    String[] result2 = w.getWildcardMatch("tea*le", "n", 2); // multiple-letter
-    //println(result2);
-    setEqual(expected2, result2);
+
+		String[] expected2 = { "teasdale", "teakettle", }; 
+		String[] result2 = w.getWildcardMatch("tea*le", "n", 2); // multiple-letter
+		//println(result2);
+		setEqual(expected2, result2);
 
 
 		//TODO
@@ -575,25 +633,25 @@ public class RiWordNetTest
 		String[] result = w.getWildcardMatch("t?le", "n"); // single-letter
 		setEqual(expected, result);
 
-    String[] expected2 = { "teasdale", "teakettle", "teasle"};  
-    String[] result2 = w.getWildcardMatch("tea*le", "n"); // multiple-letter
-    //println(result2);
-    setEqual(expected2, result2);
-    
-    //TODO
+		String[] expected2 = { "teasdale", "teakettle", "teasle"};  
+		String[] result2 = w.getWildcardMatch("tea*le", "n"); // multiple-letter
+		//println(result2);
+		setEqual(expected2, result2);
+
+		//TODO
 	}
 
 	@Test
 	public void testFilterIntStringStringInt()
 	{
-    String[] expected10 = { "tablet" };
-    String[] result10 = w.filter(RiWordNet.WILDCARD_MATCH, "table?", "n", 3);
-    setEqual(expected10, result10);
-    
-    String[] expected11 = { "collectable", "charitableness", "acceptableness" };
-    String[] result11 = w.filter(RiWordNet.WILDCARD_MATCH, "*table*", "n", 3);
-    //printArr(result11);
-    setEqual(expected11, result11);
+		String[] expected10 = { "tablet" };
+		String[] result10 = w.filter(RiWordNet.WILDCARD_MATCH, "table?", "n", 3);
+		setEqual(expected10, result10);
+
+		String[] expected11 = { "collectable", "charitableness", "acceptableness" };
+		String[] result11 = w.filter(RiWordNet.WILDCARD_MATCH, "*table*", "n", 3);
+		//printArr(result11);
+		setEqual(expected11, result11);
 
 		String[] expected = { "tabbouleh", "tableau", "tabooli"};
 		String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n", 3);
@@ -662,10 +720,96 @@ public class RiWordNetTest
 	@Test
 	public void testFilterIntStringString()
 	{
-		String[] expected = { "tabbouleh", "tableau", "tabooli", "tepal", "tiepolo", "tipple", "tivoli", "tubful", "tubule", "tupelo", "tuvalu" };
+		/*String[] expected = { "tabbouleh", "tableau", "tabooli", "tepal", "tiepolo", "tipple", "tivoli", "tubful", "tubule", "tupelo", "tuvalu" };
 		String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n");
 		//println(result);
 		setEqual(expected, result);
+		 */
+		//setEqualMulti
+		//		setEqual(expected14, result14);
+
+
+		String[] expected10 = { "tablet" };
+		String[] result10 = w.filter(RiWordNet.WILDCARD_MATCH, "table?", "n");
+		//printArr(result10);
+		setEqual(expected10, result10);
+
+
+		String[] expected11 = { "table lifting", "constable", "eatable", "inevitable accident", "work table", "vegetable garden", "pool table", "julienne vegetable", "comfortableness", "cruciferous vegetable", "abatable nuisance", "table turning", "solanaceous vegetable", "uncomfortableness", "profitableness", "drawing table", "coffee table", "roundtable", "table salt", "lord's table", "acceptableness", "table-tennis table", "stable gear", "ping-pong table", "water table", "pier table", "stable companion", "inflatable cushion", "console table", "gateleg table", "actuarial table", "tablet-armed chair", "king arthur's round table", "vegetable marrow", "leafy vegetable", "root vegetable", "trestle table", "toilet table", "table mustard", "memorial tablet", "knight of the round table", "livery stable", "timetable", "vegetable sheep", "training table", "portable saw", "portable", "tablefork", "relocatable program", "plane table", "disreputableness", "card table", "charitableness", "raw vegetable", "tableau vivant", "parsons table", "tea table", "sleeping tablet", "vegetable wax", "potable", "vegetable oyster", "table linen", "table of contents", "unsuitableness", "snooker table", "drafting table", "notable", "mutableness", "coffee-table book", "inhospitableness", "conference table", "billiard table", "pedestal table", "italian vegetable marrow", "inevitable", "police constable", "vegetable sponge", "table-tennis bat", "table talk", "kitchen table", "augean stables", "adjustable wrench", "habitableness", "graduated table", "vegetable oil", "unacceptableness", "vegetable patch", "table d'hote", "tablet", "suitableness", "tip table", "collectable", "john constable", "pin table", "table knife", "mortality table", "dressing table", "intractableness", "round-table conference", "pingpong table", "chief constable", "communion table", "tablespoonful", "permutableness", "disreputable person", "tableau", "refectory table", "stablemate", "vegetable soup", "table game", "periodic table", "turntable", "immutableness", "file allocation table", "irritable bowel syndrome", "tableware", "ratables", "excitable area", "table service", "unprofitableness", "adjustable spanner", "stableman", "table napkin", "correlation table", "tablecloth", "operating table", "vegetable silk", "dining-room table", "unpalatableness", "stableness", "table wine", "table-mountain pine", "portable computer", "tip-top table", "tablemate", "cocktail table", "breakfast table", "japanese table pine", "dinner table", "drop-leaf table", "portable circular saw", "vegetable hummingbird", "stable", "table tapping", "stable factor", "council table", "tablespoon", "palatableness", "excitableness", "tilt-top table", "gaming table", "high table", "table-tennis racquet", "vegetable tallow", "worktable", "decision table", "table rapping", "hospitableness", "vegetable ivory", "stableboy", "table tipping", "table tennis", "tabletop", "inevitableness", "dining table", "vegetable", "writing table", "table tilting", "charitable trust", "unstableness", "round table", "vegetable matter", "statistical table", "table lamp", "tractableness", "tableland", "table mat", "table saw" };
+		String[] result11 = w.filter(RiWordNet.WILDCARD_MATCH, "*table*", "n");
+		//printArr(result11);
+		setEqual(expected11, result11);
+		
+		w.ignoreCompoundWords(true);
+		String[] expected15 = { "tablespoon", "potable", "inevitable", "suitableness", "constable", "charitableness", "collectable", "worktable", "unstableness", "stableboy", "tablemate", "inhospitableness", "inevitableness", "tableau", "tractableness", "intractableness", "comfortableness", "stable", "hospitableness", "unprofitableness", "tableware", "excitableness", "eatable", "roundtable", "tablefork", "turntable", "immutableness", "stableman", "unpalatableness", "stablemate", "timetable", "stableness", "unsuitableness", "tablespoonful", "tabletop", "vegetable", "habitableness", "tableland", "notable", "mutableness", "permutableness", "palatableness", "acceptableness", "tablecloth", "tablet", "disreputableness", "portable", "ratables", "unacceptableness", "profitableness", "uncomfortableness" };
+		String[] result15 = w.filter(RiWordNet.WILDCARD_MATCH, "*table*", "n");
+		//printArr(result15);
+		setEqual(expected15, result15);
+	
+		String[] expected = { "tuvalu", "tabooli", "tableau", "tepal", "tivoli", "tubule", "tipple", "tupelo", "tiepolo", "tabbouleh", "t-bill", "tubful" };
+		String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n");
+		//printArr(result);
+		setEqual(expected, result);
+
+	
+		String[] expected2 = { "tabletop", "tablecloth", "tablemate", "tablefork", "tablet", "tablespoonful", "tableau", "tableland", "tableware", "tablespoon" };
+		String[] result2 = w.filter(RiWordNet.STARTS_WITH, "table", "n");
+		//printArr(result2);
+		setEqual(expected2, result2);
+
+		
+		String[] expected3 = { "bleat" };
+		String[] result3 = w.filter(RiWordNet.ANAGRAMS, "table", "n");
+		//printArr(result3);
+		setEqual(expected3, result3);
+
+	
+		String[] expected4 = { "unsuitableness", "disreputableness", "tableau", "inevitableness", "notable", "portable", "palatableness", "habitableness", "mutableness", "collectable", "tableware", "roundtable", "acceptableness", "hospitableness", "tableland", "tractableness", "inevitable", "tablemate", "worktable", "tablecloth", "constable", "suitableness", "tablespoon", "stableness", "tablet", "inhospitableness", "uncomfortableness", "timetable", "potable", "ratables", "unprofitableness", "stableboy", "turntable", "intractableness", "stableman", "tabletop", "stablemate", "profitableness", "comfortableness", "tablefork", "charitableness", "stable", "unacceptableness", "unstableness", "unpalatableness", "eatable", "tablespoonful", "permutableness", "immutableness", "vegetable", "excitableness" };
+		String[] result4 = w.filter(RiWordNet.CONTAINS, "table", "n");
+		//printArr(result4);
+		setEqual(expected4, result4);
+
+
+		String[] expected5 = {};
+		String[] result5 = w.filter(RiWordNet.CONTAINS, "tableauu", "n");
+		//printArr(result5);
+		setEqual(expected5, result5);
+
+		String[] expected6 = {"collectable"};
+		String[] result6 = w.filter(RiWordNet.ENDS_WITH, "ctable", "n");
+		//printArr(result6);
+		setEqual(expected6, result6);
+		
+		String[] expected8 = { "table" }; //TODO
+		String[] result8 = w.filter(RiWordNet.REGEX_MATCH, "table", "n");
+		//printArr(result8);
+		setEqual(expected8, result8);
+		
+		
+		String[] expected9 ={ "vegetable", "conductance", "comestible", "constable", "collectivism", "reflectance", "connective", "colette", "collapse", "telltale", "college", "collotype", "clientele", "eatable", "portable", "mollycoddle", "volleyball", "collage", "conjecture", "follicle", "sociable", "collectible", "worktable", "notable", "collet", "collect", "collembola", "vocable", "collywobbles", "roundtable", "molecule", "combustible", "collocalia", "collectivist", "collecting", "collective", "collegian", "syllable", "decolletage", "folktale", "colpocele", "corrective", "potable", "clientage", "collector", "collection", "timetable", "colleague", "conventicle", "spectacle", "convertible" };
+		String[] result9 = w.filter(RiWordNet.SIMILAR_TO, "collectable", "n");
+		//printArr(result9);
+		setEqual(expected9, result9);
+		
+		String[] expected12 = { };
+		String[] result12 = w.filter(RiWordNet.CONTAINS, "nahsuchword", "n");
+		//printArr(result12);
+		setEqual(expected12, result12);
+	
+		String[] expected14 = { "notable", "intractableness", "charitableness", "tableland", "disreputableness", "immutableness", "excitableness", "timetable", "mutableness", "stablemate", "stableness", "palatableness", "collectable", "permutableness", "tablespoon", "stableboy", "tablemate", "inevitable", "stableman", "uncomfortableness", "unacceptableness", "tablefork", "tableware", "acceptableness", "unpalatableness", "stable", "turntable", "portable", "inevitableness", "tablecloth", "constable", "worktable", "comfortableness", "tractableness", "profitableness", "tablet", "suitableness", "unprofitableness", "unstableness", "tablespoonful", "vegetable", "hospitableness", "unsuitableness", "potable", "ratables", "roundtable", "tableau", "habitableness", "inhospitableness", "eatable", "tabletop" };
+		String[] result14 = w.filter(RiWordNet.CONTAINS, "table", "n");
+		//printArr(result14);
+		setEqual(expected14, result14);
+	
+		try{
+			w.filter(RiWordNet.CONTAINS, "table", "e");
+			ok(false);
+		}
+		catch(Exception e)
+		{
+			ok(e);
+		}
+
 	}
 
 	@Test
@@ -675,6 +819,42 @@ public class RiWordNetTest
 		String result = w.getGloss("wear", "n");
 		//println(result);
 		assertEquals(expected, result);
+		
+		String expected2 = "a sign posted in a public place as an advertisement; "+'"'+"a poster advertised the coming attractions"+'"';
+		String result2 = w.getGloss("poster", "n");
+		//println(result2);
+		assertEquals(expected2, result2);
+		
+		String expected3 = "affix in a public place or for public notice; "+'"'+"post a warning"+'"';
+		String result3 = w.getGloss("post", "v");
+		//println(result3);
+		assertEquals(expected3, result3);
+		
+		String expected4 = null;
+		String result4 = w.getGloss("post", "a");
+		println(result4);
+		//assertEquals(expected4, result4);
+		
+		String expected5 = null;
+		String result5 = w.getGloss("post", "r");
+		//println(result5);
+		assertEquals(expected5, result5);
+		
+		
+		String expected6 = null;
+		String result6 = w.getGloss("happy", "a");
+		println(result6);
+		//assertEquals(expected5, result5);
+		
+		try{
+			w.w.getGloss("post", "u");
+			ok(false);
+		}
+		catch(Exception e)
+		{
+			ok(e);
+		}
+
 	}
 
 	@Test
@@ -954,10 +1134,10 @@ public class RiWordNetTest
 	@Test
 	public void testIsAdjective()
 	{
-	  RiWordNet.useMorphologicalProcessor = true;
-    equal(true, w.isAdjective("biggest"));
-    RiWordNet.useMorphologicalProcessor = false;
-    equal(!true, w.isAdjective("biggest"));
+		RiWordNet.useMorphologicalProcessor = true;
+		equal(true, w.isAdjective("biggest"));
+		RiWordNet.useMorphologicalProcessor = false;
+		equal(!true, w.isAdjective("biggest"));
 
 		equal(true, w.isAdjective("big"));
 		equal(true, w.isAdjective("bigger"));
@@ -1213,7 +1393,7 @@ public class RiWordNetTest
 		String[] expected = {"populate", "dwell", "inhabit"};
 		String[] result = w.getVerbGroup("live", "v");
 		setEqual(expected, result);
-		
+
 		// TODO: >=3
 	}
 
@@ -1231,7 +1411,7 @@ public class RiWordNetTest
 	{
 		String[] expected = {"populate", "dwell", "inhabit", "survive", "last", "go", "endure", "be", "exist", "subsist", "know", "experience"};
 		String[] result = w.getAllVerbGroups("live", "v");
-    //println(result,true);
+		//println(result,true);
 		setEqual(expected, result);
 	}
 
@@ -1298,7 +1478,7 @@ public class RiWordNetTest
 		//println(w.getSenseIds("happy", "a"));
 		//println(result);
 		setEqual(expected, result);
-		
+
 	}
 
 	@Test
@@ -1411,7 +1591,7 @@ public class RiWordNetTest
 		setEqual(expected2, result2);
 
 	}
-	
+
 	@Test
 	public void testIgnoreCompoundWords()
 	{
@@ -1419,74 +1599,74 @@ public class RiWordNetTest
 		ok(w.ignoreCompoundWords());
 
 		w.ignoreCompoundWords(false);
-    ok(!w.ignoreCompoundWords());
+		ok(!w.ignoreCompoundWords());
 
-    // TODO: add tests here like in testIgnoreUpperCaseWords();
+		// TODO: add tests here like in testIgnoreUpperCaseWords();
 	}
 
 	@Test
 	public void testIgnoreUpperCaseWordsBoolean() 
 	{
-	  w.ignoreUpperCaseWords(false);
-    w.ignoreCompoundWords(true);
+		w.ignoreUpperCaseWords(false);
+		w.ignoreCompoundWords(true);
 
-	  String[] expected = { "Dulles"};
-    String[] result = w.getSynset("dulles", "n");
-    //System.out.println("testIgnoreUpperCaseWordsBoolean: ");
-    RiTa.out(result);
-    setEqual(expected, result);
-		
+		String[] expected = { "Dulles"};
+		String[] result = w.getSynset("dulles", "n");
+		//System.out.println("testIgnoreUpperCaseWordsBoolean: ");
+		RiTa.out(result);
+		setEqual(expected, result);
+
 		expected = new String[] { "Fungi"};
-    result = w.getSynset("fungi", "n");
-    setEqual(expected, result);
-    
-    expected = new String[] { "Fungi","Prokayotae", "Monera", "Protoctista", "Animalia", "Plantae" };
-    result = w.getAllSynonyms("fungi", "n");
-    setEqual(expected, result);
+		result = w.getSynset("fungi", "n");
+		setEqual(expected, result);
+
+		expected = new String[] { "Fungi","Prokayotae", "Monera", "Protoctista", "Animalia", "Plantae" };
+		result = w.getAllSynonyms("fungi", "n");
+		setEqual(expected, result);
 	}
 
 	@Test
 	public void testIgnoreUpperCaseWords()
 	{
 		w.ignoreUpperCaseWords(true);
-    w.ignoreCompoundWords(true);
-    ok(w.ignoreUpperCaseWords());
-    
+		w.ignoreCompoundWords(true);
+		ok(w.ignoreUpperCaseWords());
+
 		String[] expected = new String[] { };
 		String[] result = w.getSynset("fungi", "n");
-    setEqual(expected, result);
-    
+		setEqual(expected, result);
+
 		w.ignoreUpperCaseWords(false);
-    ok(!w.ignoreUpperCaseWords());
-    
+		ok(!w.ignoreUpperCaseWords());
+
 		expected = new String[] { "Fungi"};
-    result = w.getSynset("fungi", "n");
-    setEqual(expected, result);
+		result = w.getSynset("fungi", "n");
+		setEqual(expected, result);
 	}
 
 	@Test
 	public void testIteratorString()
 	{
-	  String[] pos = {"n","a","r","v",};
-    Set s = new HashSet();
-    for (int i = 0; i < pos.length; i++)
-    {
-      Iterator it = w.iterator(pos[i]);
-      int numOfItems = 0;
-      while (it.hasNext())
-      {
-        String word = (String) it.next();
-        String wpos = w.getPosStr(word);
-        s.add(wpos);
-        ok(word);
-        if (!wpos.contains(pos[i]))
-          System.err.println("FAIL: "+word+"("+wpos+") does not contain: "+pos[i]);
-        //ok(wpos.contains(pos[i]));
-        numOfItems++;
-      }
-//System.out.println(numOfItems+" of "+pos[i]);
-      ok(numOfItems > 50);
-    }
+		String[] pos = {"n","a","r","v",};
+		Set s = new HashSet();
+		for (int i = 0; i < pos.length; i++)
+		{
+			Iterator it = w.iterator(pos[i]);
+			int numOfItems = 0;
+			while (it.hasNext())
+			{
+				String word = (String) it.next();
+				String wpos = w.getPosStr(word);
+				s.add(wpos);
+				ok(word);
+				if (!wpos.contains(pos[i]))
+					System.err.println("FAIL: "+word+"("+wpos+") does not contain: "+pos[i]);
+				//ok(wpos.contains(pos[i]));
+				numOfItems++;
+			}
+			//System.out.println(numOfItems+" of "+pos[i]);
+			ok(numOfItems > 50);
+		}
 	}
 
 	@Test
@@ -1507,10 +1687,10 @@ public class RiWordNetTest
 	@Test
 	public void testOrFilterIntArrayStringArrayString()
 	{
-	  int[] filters = { RiWordNet.STARTS_WITH, RiWordNet.ENDS_WITH };
-	  String[] patterns = { "ax", "ax" };
-	  String[] result = w.orFilter(filters, patterns , "n");
-RiTa.out(result);
+		int[] filters = { RiWordNet.STARTS_WITH, RiWordNet.ENDS_WITH };
+		String[] patterns = { "ax", "ax" };
+		String[] result = w.orFilter(filters, patterns , "n");
+		RiTa.out(result);
 		fail("Not yet implemented");
 	}
 
@@ -1518,165 +1698,165 @@ RiTa.out(result);
 	public void testIsCompound()  // DCH: ok now...
 	{
 
-    String[] input3 = {"back", "space", "back space", "back_space"};
-    boolean[] expected3 = {false, false, true, true};
-    for(int i=0; i< input3.length; i++){
-      //println(w.isCompound(input3[i]));
-      deepEqual(w.isCompound(input3[i]),expected3[i]);
-    }
+		String[] input3 = {"back", "space", "back space", "back_space"};
+		boolean[] expected3 = {false, false, true, true};
+		for(int i=0; i< input3.length; i++){
+			//println(w.isCompound(input3[i]));
+			deepEqual(w.isCompound(input3[i]),expected3[i]);
+		}
 	}
 
-  
-  
-  /////////////////////////////  Dynamics ///////////////////////////////
 
-  void setContainsMulti(String[] expected, String methodNm, int id, int count) {
-    setContainsMulti(expected, methodNm, 
-        new Class[] { int.class, int.class }, new Object[]{ id, count } );
-  }
-  void setContainsMulti(String[] expected, String methodNm, String word, String pos, int count) {
-    setContainsMulti(expected, methodNm, 
-        new Class[] { String.class, String.class, int.class }, new Object[]{ word, pos, count } );
-  }
-  void setContainsMulti(String[] expected, String methodNm, Class[] argTypes, Object[] args)
-  {
-    boolean ignoreCompoundsOrig = w.ignoreCompoundWords();
-    boolean ignoreUppersOrig = w.ignoreUpperCaseWords();
-    String[] result;
-    Method m = RiTa._findMethod(w, methodNm, argTypes );
-    try
-    {
-      w.ignoreCompoundWords(false);
-      w.ignoreUpperCaseWords(false);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setContains(expected, result);
 
-      
-      w.ignoreCompoundWords(true);
-      w.ignoreUpperCaseWords(false);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setContains(removeCompoundWords(expected), result);
+	/////////////////////////////  Dynamics ///////////////////////////////
 
-      
-      w.ignoreCompoundWords(false);
-      w.ignoreUpperCaseWords(true);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setContains(removeUpperCaseWords(expected), result);
+	void setContainsMulti(String[] expected, String methodNm, int id, int count) {
+		setContainsMulti(expected, methodNm, 
+				new Class[] { int.class, int.class }, new Object[]{ id, count } );
+	}
+	void setContainsMulti(String[] expected, String methodNm, String word, String pos, int count) {
+		setContainsMulti(expected, methodNm, 
+				new Class[] { String.class, String.class, int.class }, new Object[]{ word, pos, count } );
+	}
+	void setContainsMulti(String[] expected, String methodNm, Class[] argTypes, Object[] args)
+	{
+		boolean ignoreCompoundsOrig = w.ignoreCompoundWords();
+		boolean ignoreUppersOrig = w.ignoreUpperCaseWords();
+		String[] result;
+		Method m = RiTa._findMethod(w, methodNm, argTypes );
+		try
+		{
+			w.ignoreCompoundWords(false);
+			w.ignoreUpperCaseWords(false);
+			result = (String[]) m.invoke(w, args);
+			if (args[0] instanceof String) // make sure we don't have the search term
+				ok(!Arrays.asList(result).contains(args[0]));
+			setContains(expected, result);
 
-      
-      w.ignoreCompoundWords(true);
-      w.ignoreUpperCaseWords(true);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setContains(removeCompoundWords(removeUpperCaseWords(expected)), result);
 
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    w.ignoreCompoundWords(ignoreCompoundsOrig);
-    w.ignoreUpperCaseWords(ignoreUppersOrig);
-  }
-  
-  void setEqualMulti(String[] expected, String methodNm, int id)
-  {
-    setEqualMulti(expected, methodNm, new Class[] { int.class }, new Object[]{ id });
-  }
-  void setEqualMulti(String[] expected, String methodNm, String word, String pos)
-  {
-    setEqualMulti(expected, methodNm, new Class[] { String.class, String.class }, new Object[]{ word, pos });
-  }
-  void setEqualMulti(String[] expected, String methodNm, Class[] argTypes, Object[] args)
-  {
-    boolean ignoreCompoundsOrig = w.ignoreCompoundWords();
-    boolean ignoreUppersOrig = w.ignoreUpperCaseWords();
-    String[] result;
-    Method m = RiTa._findMethod(w, methodNm, argTypes );
-    try
-    {
-      w.ignoreCompoundWords(false);
-      w.ignoreUpperCaseWords(false);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setEqual(expected, result);
-      
-      w.ignoreCompoundWords(true);
-      w.ignoreUpperCaseWords(false);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setEqual(removeCompoundWords(expected), result);
-      
-      w.ignoreCompoundWords(false);
-      w.ignoreUpperCaseWords(true);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setEqual(removeUpperCaseWords(expected), result);
-      
-      w.ignoreCompoundWords(true);
-      w.ignoreUpperCaseWords(true);
-      result = (String[]) m.invoke(w, args);
-      if (args[0] instanceof String) // make sure we don't have the search term
-        ok(!Arrays.asList(result).contains(args[0]));
-      setEqual(removeCompoundWords(removeUpperCaseWords(expected)), result);
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    w.ignoreCompoundWords(ignoreCompoundsOrig);
-    w.ignoreUpperCaseWords(ignoreUppersOrig);
-  }
+			w.ignoreCompoundWords(true);
+			w.ignoreUpperCaseWords(false);
+			result = (String[]) m.invoke(w, args);
+			if (args[0] instanceof String) // make sure we don't have the search term
+				ok(!Arrays.asList(result).contains(args[0]));
+			setContains(removeCompoundWords(expected), result);
 
-  //////////////////////////////// Helpers ///////////////////////////////////
-  
-  private static String[] removeUpperCaseWords(String[] s)
-  {
-    ArrayList<String> al = new ArrayList<String>();
-    for (int i = 0; i < s.length; i++)
-    {
-      if (!WordnetUtil.startsWithUppercase(s[i]))
-        al.add(s[i]);
-    }
-    return al.toArray(new String[0]);
-  }
 
-  private static String[] removeCompoundWords(String[] s)
-  {
-    ArrayList<String> al = new ArrayList<String>();
-    for (int i = 0; i < s.length; i++)
-    {
-      if (!w.isCompound(s[i]))
-        al.add(s[i]);
-    }
-    return al.toArray(new String[0]);
-  }
-  
-  static RiWordNet w;
-  static boolean preloadFilters;
-  static { 
+			w.ignoreCompoundWords(false);
+			w.ignoreUpperCaseWords(true);
+			result = (String[]) m.invoke(w, args);
+			if (args[0] instanceof String) // make sure we don't have the search term
+				ok(!Arrays.asList(result).contains(args[0]));
+			setContains(removeUpperCaseWords(expected), result);
 
-    SILENT = false;
-    long ts = System.currentTimeMillis();
-    w = new RiWordNet("/WordNet-3.1");
-    if (preloadFilters) {
-      String[] pos = {"n","a","r","v",};
-      for (int i = 0; i < pos.length; i++)
-        w.iterator(pos[i]); // force load filters, so slow (TODO: optimize!)
-    }
-    System.out.println("[INFO] Loaded in "+(System.currentTimeMillis()-ts)+"ms");
-  }
-  
+
+			w.ignoreCompoundWords(true);
+			w.ignoreUpperCaseWords(true);
+			result = (String[]) m.invoke(w, args);
+			if (args[0] instanceof String) // make sure we don't have the search term
+				ok(!Arrays.asList(result).contains(args[0]));
+			setContains(removeCompoundWords(removeUpperCaseWords(expected)), result);
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		w.ignoreCompoundWords(ignoreCompoundsOrig);
+		w.ignoreUpperCaseWords(ignoreUppersOrig);
+	}
+
+	void setEqualMulti(String[] expected, String methodNm, int id)
+	{
+		setEqualMulti(expected, methodNm, new Class[] { int.class }, new Object[]{ id });
+	}
+	void setEqualMulti(String[] expected, String methodNm, String word, String pos)
+	{
+		setEqualMulti(expected, methodNm, new Class[] { String.class, String.class }, new Object[]{ word, pos });
+	}
+	void setEqualMulti(String[] expected, String methodNm, Class[] argTypes, Object[] args)
+	{
+		boolean ignoreCompoundsOrig = w.ignoreCompoundWords();
+		boolean ignoreUppersOrig = w.ignoreUpperCaseWords();
+		String[] result;
+		Method m = RiTa._findMethod(w, methodNm, argTypes );
+		try
+		{
+			w.ignoreCompoundWords(false);
+			w.ignoreUpperCaseWords(false);
+			result = (String[]) m.invoke(w, args);
+			if (args[0] instanceof String) // make sure we don't have the search term
+				ok(!Arrays.asList(result).contains(args[0]));
+			setEqual(expected, result);
+
+			w.ignoreCompoundWords(true);
+			w.ignoreUpperCaseWords(false);
+			result = (String[]) m.invoke(w, args);
+			if (args[0] instanceof String) // make sure we don't have the search term
+				ok(!Arrays.asList(result).contains(args[0]));
+			setEqual(removeCompoundWords(expected), result);
+
+			w.ignoreCompoundWords(false);
+			w.ignoreUpperCaseWords(true);
+			result = (String[]) m.invoke(w, args);
+			if (args[0] instanceof String) // make sure we don't have the search term
+				ok(!Arrays.asList(result).contains(args[0]));
+			setEqual(removeUpperCaseWords(expected), result);
+
+			w.ignoreCompoundWords(true);
+			w.ignoreUpperCaseWords(true);
+			result = (String[]) m.invoke(w, args);
+			if (args[0] instanceof String) // make sure we don't have the search term
+				ok(!Arrays.asList(result).contains(args[0]));
+			setEqual(removeCompoundWords(removeUpperCaseWords(expected)), result);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		w.ignoreCompoundWords(ignoreCompoundsOrig);
+		w.ignoreUpperCaseWords(ignoreUppersOrig);
+	}
+
+	//////////////////////////////// Helpers ///////////////////////////////////
+
+	private static String[] removeUpperCaseWords(String[] s)
+	{
+		ArrayList<String> al = new ArrayList<String>();
+		for (int i = 0; i < s.length; i++)
+		{
+			if (!WordnetUtil.startsWithUppercase(s[i]))
+				al.add(s[i]);
+		}
+		return al.toArray(new String[0]);
+	}
+
+	private static String[] removeCompoundWords(String[] s)
+	{
+		ArrayList<String> al = new ArrayList<String>();
+		for (int i = 0; i < s.length; i++)
+		{
+			if (!w.isCompound(s[i]))
+				al.add(s[i]);
+		}
+		return al.toArray(new String[0]);
+	}
+
+	static RiWordNet w;
+	static boolean preloadFilters;
+	static { 
+
+		SILENT = false;
+		long ts = System.currentTimeMillis();
+		w = new RiWordNet("/WordNet-3.1");
+		if (preloadFilters) {
+			String[] pos = {"n","a","r","v",};
+			for (int i = 0; i < pos.length; i++)
+				w.iterator(pos[i]); // force load filters, so slow (TODO: optimize!)
+		}
+		System.out.println("[INFO] Loaded in "+(System.currentTimeMillis()-ts)+"ms");
+	}
+
 	public static void main(String[] args)
 	{  
 		println(new RiWordNet("/WordNet-3.1").ignoreCompoundWords(false).getSynset("medicare", "n"));
