@@ -832,8 +832,8 @@ public class RiWordNetTest
 		
 		String expected4 = null;
 		String result4 = w.getGloss("post", "a");
-		println(result4);
-		//assertEquals(expected4, result4);
+		//println(result4);
+		assertEquals(expected4, result4);
 		
 		String expected5 = null;
 		String result5 = w.getGloss("post", "r");
@@ -841,13 +841,18 @@ public class RiWordNetTest
 		assertEquals(expected5, result5);
 		
 		
-		String expected6 = null;
-		String result6 = w.getGloss("happy", "a");
-		println(result6);
-		//assertEquals(expected5, result5);
+		String expected6 = "engagingly stimulating or provocative; "+'"'+"a piquant wit"+'"'+"; "+'"'+"salty language"+'"';
+		String result6 = w.getGloss("salty", "a");
+		//println(result6);
+		assertEquals(expected6, result6);
+		
+		String expected7 = "with resolute determination; "+'"'+"we firmly believed it"+'"'+"; "+'"'+"you must stand firm"+'"';
+		String result7 = w.getGloss("firmly", "r");
+		//println(result7);
+		assertEquals(expected7, result7);
 		
 		try{
-			w.w.getGloss("post", "u");
+			w.getGloss("post", "u");
 			ok(false);
 		}
 		catch(Exception e)
@@ -855,20 +860,40 @@ public class RiWordNetTest
 			ok(e);
 		}
 
+		
 	}
 
 	@Test
 	public void testGetAllGlosses()
 	{
+
 		String[] expected = {"impairment resulting from long use; "+
 				'"'+"the tires showed uneven wear"+'"', 
 				"a covering designed to be worn on a person's body", 
 				"the act of having on your person as a covering or adornment; "+
 						'"'+"she bought it for everyday wear"+'"'
 		};
+		setEqualMulti(expected,"getAllGlosses","wear", "n");
 		String[] result = w.getAllGlosses("wear", "n");
 		//println(result);
 		setEqual(expected, result);
+		
+		//{ "in a joyous manner; "they shouted happily"","in an unexpectedly lucky way; "happily he was not injured"", }; //TODO extra comma and " on each...
+		String[] expected2 = { '"'+"in a joyous manner; "+'"'+"they shouted happily"+'"'+","+'"'+"in an unexpectedly lucky way; "+'"'+"happily he was not injured"+'"'};
+
+		setEqualMulti(expected2,"getAllGlosses","happily", "r");
+		setEqualMulti(expected2,"getAllGlosses","firmly", "r"); //TODO this should be failed????
+		println(w.getAllGlosses("happily", "r"), true);
+/*
+		String[] expected3 = {"impairment resulting from long use; "+
+				'"'+"the tires showed uneven wear"+'"', 
+				"a covering designed to be worn on a person's body", 
+				"the act of having on your person as a covering or adornment; "+
+						'"'+"she bought it for everyday wear"+'"'
+		};
+		//setEqualMulti(expected3,"getAllGlosses","salty", "a");
+		println(w.getAllGlosses("salty", "a"),true);
+	*/
 	}
 
 	@Test
