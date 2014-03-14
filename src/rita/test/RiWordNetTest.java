@@ -879,7 +879,7 @@ public class RiWordNetTest
 		String[] expected2 = { '"'+"in a joyous manner; "+'"'+"they shouted happily"+'"'+","+'"'+"in an unexpectedly lucky way; "+'"'+"happily he was not injured"+'"'};
 
 		setEqualMulti(expected2,"getAllGlosses","happily", "r");
-		setEqualMulti(expected2,"getAllGlosses","firmly", "r"); //TODO this should be failed????
+		setEqualMulti(expected2,"getAllGlosses","firmly", "r"); //TODO this should be failed
 		println(w.getAllGlosses("happily", "r"), true);
 		/*
 		String[] expected3 = {"impairment resulting from long use; "+
@@ -1050,18 +1050,32 @@ public class RiWordNetTest
 	public void testGetExamplesCharSequenceCharSequence()
 	{
 		String[] expected = {"the tires showed uneven wear"};
-		String[] result = w.getExamples("wear", "n");
 		setEqualMulti(expected,"getExamples","wear","n");
 
-		String[] expected2 = {"the tires showed uneven wear"};
-		printArr(w.getExamples("wearing", "a"));
-		//setEqualMulti(expected2,"getExamples","wear","n");
+		String[] expected2 = { "the visit was especially wearing", "an exhausting march" };
+		//printArr(w.getExamples("wearing", "a"));
+		setEqualMulti(expected2,"getExamples","wearing","a");
 		
-		String[] expected2 = {"the tires showed uneven wear"};
-		printArr(w.getExamples("wearing", "a"));
-		//setEqualMulti(expected2,"getExamples","wear","n");
+		String[] expected3 = {  "he had stupidly bought a one way ticket" };
+		//printArr(w.getExamples("stupidly", "r"));
+		setEqualMulti(expected3,"getExamples","stupidly","r");
+		
+		String[] expected4 = { "Don't run--you'll be out of breath", "The children ran to the store" };
+		//printArr(w.getExamples("run", "v"));
+		setEqualMulti(expected4,"getExamples","run","v"); 
+		setEqualMulti(expected2,"getExamples","run","v");  //TODO this should be failed
 
+		String[] expected5 = { };
+		//printArr(w.getExamples("run", "v"));
+		setEqualMulti(expected5,"getExamples","runununun","v");
 		
+		try{
+			String[] result = w.getExamples("run", "j");
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
 	}
 
 	@Test
