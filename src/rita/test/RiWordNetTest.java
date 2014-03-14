@@ -863,34 +863,32 @@ public class RiWordNetTest
 	@Test
 	public void testGetAllGlosses()
 	{
+	  w.ignoreUpperCaseWords(false);
+	  w.ignoreCompoundWords(false);
+	  
+		String[] expected2 ={ "with sadness; in a sad manner; \"`She died last night,' he said sadly\"","in an unfortunate way; \"sadly he died before he could see his grandchild\"","in an unfortunate or deplorable manner; \"he was sadly neglected\"; \"it was woefully inadequate\"", }; 
+		String[] result2 = w.getAllGlosses("sadly", "r");
+		setEqual(expected2, result2);
 
-		String[] expected = {"impairment resulting from long use; "+
-				'"'+"the tires showed uneven wear"+'"', 
-				"a covering designed to be worn on a person's body", 
-				"the act of having on your person as a covering or adornment; "+
-						'"'+"she bought it for everyday wear"+'"'
-		};
-		setEqualMulti(expected,"getAllGlosses","wear", "n");
-		String[] result = w.getAllGlosses("wear", "n");
-		//println(result);
-		setEqual(expected, result);
+    String[] expected = { "impairment resulting from long use; \"the tires showed uneven wear\"","the act of having on your person as a covering or adornment; \"she bought it for everyday wear\"","a covering designed to be worn on a person's body", };
+    String[] result = w.getAllGlosses("wear", "n");
+    //println(result,true);
+    setEqual(expected, result);
+    
+    // DO THE SAME TESTS AGAIN WITH BOTH TRUE (SHOULD BE SAME RESULT FOR GLOSSES AND EXAMPLES)
+    
+    w.ignoreUpperCaseWords(false);
+    w.ignoreCompoundWords(false);
+    
+    String[] expected3 ={ "with sadness; in a sad manner; \"`She died last night,' he said sadly\"","in an unfortunate way; \"sadly he died before he could see his grandchild\"","in an unfortunate or deplorable manner; \"he was sadly neglected\"; \"it was woefully inadequate\"", }; 
+    String[] result3 = w.getAllGlosses("sadly", "r");
+    setEqual(expected3, result3);
 
-		//{ "in a joyous manner; "they shouted happily"","in an unexpectedly lucky way; "happily he was not injured"", }; //TODO extra comma and " on each...
-		String[] expected2 = { '"'+"in a joyous manner; "+'"'+"they shouted happily"+'"'+","+'"'+"in an unexpectedly lucky way; "+'"'+"happily he was not injured"+'"'};
+    String[] expected4 = { "impairment resulting from long use; \"the tires showed uneven wear\"","the act of having on your person as a covering or adornment; \"she bought it for everyday wear\"","a covering designed to be worn on a person's body", };
+    String[] result4 = w.getAllGlosses("wear", "n");
+    //println(result4,true);
+    setEqual(expected4, result4);
 
-		setEqualMulti(expected2,"getAllGlosses","happily", "r");
-		setEqualMulti(expected2,"getAllGlosses","firmly", "r"); //TODO this should be failed
-		println(w.getAllGlosses("happily", "r"), true);
-		/*
-		String[] expected3 = {"impairment resulting from long use; "+
-				'"'+"the tires showed uneven wear"+'"', 
-				"a covering designed to be worn on a person's body", 
-				"the act of having on your person as a covering or adornment; "+
-						'"'+"she bought it for everyday wear"+'"'
-		};
-		//setEqualMulti(expected3,"getAllGlosses","salty", "a");
-		println(w.getAllGlosses("salty", "a"),true);
-		 */
 	}
 
 	@Test
@@ -1049,33 +1047,72 @@ public class RiWordNetTest
 	@Test
 	public void testGetExamplesCharSequenceCharSequence()
 	{
+	  w.ignoreUpperCaseWords(false);
+	  w.ignoreCompoundWords(false);
+	    
 		String[] expected = {"the tires showed uneven wear"};
-		setEqualMulti(expected,"getExamples","wear","n");
+		setEqual(expected, w.getExamples("wear","n"));
 
 		String[] expected2 = { "the visit was especially wearing", "an exhausting march" };
 		//printArr(w.getExamples("wearing", "a"));
-		setEqualMulti(expected2,"getExamples","wearing","a");
+		setEqual(expected2,w.getExamples("wearing","a"));
 		
 		String[] expected3 = {  "he had stupidly bought a one way ticket" };
 		//printArr(w.getExamples("stupidly", "r"));
-		setEqualMulti(expected3,"getExamples","stupidly","r");
+		setEqual(expected3,w.getExamples("stupidly","r"));
 		
-		String[] expected4 = { "Don't run--you'll be out of breath", "The children ran to the store" };
-		//printArr(w.getExamples("run", "v"));
-		setEqualMulti(expected4,"getExamples","run","v"); 
-		setEqualMulti(expected2,"getExamples","run","v");  //TODO this should be failed
 
 		String[] expected5 = { };
 		//printArr(w.getExamples("run", "v"));
-		setEqualMulti(expected5,"getExamples","runununun","v");
+		setEqual(expected5,w.getExamples("runununun","v"));
 		
+    String[] expected4 = { "Don't run--you'll be out of breath", "The children ran to the store" };
+    //printArr(w.getExamples("run", "v"));
+    setEqual(expected4, w.getExamples("run","v")); 
+    
+    setEqual(expected2, w.getExamples("run","v"));  //TODO this should be failed
+    
 		try{
-			String[] result = w.getExamples("run", "j");
-			equal(1,2);
+			w.getExamples("run", "j");
+			fail("no exception");
 		}
 		catch(Exception e){
 			ok(e);
 		}
+		
+		// DO THE SAME TESTS AGAIN WITH BOTH TRUE (SHOULD BE SAME RESULT FOR GLOSSES AND EXAMPLES)
+    w.ignoreUpperCaseWords(true);
+    w.ignoreCompoundWords(true);
+    
+    expected = new String[] {"the tires showed uneven wear"};
+    setEqual(expected, w.getExamples("wear","n"));
+
+    expected2 = new String[] { "the visit was especially wearing", "an exhausting march" };
+    //printArr(w.getExamples("wearing", "a"));
+    setEqual(expected2,w.getExamples("wearing","a"));
+    
+    expected3 = new String[] {  "he had stupidly bought a one way ticket" };
+    //printArr(w.getExamples("stupidly", "r"));
+    setEqual(expected3,w.getExamples("stupidly","r"));
+    
+
+    expected5 = new String[] { };
+    //printArr(w.getExamples("run", "v"));
+    setEqual(expected5,w.getExamples("runununun","v"));
+    
+    expected4 = new String[] { "Don't run--you'll be out of breath", "The children ran to the store" };
+    //printArr(w.getExamples("run", "v"));
+    setEqual(expected4, w.getExamples("run","v")); 
+    
+    setEqual(expected2, w.getExamples("run","v"));  //TODO this should be failed
+    
+    try{
+      w.getExamples("run", "j");
+      fail("no exception");
+    }
+    catch(Exception e){
+      ok(e);
+    }
 	}
 
 	@Test
@@ -1945,6 +1982,7 @@ public class RiWordNetTest
 	{
 		setEqualMulti(expected, methodNm, new Class[] { String.class, String.class }, new Object[]{ word, pos });
 	}
+	
 	void setEqualMulti(String[] expected, String methodNm, Class[] argTypes, Object[] args)
 	{
 		boolean ignoreCompoundsOrig = w.ignoreCompoundWords();
@@ -1981,9 +2019,9 @@ public class RiWordNetTest
 				ok(!Arrays.asList(result).contains(args[0]));
 			setEqual(removeCompoundWords(removeUpperCaseWords(expected)), result);
 		}
-		catch (Exception e)
+		catch (Throwable e)
 		{
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		w.ignoreCompoundWords(ignoreCompoundsOrig);
 		w.ignoreUpperCaseWords(ignoreUppersOrig);
