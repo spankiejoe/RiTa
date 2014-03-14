@@ -32,9 +32,14 @@ public class RiWordNetTest
 	@Test
 	public void testGetSynonymsInt()
 	{
-		String[] expected = { "scout","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
-		//println(w.getSynonyms(81318273), true);
+		String[] expected = { "quest for", "divine", "quest after", "look for", "drag", "seek out", "window-shop", "scrabble", "feel", "gather", "grope for", "seek", "leave no stone unturned", "browse", "fish", "want", "angle", "scour", "grope", "finger", "shell", "dredge", "hunt", "antique", "grub", "fumble", "search", "pursue", "shop", "dowse", "comparison-shop", "surf", "go after" };		//println(w.getSynonyms(81318273), true);
+		printArr( w.getSynonyms(81318273));
 		setEqualMulti(expected, "getSynonyms", 81318273); 
+		
+		String[] expected2 = { "Methuselah", "beau", "baboo", "fashion plate", "ironman", "dandy", "graybeard", "macho-man", "babu", "fop", "divorced man", "signior", "grass widower", "Samson", "ponce", "young man", "young buck", "old man", "Tarzan", "widowman", "fellow", "old boy", "cat", "middle-aged man", "stiff", "wonder boy", "unmarried man", "father-figure", "he-man", "Peter Pan", "guy", "boy", "Herr", "boyfriend", "swell", "Esq", "gallant", "dude", "shaver", "hombre", "hunk", "golden boy", "Hooray Henry", "bozo", "signor", "iron man", "gentleman", "inamorato", "Senhor", "womanizer", "adonis", "widower", "Monsieur", "bull", "bey", "white man", "womaniser", "housefather", "buster", "sheik", "ejaculator", "sod", "greybeard", "ex", "castrate", "philanderer", "signore", "ex-husband", "sir", "posseman", "galoot", "clotheshorse", "eunuch", "father surrogate", "patriarch", "stud", "ironside", "geezer", "swain", "father figure", "strapper", "ex-boyfriend", "paterfamilias", "bruiser", "bachelor", "Esquire" };
+		printArr( w.getSynonyms(910172934));
+		setEqualMulti(expected, "getSynonyms", 910172934); 
+
 	}
 
 	@Test
@@ -81,6 +86,8 @@ public class RiWordNetTest
 	{
 		RiWordNet.useMorphologicalProcessor = false;
 
+		w.ignoreCompoundWords(false);
+		w.ignoreUpperCaseWords(false);
 		ok(!w.exists("healthXXX"));
 		ok(w.exists("health"));
 
@@ -96,13 +103,35 @@ public class RiWordNetTest
 		ok(!w.exists(""));
 		ok(!w.exists("||"));
 		ok(!w.exists("!@#$%^&*("));
+		
+		w.ignoreCompoundWords(true);
+		w.ignoreUpperCaseWords(true);
+		
+		ok(!w.exists("healthXXX"));
+		ok(w.exists("health"));
+
+		ok(w.exists("medicare"));
+		ok(w.exists("health insurance"));
+		ok(!w.exists("health ignorance"));
+		ok(!w.exists("health XXX"));
+
+		ok(w); // see above
+		ok(w.exists("hello"));
+		ok(!w.exists("caz"));
+
+		ok(!w.exists(""));
+		ok(!w.exists("||"));
+		ok(!w.exists("!@#$%^&*("));
+		
 	}
 
 	@Test
-	public void testGetSenseIdsStringString()
+	public void testGetSenseIdsStringString() //TODO More pos
 	{
 
 		//TODO cannot use setEqualMulti as it is int[]
+		w.ignoreCompoundWords(false);
+		w.ignoreUpperCaseWords(false);
 		int[] expected = { 92124272, 910172934, 99919605, 93614083, 92989061, 92986962, 92130460, 9903174 };
 		int[] result = w.getSenseIds("cat", "n");
 		deepEqual(expected, result);
@@ -122,10 +151,33 @@ public class RiWordNetTest
 		catch(Exception e){
 			ok(e);
 		}
+		
+		w.ignoreCompoundWords(true);
+		w.ignoreUpperCaseWords(true);
+		
+		int[] expected3 = { 92124272, 910172934, 99919605, 93614083, 92989061, 92986962, 92130460, 9903174 };
+		int[] result3 = w.getSenseIds("cat", "n");
+		deepEqual(expected3, result3);
+
+		int[] expected4 = { 913367788 };
+		int[] result4 = w.getSenseIds("health insurance", "n");
+		deepEqual(expected4, result4);
+
+		int[] expected5 = { };
+		int[] result5 = w.getSenseIds("caz", "n");
+		deepEqual(expected5, result5);
+
+		try{
+			w.getSenseIds("cat", "u");
+			ok(false);
+		}
+		catch(Exception e){
+			ok(e);
+		}
 	}
 
 	@Test
-	public void testGetHypernymsStringString()
+	public void testGetHypernymsStringString() //TODO More pos
 	{
 
 		String[] expected = { "root" };
@@ -863,31 +915,88 @@ public class RiWordNetTest
 	@Test
 	public void testGetAllGlosses()
 	{
-	  w.ignoreUpperCaseWords(false);
-	  w.ignoreCompoundWords(false);
-	  
+		w.ignoreUpperCaseWords(false);
+		w.ignoreCompoundWords(false);
+
 		String[] expected2 ={ "with sadness; in a sad manner; \"`She died last night,' he said sadly\"","in an unfortunate way; \"sadly he died before he could see his grandchild\"","in an unfortunate or deplorable manner; \"he was sadly neglected\"; \"it was woefully inadequate\"", }; 
 		String[] result2 = w.getAllGlosses("sadly", "r");
 		setEqual(expected2, result2);
 
-    String[] expected = { "impairment resulting from long use; \"the tires showed uneven wear\"","the act of having on your person as a covering or adornment; \"she bought it for everyday wear\"","a covering designed to be worn on a person's body", };
-    String[] result = w.getAllGlosses("wear", "n");
-    //println(result,true);
-    setEqual(expected, result);
-    
-    // DO THE SAME TESTS AGAIN WITH BOTH TRUE (SHOULD BE SAME RESULT FOR GLOSSES AND EXAMPLES)
-    
-    w.ignoreUpperCaseWords(false);
-    w.ignoreCompoundWords(false);
-    
-    String[] expected3 ={ "with sadness; in a sad manner; \"`She died last night,' he said sadly\"","in an unfortunate way; \"sadly he died before he could see his grandchild\"","in an unfortunate or deplorable manner; \"he was sadly neglected\"; \"it was woefully inadequate\"", }; 
-    String[] result3 = w.getAllGlosses("sadly", "r");
-    setEqual(expected3, result3);
+		String[] expected = { "impairment resulting from long use; \"the tires showed uneven wear\"","the act of having on your person as a covering or adornment; \"she bought it for everyday wear\"","a covering designed to be worn on a person's body", };
+		String[] result = w.getAllGlosses("wear", "n");
+		//println(result,true);
+		setEqual(expected, result);
+		
+		String[] expected3 = { "feeling happy appreciation; \"glad of the fire's warmth\"","cheerful and bright; \"a beaming smile\"; \"a glad May morning\"","eagerly disposed to act or to be of service; \"glad to help\"","showing or causing joy and pleasure; especially made happy; \"glad you are here\"; \"glad that they succeeded\"; \"gave a glad shout\"; \"a glad smile\"; \"heard the glad news\"; \"a glad occasion\"", };
+		String[] result3 = w.getAllGlosses("glad", "a");
+		//println(result3,true);
+		setEqual(expected3, result3);
+		
+		String[] expected4 = { "cause to grow or develop; \"He grows vegetables in his backyard\"","come to have or undergo a change of (physical features and attributes); \"He grew a beard\"; \"The patient developed abdominal pains\"; \"I got funny spots all over my body\"; \"Well-developed breasts\"","pass into a condition gradually, take on a specific property or attribute; become; \"The weather turned nasty\"; \"She grew angry\"","cultivate by growing, often involving improvements by means of agricultural techniques; \"The Bordeaux region produces great red wines\"; \"They produce good ham in Parma\"; \"We grow wheat here\"; \"We raise hogs here\"","develop and reach maturity; undergo maturation; \"He matured fast\"; \"The child grew fast\"","become larger, greater, or bigger; expand or gain; \"The problem grew too large for me\"; \"Her business grew fast\"","come into existence; take on form or shape; \"A new religious movement originated in that country\"; \"a love that sprang up from friendship\"; \"the idea for the book grew out of a short story\"; \"An interesting phenomenon uprose\"","grow emotionally or mature; \"The child developed beautifully in her new kindergarten\"; \"When he spent a summer at camp, the boy grew noticeably and no longer showed some of his old adolescent behavior\"","become attached by or as if by the process of growth; \"The tree trunks had grown together\"","increase in size by natural process; \"Corn doesn't grow here\"; \"In these forests, mushrooms grow under the trees\"; \"her hair doesn't grow much anymore\"", };
+		String[] result4 = w.getAllGlosses("grow", "v");
+		//println(result4,true);
+		setEqual(expected4, result4);
+		
+		String[] expected12 = { };
+		String[] result12 = w.getAllGlosses("grow", "r");
+		println(result12,true);
+		setEqual(expected12, result12);
+		
+		
+		String[] expected11 = { };
+		String[] result11 = w.getAllGlosses("growwwwww", "v");
+		//println(result9,true);
+		setEqual(expected11, result11);
 
-    String[] expected4 = { "impairment resulting from long use; \"the tires showed uneven wear\"","the act of having on your person as a covering or adornment; \"she bought it for everyday wear\"","a covering designed to be worn on a person's body", };
-    String[] result4 = w.getAllGlosses("wear", "n");
-    //println(result4,true);
-    setEqual(expected4, result4);
+		// DO THE SAME TESTS AGAIN WITH BOTH TRUE (SHOULD BE SAME RESULT FOR GLOSSES AND EXAMPLES)
+
+		w.ignoreUpperCaseWords(true);
+		w.ignoreCompoundWords(true);
+
+		String[] expected5 ={ "with sadness; in a sad manner; \"`She died last night,' he said sadly\"","in an unfortunate way; \"sadly he died before he could see his grandchild\"","in an unfortunate or deplorable manner; \"he was sadly neglected\"; \"it was woefully inadequate\"", }; 
+		String[] result5 = w.getAllGlosses("sadly", "r");
+		setEqual(expected5, result5);
+
+		String[] expected6 = { "impairment resulting from long use; \"the tires showed uneven wear\"","the act of having on your person as a covering or adornment; \"she bought it for everyday wear\"","a covering designed to be worn on a person's body", };
+		String[] result6 = w.getAllGlosses("wear", "n");
+		//println(result6,true);
+		setEqual(expected6, result6);
+		
+		String[] expected7 = { "feeling happy appreciation; \"glad of the fire's warmth\"","cheerful and bright; \"a beaming smile\"; \"a glad May morning\"","eagerly disposed to act or to be of service; \"glad to help\"","showing or causing joy and pleasure; especially made happy; \"glad you are here\"; \"glad that they succeeded\"; \"gave a glad shout\"; \"a glad smile\"; \"heard the glad news\"; \"a glad occasion\"", };
+		String[] result7 = w.getAllGlosses("glad", "a");
+		//println(result7,true);
+		setEqual(expected7, result7);
+		
+		String[] expected8 = { "cause to grow or develop; \"He grows vegetables in his backyard\"","come to have or undergo a change of (physical features and attributes); \"He grew a beard\"; \"The patient developed abdominal pains\"; \"I got funny spots all over my body\"; \"Well-developed breasts\"","pass into a condition gradually, take on a specific property or attribute; become; \"The weather turned nasty\"; \"She grew angry\"","cultivate by growing, often involving improvements by means of agricultural techniques; \"The Bordeaux region produces great red wines\"; \"They produce good ham in Parma\"; \"We grow wheat here\"; \"We raise hogs here\"","develop and reach maturity; undergo maturation; \"He matured fast\"; \"The child grew fast\"","become larger, greater, or bigger; expand or gain; \"The problem grew too large for me\"; \"Her business grew fast\"","come into existence; take on form or shape; \"A new religious movement originated in that country\"; \"a love that sprang up from friendship\"; \"the idea for the book grew out of a short story\"; \"An interesting phenomenon uprose\"","grow emotionally or mature; \"The child developed beautifully in her new kindergarten\"; \"When he spent a summer at camp, the boy grew noticeably and no longer showed some of his old adolescent behavior\"","become attached by or as if by the process of growth; \"The tree trunks had grown together\"","increase in size by natural process; \"Corn doesn't grow here\"; \"In these forests, mushrooms grow under the trees\"; \"her hair doesn't grow much anymore\"", };
+		String[] result8 = w.getAllGlosses("grow", "v");
+		//println(result8,true);
+		setEqual(expected8, result8);
+		
+		String[] expected9 = { };
+		String[] result9 = w.getAllGlosses("growwwwww", "v");
+		//println(result9,true);
+		setEqual(expected9, result9);
+		
+		
+		String[] expected13 = { };
+		String[] result13 = w.getAllGlosses("grow", "r");
+		println(result13,true);
+		setEqual(expected13, result13);
+		
+	
+		try{
+			String[] result10 = w.getAllGlosses("grow", "j");
+		}
+		catch(Exception e){
+			ok(e);
+		}
+		
+		try{
+			String[] result14 = w.getAllGlosses("growwwwwww", "j");
+		}
+		catch(Exception e){
+			ok(e);
+		}
 
 	}
 
@@ -1047,9 +1156,9 @@ public class RiWordNetTest
 	@Test
 	public void testGetExamplesCharSequenceCharSequence()
 	{
-	  w.ignoreUpperCaseWords(false);
-	  w.ignoreCompoundWords(false);
-	    
+		w.ignoreUpperCaseWords(false);
+		w.ignoreCompoundWords(false);
+
 		String[] expected = {"the tires showed uneven wear"};
 		setEqual(expected, w.getExamples("wear","n"));
 
@@ -1057,21 +1166,23 @@ public class RiWordNetTest
 		//printArr(w.getExamples("wearing", "a"));
 		setEqual(expected2,w.getExamples("wearing","a"));
 		
+		String[] expected6 = { };
+		//printArr(w.getExamples("wearing", "r"));
+		setEqual(expected6,w.getExamples("wearing","r"));
+
 		String[] expected3 = {  "he had stupidly bought a one way ticket" };
 		//printArr(w.getExamples("stupidly", "r"));
 		setEqual(expected3,w.getExamples("stupidly","r"));
-		
+
+		String[] expected4 = { "Don't run--you'll be out of breath", "The children ran to the store" };
+		//printArr(w.getExamples("run", "v"));
+		setEqual(expected4, w.getExamples("run","v")); 
 
 		String[] expected5 = { };
 		//printArr(w.getExamples("run", "v"));
 		setEqual(expected5,w.getExamples("runununun","v"));
 		
-    String[] expected4 = { "Don't run--you'll be out of breath", "The children ran to the store" };
-    //printArr(w.getExamples("run", "v"));
-    setEqual(expected4, w.getExamples("run","v")); 
-    
-    setEqual(expected2, w.getExamples("run","v"));  //TODO this should be failed
-    
+
 		try{
 			w.getExamples("run", "j");
 			fail("no exception");
@@ -1079,40 +1190,47 @@ public class RiWordNetTest
 		catch(Exception e){
 			ok(e);
 		}
-		
+
 		// DO THE SAME TESTS AGAIN WITH BOTH TRUE (SHOULD BE SAME RESULT FOR GLOSSES AND EXAMPLES)
-    w.ignoreUpperCaseWords(true);
-    w.ignoreCompoundWords(true);
-    
-    expected = new String[] {"the tires showed uneven wear"};
-    setEqual(expected, w.getExamples("wear","n"));
+		w.ignoreUpperCaseWords(true);
+		w.ignoreCompoundWords(true);
 
-    expected2 = new String[] { "the visit was especially wearing", "an exhausting march" };
-    //printArr(w.getExamples("wearing", "a"));
-    setEqual(expected2,w.getExamples("wearing","a"));
-    
-    expected3 = new String[] {  "he had stupidly bought a one way ticket" };
-    //printArr(w.getExamples("stupidly", "r"));
-    setEqual(expected3,w.getExamples("stupidly","r"));
-    
+		expected = new String[] {"the tires showed uneven wear"};
+		setEqual(expected, w.getExamples("wear","n"));
 
-    expected5 = new String[] { };
-    //printArr(w.getExamples("run", "v"));
-    setEqual(expected5,w.getExamples("runununun","v"));
-    
-    expected4 = new String[] { "Don't run--you'll be out of breath", "The children ran to the store" };
-    //printArr(w.getExamples("run", "v"));
-    setEqual(expected4, w.getExamples("run","v")); 
-    
-    setEqual(expected2, w.getExamples("run","v"));  //TODO this should be failed
-    
-    try{
-      w.getExamples("run", "j");
-      fail("no exception");
-    }
-    catch(Exception e){
-      ok(e);
-    }
+		expected2 = new String[] { "the visit was especially wearing", "an exhausting march" };
+		//printArr(w.getExamples("wearing", "a"));
+		setEqual(expected2,w.getExamples("wearing","a"));
+		
+		expected6 = new String[]{ };
+		//printArr(w.getExamples("wearing", "r"));
+		setEqual(expected6,w.getExamples("wearing","r"));
+
+		expected3 = new String[] {  "he had stupidly bought a one way ticket" };
+		//printArr(w.getExamples("stupidly", "r"));
+		setEqual(expected3,w.getExamples("stupidly","r"));
+
+		expected4 = new String[] { "Don't run--you'll be out of breath", "The children ran to the store" };
+		//printArr(w.getExamples("run", "v"));
+		setEqual(expected4, w.getExamples("run","v")); 
+		
+		expected5 = new String[] { };
+		//printArr(w.getExamples("run", "v"));
+		setEqual(expected5,w.getExamples("runununun","v"));
+
+		expected4 = new String[] { "Don't run--you'll be out of breath", "The children ran to the store" };
+		//printArr(w.getExamples("run", "v"));
+		setEqual(expected4, w.getExamples("run","v")); 
+
+	
+
+		try{
+			w.getExamples("run", "j");
+			fail("no exception");
+		}
+		catch(Exception e){
+			ok(e);
+		}
 	}
 
 	@Test
@@ -1126,6 +1244,39 @@ public class RiWordNetTest
 		//ssertTrue(Arrays.asList(expected).contains(result));
 		setContains(expected, result);
 		//setEqual(expected, result);
+		
+		String[] expected2 = {};
+		String result2 = w.getRandomExample("dude", "n");
+		//println(result2);
+		equal(null, result2);
+				
+		String[] expected3 = new String[] {  "he had stupidly bought a one way ticket" };
+		//printArr(w.getRandomExample("stupidly", "r"));
+		setContains(expected3,w.getRandomExample("stupidly","r"));
+		
+		
+		String[] expected4 = { "Don't run--you'll be out of breath", "The children ran to the store" };  //TODO failed -- the examples are different from getExamples?????
+		//println(w.getRandomExample("run","v"));
+		setContains(expected4, w.getRandomExample("run","v")); 
+
+		
+		String[] expected5 = new String[] { "the visit was especially wearing", "an exhausting march" };
+		//printArr(w.getRandomExample("wearing", "a"));
+		setContains(expected5,w.getRandomExample("wearing","a"));
+
+		
+		String[] expected6 = {};
+		String result6 = w.getRandomExample("wearing", "r");
+		//println(w.getRandomExample("wearing", "a"));
+		setContains(null,w.getRandomExample("wearing","r"));  //TODO failed -- should have NO examples
+
+		try{
+			w.getRandomExample("wearing", "j");
+			equal(1,2);
+		}catch(Exception e){
+			ok(e);
+		}
+
 	}
 
 	@Test
@@ -1146,14 +1297,121 @@ public class RiWordNetTest
 		String[] result = w.getAllExamples("search", "v");
 		//println(result);
 		setEqual(expected, result);
+		
+		String[] expected2 = { "the visit was especially wearing" };
+		String[] result2 = w.getAllExamples("wearing", "a");
+//		printArr(result2);
+		setEqual(expected2, result2);
+		
+		String[] expected3 = {};
+		String[] result3 = w.getAllExamples("wearing", "r");
+//		printArr(result3);
+		setEqual(expected3, result3);
+		
+		String[] expected4 = {};
+		String[] result4 = w.getAllExamples("wearing", "n");
+//		printArr(result4);
+		setEqual(expected4, result4);
+		
+		String[] expected5 = {};
+		String[] result5 = w.getAllExamples("wearing", "v");
+//		printArr(result5);
+		setEqual(expected5, result5);
+		
+		String[] expected6 = { "What should I wear today?", "He always wears a smile", "wear one's hair in a certain way", "She was wearing yellow that day" };
+		String[] result6 = w.getAllExamples("wear", "v");
+//		printArr(result6);
+		setEqual(expected6, result6);
+		
+		String[] expected7 = { "they shouted happily", "happily he was not injured" };
+		String[] result7 = w.getAllExamples("happily", "r");
+//		printArr(result7);
+		setEqual(expected7, result7);
+		
+		String[] expected8 = { "a fat land", "fatty food", "he hadn't remembered how fat she was", "fat tissue", "a nice fat job", "a fat rope" };
+		String[] result8 = w.getAllExamples("fat", "a");
+//		printArr(result8);
+		setEqual(expected8, result8);
+		
+		String[] expected9 = {};
+		String[] result9 = w.getAllExamples("fatttttt", "a");
+//		printArr(result9);
+		setEqual(expected9, result9);
+		
+		try{
+			w.getAllExamples("fatttttt", "u");
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+		
 	}
 
 	@Test
 	public void testGetCommonParents() {
 
-		String[] expected = {"clothing", "vesture", "wear", "wearable", "habiliment"};
+		String[] expected = { "wear", "habiliment", "vesture", "wearable", "article of clothing", "clothing" };
 		String[] result = w.getCommonParents("activewear", "beachwear", "n");
+		printArr(result);
 		setEqual(expected, result);
+		
+		String[] expected2 = { "hymenopterous insect", "hymenopter", "hymenopteron", "hymenopteran" };
+		String[] result2 = w.getCommonParents("bee", "ant", "n");
+		printArr(result2);
+		//setEqual(expected2, result2);
+		
+		String[] expected3 = { "physical entity" };
+		String[] result3 = w.getCommonParents("bee", "wood", "n");
+		printArr(result3);
+		
+		String[] expected4 = { "entity" };
+		String[] result4 = w.getCommonParents("bee", "run", "n");
+		printArr(result4);
+		
+		String[] expected5 = { };
+		String[] result5 = w.getCommonParents("beeesdasd", "run", "n");
+		printArr(result5);
+		
+		String[] expected6 = { };
+		String[] result6 = w.getCommonParents("beeesdasd", "runasdasdasd", "n");
+		printArr(result6);
+		
+		String[] expected7 = { };
+		String[] result7 = w.getCommonParents("flower", "runasdasdasd", "n");
+		printArr(result7);
+		
+		String[] expected8 = { };
+		String[] result8 = w.getCommonParents("flower", "happily", "v");
+		printArr(result8);
+		
+		String[] expected9 = { };
+		String[] result9 = w.getCommonParents("flower", "happily", "r");
+		printArr(result9);
+		
+		String[] expected10 = { };
+		String[] result10 = w.getCommonParents("flower", "happily", "a");
+		printArr(result10);
+		
+		String[] expected11 = { };
+		String[] result11 = w.getCommonParents("sadly", "happily", "r");
+		printArr(result11);
+		
+		String[] expected12 = { };
+		String[] result12 = w.getCommonParents("fat", "thin", "a");
+		printArr(result12);
+		
+		String[] expected13 = { };
+		String[] result13 = w.getCommonParents("go", "run", "v");
+		printArr(result13);
+		
+		try{
+			w.getCommonParents("fatttttt", "sad","j");
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
 	}
 
 	@Test
@@ -1240,6 +1498,19 @@ public class RiWordNetTest
 
 		setEqual(w.getAntonyms("quickly", "r"), new String[]{"slowly"});
 		setEqual(w.getAntonyms("slowly", "r"), new String[]{"quickly"});
+
+		setEqual(w.getAntonyms("smoothly", "r"), new String[]{});
+		setEqual(w.getAntonyms("", "r"), new String[]{});
+		
+		setEqual(w.getAntonyms("smoothlyyyyyyyyyyyy", "r"), new String[]{});
+		try{
+			w.getAntonyms("smoothlyyyyyyyyyyyy", "u");
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+
 	}
 
 	@Test
@@ -1407,6 +1678,11 @@ public class RiWordNetTest
 		equal(true, w.exists("abc"));
 		equal(true, w.exists("wait"));
 		equal(false, w.exists("tesxx"));
+		
+		equal(false, w.exists("123"));
+		equal(false, w.exists("#$%^&*()"));
+		equal(false, w.exists("tes$%^"));
+		
 	}
 
 	@Test
@@ -1982,7 +2258,7 @@ public class RiWordNetTest
 	{
 		setEqualMulti(expected, methodNm, new Class[] { String.class, String.class }, new Object[]{ word, pos });
 	}
-	
+
 	void setEqualMulti(String[] expected, String methodNm, Class[] argTypes, Object[] args)
 	{
 		boolean ignoreCompoundsOrig = w.ignoreCompoundWords();
