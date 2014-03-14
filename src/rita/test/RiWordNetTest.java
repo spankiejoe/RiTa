@@ -693,8 +693,6 @@ public class RiWordNetTest
 		//		printArr(result9);
 		setEqual(expected9, result9);
 
-
-
 		String[] expected12 = { };
 		String[] result12 = w.filter(RiWordNet.CONTAINS, "nahsuchword", "n", 3);
 		//		printArr(result12);
@@ -739,31 +737,31 @@ public class RiWordNetTest
 		String[] result11 = w.filter(RiWordNet.WILDCARD_MATCH, "*table*", "n");
 		//printArr(result11);
 		setEqual(expected11, result11);
-		
+
 		w.ignoreCompoundWords(true);
 		String[] expected15 = { "tablespoon", "potable", "inevitable", "suitableness", "constable", "charitableness", "collectable", "worktable", "unstableness", "stableboy", "tablemate", "inhospitableness", "inevitableness", "tableau", "tractableness", "intractableness", "comfortableness", "stable", "hospitableness", "unprofitableness", "tableware", "excitableness", "eatable", "roundtable", "tablefork", "turntable", "immutableness", "stableman", "unpalatableness", "stablemate", "timetable", "stableness", "unsuitableness", "tablespoonful", "tabletop", "vegetable", "habitableness", "tableland", "notable", "mutableness", "permutableness", "palatableness", "acceptableness", "tablecloth", "tablet", "disreputableness", "portable", "ratables", "unacceptableness", "profitableness", "uncomfortableness" };
 		String[] result15 = w.filter(RiWordNet.WILDCARD_MATCH, "*table*", "n");
 		//printArr(result15);
 		setEqual(expected15, result15);
-	
+
 		String[] expected = { "tuvalu", "tabooli", "tableau", "tepal", "tivoli", "tubule", "tipple", "tupelo", "tiepolo", "tabbouleh", "t-bill", "tubful" };
 		String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n");
 		//printArr(result);
 		setEqual(expected, result);
 
-	
+
 		String[] expected2 = { "tabletop", "tablecloth", "tablemate", "tablefork", "tablet", "tablespoonful", "tableau", "tableland", "tableware", "tablespoon" };
 		String[] result2 = w.filter(RiWordNet.STARTS_WITH, "table", "n");
 		//printArr(result2);
 		setEqual(expected2, result2);
 
-		
+
 		String[] expected3 = { "bleat" };
 		String[] result3 = w.filter(RiWordNet.ANAGRAMS, "table", "n");
 		//printArr(result3);
 		setEqual(expected3, result3);
 
-	
+
 		String[] expected4 = { "unsuitableness", "disreputableness", "tableau", "inevitableness", "notable", "portable", "palatableness", "habitableness", "mutableness", "collectable", "tableware", "roundtable", "acceptableness", "hospitableness", "tableland", "tractableness", "inevitable", "tablemate", "worktable", "tablecloth", "constable", "suitableness", "tablespoon", "stableness", "tablet", "inhospitableness", "uncomfortableness", "timetable", "potable", "ratables", "unprofitableness", "stableboy", "turntable", "intractableness", "stableman", "tabletop", "stablemate", "profitableness", "comfortableness", "tablefork", "charitableness", "stable", "unacceptableness", "unstableness", "unpalatableness", "eatable", "tablespoonful", "permutableness", "immutableness", "vegetable", "excitableness" };
 		String[] result4 = w.filter(RiWordNet.CONTAINS, "table", "n");
 		//printArr(result4);
@@ -779,28 +777,27 @@ public class RiWordNetTest
 		String[] result6 = w.filter(RiWordNet.ENDS_WITH, "ctable", "n");
 		//printArr(result6);
 		setEqual(expected6, result6);
-		
-		String[] expected8 = { "table" }; //TODO
-		String[] result8 = w.filter(RiWordNet.REGEX_MATCH, "table", "n");
+
+		String[] expected8 = { "stable", "notable", "turntable", "potable", "table", "roundtable", "constable", "portable", "eatable", "worktable", "inevitable", "collectable", "vegetable", "timetable" };
+		String[] result8 = w.filter(RiWordNet.REGEX_MATCH, ".*table", "n");
 		//printArr(result8);
 		setEqual(expected8, result8);
-		
-		
+
 		String[] expected9 ={ "vegetable", "conductance", "comestible", "constable", "collectivism", "reflectance", "connective", "colette", "collapse", "telltale", "college", "collotype", "clientele", "eatable", "portable", "mollycoddle", "volleyball", "collage", "conjecture", "follicle", "sociable", "collectible", "worktable", "notable", "collet", "collect", "collembola", "vocable", "collywobbles", "roundtable", "molecule", "combustible", "collocalia", "collectivist", "collecting", "collective", "collegian", "syllable", "decolletage", "folktale", "colpocele", "corrective", "potable", "clientage", "collector", "collection", "timetable", "colleague", "conventicle", "spectacle", "convertible" };
 		String[] result9 = w.filter(RiWordNet.SIMILAR_TO, "collectable", "n");
 		//printArr(result9);
 		setEqual(expected9, result9);
-		
+
 		String[] expected12 = { };
 		String[] result12 = w.filter(RiWordNet.CONTAINS, "nahsuchword", "n");
 		//printArr(result12);
 		setEqual(expected12, result12);
-	
+
 		String[] expected14 = { "notable", "intractableness", "charitableness", "tableland", "disreputableness", "immutableness", "excitableness", "timetable", "mutableness", "stablemate", "stableness", "palatableness", "collectable", "permutableness", "tablespoon", "stableboy", "tablemate", "inevitable", "stableman", "uncomfortableness", "unacceptableness", "tablefork", "tableware", "acceptableness", "unpalatableness", "stable", "turntable", "portable", "inevitableness", "tablecloth", "constable", "worktable", "comfortableness", "tractableness", "profitableness", "tablet", "suitableness", "unprofitableness", "unstableness", "tablespoonful", "vegetable", "hospitableness", "unsuitableness", "potable", "ratables", "roundtable", "tableau", "habitableness", "inhospitableness", "eatable", "tabletop" };
 		String[] result14 = w.filter(RiWordNet.CONTAINS, "table", "n");
 		//printArr(result14);
 		setEqual(expected14, result14);
-	
+
 		try{
 			w.filter(RiWordNet.CONTAINS, "table", "e");
 			ok(false);
@@ -819,38 +816,38 @@ public class RiWordNetTest
 		String result = w.getGloss("wear", "n");
 		//println(result);
 		assertEquals(expected, result);
-		
+
 		String expected2 = "a sign posted in a public place as an advertisement; "+'"'+"a poster advertised the coming attractions"+'"';
 		String result2 = w.getGloss("poster", "n");
 		//println(result2);
 		assertEquals(expected2, result2);
-		
+
 		String expected3 = "affix in a public place or for public notice; "+'"'+"post a warning"+'"';
 		String result3 = w.getGloss("post", "v");
 		//println(result3);
 		assertEquals(expected3, result3);
-		
+
 		String expected4 = null;
 		String result4 = w.getGloss("post", "a");
 		//println(result4);
 		assertEquals(expected4, result4);
-		
+
 		String expected5 = null;
 		String result5 = w.getGloss("post", "r");
 		//println(result5);
 		assertEquals(expected5, result5);
-		
-		
+
+
 		String expected6 = "engagingly stimulating or provocative; "+'"'+"a piquant wit"+'"'+"; "+'"'+"salty language"+'"';
 		String result6 = w.getGloss("salty", "a");
 		//println(result6);
 		assertEquals(expected6, result6);
-		
+
 		String expected7 = "with resolute determination; "+'"'+"we firmly believed it"+'"'+"; "+'"'+"you must stand firm"+'"';
 		String result7 = w.getGloss("firmly", "r");
 		//println(result7);
 		assertEquals(expected7, result7);
-		
+
 		try{
 			w.getGloss("post", "u");
 			ok(false);
@@ -860,7 +857,7 @@ public class RiWordNetTest
 			ok(e);
 		}
 
-		
+
 	}
 
 	@Test
@@ -877,14 +874,14 @@ public class RiWordNetTest
 		String[] result = w.getAllGlosses("wear", "n");
 		//println(result);
 		setEqual(expected, result);
-		
+
 		//{ "in a joyous manner; "they shouted happily"","in an unexpectedly lucky way; "happily he was not injured"", }; //TODO extra comma and " on each...
 		String[] expected2 = { '"'+"in a joyous manner; "+'"'+"they shouted happily"+'"'+","+'"'+"in an unexpectedly lucky way; "+'"'+"happily he was not injured"+'"'};
 
 		setEqualMulti(expected2,"getAllGlosses","happily", "r");
 		setEqualMulti(expected2,"getAllGlosses","firmly", "r"); //TODO this should be failed????
 		println(w.getAllGlosses("happily", "r"), true);
-/*
+		/*
 		String[] expected3 = {"impairment resulting from long use; "+
 				'"'+"the tires showed uneven wear"+'"', 
 				"a covering designed to be worn on a person's body", 
@@ -893,34 +890,160 @@ public class RiWordNetTest
 		};
 		//setEqualMulti(expected3,"getAllGlosses","salty", "a");
 		println(w.getAllGlosses("salty", "a"),true);
-	*/
+		 */
 	}
 
 	@Test
 	public void testGetGlossInt()
 	{
+		w.ignoreUpperCaseWords(false);
+		w.ignoreCompoundWords(false);
 		String expected = "feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats";
 		String result = w.getGloss(92124272);
 		//println(result);
 		assertEquals(expected, result);
+
+		String expected2 = "try to locate or discover, or try to establish the existence of; "+'"'+"The police are searching for clues"+'"'+"; "+'"'+"They are searching for the missing man in the entire county"+'"';
+		String result2 = w.getGloss(81318273);
+		//println(result2);
+		assertEquals(expected2, result2);
+
+		String expected3 = "a whip with nine knotted cords; "+'"'+"British sailors feared the cat"+'"';
+		String result3 = w.getGloss(92989061);
+		//println(result3);
+		assertEquals(expected3, result3);
+
+		w.ignoreCompoundWords(true);
+		String expected4 = "feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats";
+		String result4 = w.getGloss(92124272);
+		//println(result);
+		assertEquals(expected4, result4);
+
+		String expected5 = "try to locate or discover, or try to establish the existence of; "+'"'+"The police are searching for clues"+'"'+"; "+'"'+"They are searching for the missing man in the entire county"+'"';
+		String result5 = w.getGloss(81318273);
+		//println(result2);
+		assertEquals(expected5, result5);
+
+		String expected6 = "a whip with nine knotted cords; "+'"'+"British sailors feared the cat"+'"';
+		String result6 = w.getGloss(92989061);
+		//println(result6);
+		assertEquals(expected6, result6);
+
+		try{
+			String result7 = w.getGloss(123213123);
+			ok(false);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+
 	}
 
 	@Test
 	public void testGetDescriptionInt()
 	{
+		w.ignoreUpperCaseWords(false);
+		w.ignoreCompoundWords(false);
 		String expected = "feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats";
 		String result = w.getDescription(92124272);
-		//println(result);
+		//		println(result);
 		assertEquals(expected, result);
+
+
+		String expected2 = "try to locate or discover, or try to establish the existence of";
+		String result2 = w.getDescription(81318273);
+		//		println(result2);
+		assertEquals(expected2, result2);
+
+		String expected3 = "a whip with nine knotted cords";
+		String result3 = w.getDescription(92989061);
+		//		println(result3);
+		assertEquals(expected3, result3);
+
+		w.ignoreCompoundWords(true);
+		String expected4 = "feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats";
+		String result4 = w.getDescription(92124272);
+		//		println(result);
+		assertEquals(expected4, result4);
+
+		String expected5 = "try to locate or discover, or try to establish the existence of";
+		String result5 = w.getDescription(81318273);
+		//		println(result2);
+		assertEquals(expected5, result5);
+
+		String expected6 = "a whip with nine knotted cords";
+		String result6 = w.getDescription(92989061);
+		//		println(result6);
+		assertEquals(expected6, result6);
+
+		try{
+			String result7 = w.getDescription(123213123);
+			ok(false);
+		}
+		catch(Exception e){
+			ok(e);
+		}
 	}
 
 	@Test
 	public void testGetDescriptionStringString()
 	{
+		w.ignoreUpperCaseWords(false);
+		w.ignoreCompoundWords(false);
 		String expected = "feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats";
 		String result = w.getDescription("cat", "n");
-		//println(result);
+		//		println(result);
 		assertEquals(expected, result);
+
+		String expected2 = "change location; move, travel, or proceed, also metaphorically";
+		String result2 = w.getDescription("move", "v");
+		//		println(result2);
+		assertEquals(expected2, result2);
+
+		String expected3 = "having an (over)abundance of flesh";
+		String result3 = w.getDescription("fat", "a");
+		//		println(result3);
+		assertEquals(expected3, result3);
+
+		String expected4 = "to a severe or serious degree";
+		String result4 = w.getDescription("badly", "r");
+		//		println(result4);
+		assertEquals(expected4, result4);
+
+		w.ignoreCompoundWords(true);
+
+		String expected5 = "feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats";
+		String result5 = w.getDescription("cat", "n");
+		//		println(result);
+		assertEquals(expected5, result5);
+
+		String expected6 = "change location; move, travel, or proceed, also metaphorically";
+		String result6 = w.getDescription("move", "v");
+		//		println(result2);
+		assertEquals(expected6, result6);
+
+		String expected7 = "having an (over)abundance of flesh";
+		String result7 = w.getDescription("fat", "a");
+		//		println(result3);
+		assertEquals(expected7, result7);
+
+		String expected8 = "to a severe or serious degree";
+		String result8 = w.getDescription("badly", "r");
+		//		println(result4);
+		assertEquals(expected8, result8);
+
+		String expected9 = null;
+		String result9 = w.getDescription("badlyyyyy", "r");
+		//println(result9);
+		assertEquals(expected9, result9);
+
+		try{
+			String result10 = w.getDescription("badly", "u");
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
 	}
 
 	@Test
@@ -928,8 +1051,17 @@ public class RiWordNetTest
 	{
 		String[] expected = {"the tires showed uneven wear"};
 		String[] result = w.getExamples("wear", "n");
-		//println(result);
-		setEqual(expected, result);
+		setEqualMulti(expected,"getExamples","wear","n");
+
+		String[] expected2 = {"the tires showed uneven wear"};
+		printArr(w.getExamples("wearing", "a"));
+		//setEqualMulti(expected2,"getExamples","wear","n");
+		
+		String[] expected2 = {"the tires showed uneven wear"};
+		printArr(w.getExamples("wearing", "a"));
+		//setEqualMulti(expected2,"getExamples","wear","n");
+
+		
 	}
 
 	@Test
