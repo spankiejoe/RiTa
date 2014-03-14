@@ -32,13 +32,13 @@ public class RiWordNetTest
 	@Test
 	public void testGetSynonymsInt()
 	{
-		String[] expected = { "quest for", "divine", "quest after", "look for", "drag", "seek out", "window-shop", "scrabble", "feel", "gather", "grope for", "seek", "leave no stone unturned", "browse", "fish", "want", "angle", "scour", "grope", "finger", "shell", "dredge", "hunt", "antique", "grub", "fumble", "search", "pursue", "shop", "dowse", "comparison-shop", "surf", "go after" };		//println(w.getSynonyms(81318273), true);
-		printArr( w.getSynonyms(81318273));
+		String[] expected = { "scour","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
+		//printArr( w.getSynonyms(81318273));
 		setEqualMulti(expected, "getSynonyms", 81318273); 
 		
-		String[] expected2 = { "Methuselah", "beau", "baboo", "fashion plate", "ironman", "dandy", "graybeard", "macho-man", "babu", "fop", "divorced man", "signior", "grass widower", "Samson", "ponce", "young man", "young buck", "old man", "Tarzan", "widowman", "fellow", "old boy", "cat", "middle-aged man", "stiff", "wonder boy", "unmarried man", "father-figure", "he-man", "Peter Pan", "guy", "boy", "Herr", "boyfriend", "swell", "Esq", "gallant", "dude", "shaver", "hombre", "hunk", "golden boy", "Hooray Henry", "bozo", "signor", "iron man", "gentleman", "inamorato", "Senhor", "womanizer", "adonis", "widower", "Monsieur", "bull", "bey", "white man", "womaniser", "housefather", "buster", "sheik", "ejaculator", "sod", "greybeard", "ex", "castrate", "philanderer", "signore", "ex-husband", "sir", "posseman", "galoot", "clotheshorse", "eunuch", "father surrogate", "patriarch", "stud", "ironside", "geezer", "swain", "father figure", "strapper", "ex-boyfriend", "paterfamilias", "bruiser", "bachelor", "Esquire" };
-		printArr( w.getSynonyms(910172934));
-		setEqualMulti(expected, "getSynonyms", 910172934); 
+		String[] expected2 = { "paterfamilias", "old man", "clotheshorse", "widower", "father-figure", "greybeard", "fellow", "Esq", "shaver", "stiff", "stud", "he-man", "divorced man", "ironside", "unmarried man", "old boy", "beau", "gallant", "iron man", "bull", "ponce", "boyfriend", "bachelor", "Samson", "signor", "ex-husband", "bey", "young buck", "Methuselah", "Esquire", "sir", "ex-boyfriend", "strapper", "dandy", "galoot", "posseman", "boy", "buster", "Herr", "ex", "signore", "sheik", "sod", "Peter Pan", "philanderer", "wonder boy", "ironman", "bozo", "grass widower", "dude", "eunuch", "Monsieur", "gentleman", "father surrogate", "hunk", "signior", "ejaculator", "swell", "Tarzan", "babu", "bruiser", "geezer", "golden boy", "father figure", "middle-aged man", "womaniser", "womanizer", "fop", "Senhor", "patriarch", "macho-man", "widowman", "swain", "inamorato", "graybeard", "hombre", "cat", "fashion plate", "housefather", "adonis", "guy", "Hooray Henry", "baboo", "young man", "castrate", "white man" };
+		//printArr( w.getSynonyms(910172934));
+		setEqualMulti(expected2, "getSynonyms", 910172934); 
 
 	}
 
