@@ -2182,8 +2182,8 @@ public class RiWordNetTest
 	public void testIsCompound()  // DCH: ok now...
 	{
 
-		String[] input3 = {"back", "space", "back space", "back_space"};
-		boolean[] expected3 = {false, false, true, true};
+		String[] input3 = {"back", "space", "back space", "back_space","","#$%^&"};
+		boolean[] expected3 = {false, false, true, true,false,false};
 		for(int i=0; i< input3.length; i++){
 			//println(w.isCompound(input3[i]));
 			deepEqual(w.isCompound(input3[i]),expected3[i]);
