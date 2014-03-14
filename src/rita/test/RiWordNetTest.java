@@ -39,7 +39,11 @@ public class RiWordNetTest
 		String[] expected2 = { "paterfamilias", "old man", "clotheshorse", "widower", "father-figure", "greybeard", "fellow", "Esq", "shaver", "stiff", "stud", "he-man", "divorced man", "ironside", "unmarried man", "old boy", "beau", "gallant", "iron man", "bull", "ponce", "boyfriend", "bachelor", "Samson", "signor", "ex-husband", "bey", "young buck", "Methuselah", "Esquire", "sir", "ex-boyfriend", "strapper", "dandy", "galoot", "posseman", "boy", "buster", "Herr", "ex", "signore", "sheik", "sod", "Peter Pan", "philanderer", "wonder boy", "ironman", "bozo", "grass widower", "dude", "eunuch", "Monsieur", "gentleman", "father surrogate", "hunk", "signior", "ejaculator", "swell", "Tarzan", "babu", "bruiser", "geezer", "golden boy", "father figure", "middle-aged man", "womaniser", "womanizer", "fop", "Senhor", "patriarch", "macho-man", "widowman", "swain", "inamorato", "graybeard", "hombre", "cat", "fashion plate", "housefather", "adonis", "guy", "Hooray Henry", "baboo", "young man", "castrate", "white man" };
 		//printArr( w.getSynonyms(910172934));
 		setEqualMulti(expected2, "getSynonyms", 910172934); 
-
+		
+		String[] expected3 = {};
+		printArr( w.getSynonyms(9101729));
+		setEqualMulti(expected3, "getSynonyms", 9101729); 
+		
 	}
 
 	@Test
@@ -47,6 +51,13 @@ public class RiWordNetTest
 	{
 		String[] expected = { "scour","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
 		setContainsMulti(expected, "getSynonyms", 81318273, 4);
+		
+		String[] expected2 = { "paterfamilias", "old man", "clotheshorse", "widower", "father-figure", "greybeard", "fellow", "Esq", "shaver", "stiff", "stud", "he-man", "divorced man", "ironside", "unmarried man", "old boy", "beau", "gallant", "iron man", "bull", "ponce", "boyfriend", "bachelor", "Samson", "signor", "ex-husband", "bey", "young buck", "Methuselah", "Esquire", "sir", "ex-boyfriend", "strapper", "dandy", "galoot", "posseman", "boy", "buster", "Herr", "ex", "signore", "sheik", "sod", "Peter Pan", "philanderer", "wonder boy", "ironman", "bozo", "grass widower", "dude", "eunuch", "Monsieur", "gentleman", "father surrogate", "hunk", "signior", "ejaculator", "swell", "Tarzan", "babu", "bruiser", "geezer", "golden boy", "father figure", "middle-aged man", "womaniser", "womanizer", "fop", "Senhor", "patriarch", "macho-man", "widowman", "swain", "inamorato", "graybeard", "hombre", "cat", "fashion plate", "housefather", "adonis", "guy", "Hooray Henry", "baboo", "young man", "castrate", "white man" };
+		setContainsMulti(expected2, "getSynonyms", 910172934, 4); 
+		
+		String[] expected3 = {};
+		printArr( w.getSynonyms(9101729));
+		setContainsMulti(expected3, "getSynonyms", 9101729,2); 
 	}
 
 	@Test
@@ -55,13 +66,66 @@ public class RiWordNetTest
 		String[] expected = { "shop","grope","seek","want","fumble","scour","grub","gather","seek out","leave no stone unturned","divine","hunt","quest after","feel","angle","go after","fish","browse","quest for","finger","dredge","look for","surf","drag","pursue", };
 		//println(w.getSynonyms("search", "v"), true);
 		setEqualMulti(expected, "getSynonyms", "search", "v");
+		
+		String[] expected2 = { "endeavor","variation","concealing","protection","utilisation","mourning","works","wastefulness","ceremony","seeking","instruction","continuance","buzz","provision","control","misconduct","practice","measuring","acting","variance","market","space walk","deeds","playacting","didactics","wrongdoing","precedency","forage","line","occupation","assist","creative activity","demand","pedagogy","animation","help","disassembly","use","ransacking","burst","market place","supporting","laughter","standardization","organization","leading","playing","procedure","wrongful conduct","activation","puncture","leadership","measurement","recreation","frisking","conduct","music","perturbation","grouping","activating","line of work","calibration","operation","attempt","try","measure","update","job","dish","education","representation","sensory activity","concealment","foraging","locating","training","service","teaching","process","performing","military operation","exploration","turn","cup of tea","standardisation","disturbance","release","outlet","last","assistance","looking for","negotiation","supply","support","emplacement","scouring","marketplace","liveliness","hunt","readying","energizing","work","enjoyment","supplying","doings","solo","employment","mystification","play","followup","mensuration","quest","precedence","placement","location","fun","manhunt","organisation","continuation","dismantlement","fit","obfuscation","pattern","preparation","verbalization","delectation","utilization","timekeeping","politics","dismantling","diversion","position","vent","bag","aid","creation","hiding","positioning","looking","pleasure","behaviour","effort","grooming","exercise","committal to writing","worship","game","precession","shakedown","writing","domesticity","rummage","endeavour","follow-up","role","hunting","lamentation","frisk","actus reus","business","usage","waste","behavior","verbalisation","educational activity","dissipation", };
+		println(w.getSynonyms("search", "n"), true);
+		setEqualMulti(expected2, "getSynonyms", "search", "n");
+		
+		String[] expected3 = {};
+		println(w.getSynonyms("search", "r"), true);
+		setEqualMulti(expected3, "getSynonyms", "search", "r");
+		
+		String[] expected4 = {};
+		println(w.getSynonyms("search", "a"), true);
+		setEqualMulti(expected4, "getSynonyms", "search", "a");
+		
+		String[] expected5 = {"contented","content","bright","riant","elated","blissful","joyful","euphoric","cheerful","laughing","golden","joyous","felicitous","halcyon","glad","prosperous","blessed", };
+		println(w.getSynonyms("happy", "a"), true);
+		setEqualMulti(expected5, "getSynonyms", "happy", "a");
+		
+		String[] expected6 = { };
+		println(w.getSynonyms("happyyyyyyyy", "a"), true);
+		setEqualMulti(expected6, "getSynonyms", "happyyyyyyyy", "a");
+		
+		try{
+			println(w.getSynonyms("search", "j"), true);
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
 	}
 
 	@Test
 	public void testGetSynonymsStringStringInt()
 	{
+
 		String[] expected = { "shop","grope","seek","want","fumble","scour","grub","gather","seek out","leave no stone unturned","divine","hunt","quest after","feel","angle","go after","fish","browse","quest for","finger","dredge","look for","surf","drag","pursue", };
-		setContainsMulti(expected, "getSynonyms", "search", "v", 4);
+		//println(w.getSynonyms("search", "v"), true);
+		setContainsMulti(expected, "getSynonyms", "search", "v",5);
+		
+		String[] expected2 = { "endeavor","variation","concealing","protection","utilisation","mourning","works","wastefulness","ceremony","seeking","instruction","continuance","buzz","provision","control","misconduct","practice","measuring","acting","variance","market","space walk","deeds","playacting","didactics","wrongdoing","precedency","forage","line","occupation","assist","creative activity","demand","pedagogy","animation","help","disassembly","use","ransacking","burst","market place","supporting","laughter","standardization","organization","leading","playing","procedure","wrongful conduct","activation","puncture","leadership","measurement","recreation","frisking","conduct","music","perturbation","grouping","activating","line of work","calibration","operation","attempt","try","measure","update","job","dish","education","representation","sensory activity","concealment","foraging","locating","training","service","teaching","process","performing","military operation","exploration","turn","cup of tea","standardisation","disturbance","release","outlet","last","assistance","looking for","negotiation","supply","support","emplacement","scouring","marketplace","liveliness","hunt","readying","energizing","work","enjoyment","supplying","doings","solo","employment","mystification","play","followup","mensuration","quest","precedence","placement","location","fun","manhunt","organisation","continuation","dismantlement","fit","obfuscation","pattern","preparation","verbalization","delectation","utilization","timekeeping","politics","dismantling","diversion","position","vent","bag","aid","creation","hiding","positioning","looking","pleasure","behaviour","effort","grooming","exercise","committal to writing","worship","game","precession","shakedown","writing","domesticity","rummage","endeavour","follow-up","role","hunting","lamentation","frisk","actus reus","business","usage","waste","behavior","verbalisation","educational activity","dissipation", };
+		setContainsMulti(expected2, "getSynonyms", "search", "n",20);
+		
+		String[] expected3 = {};
+		setContainsMulti(expected3, "getSynonyms", "search", "r",1);
+		
+		String[] expected4 = {};
+		setContainsMulti(expected4, "getSynonyms", "search", "a",5);
+		
+		String[] expected5 = {"contented","content","bright","riant","elated","blissful","joyful","euphoric","cheerful","laughing","golden","joyous","felicitous","halcyon","glad","prosperous","blessed", };
+		setContainsMulti(expected5, "getSynonyms", "happy", "a",3);
+		
+		String[] expected6 = { };
+		setContainsMulti(expected6, "getSynonyms", "happyyyyyyyy", "a",2);
+		
+		try{
+			println(w.getSynonyms("search", "j",4), true);
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
 	}
 
 	@Test
@@ -70,6 +134,36 @@ public class RiWordNetTest
 		String[] expected = { "check","pursue","experiment","re-explore","grub","research","peruse","prospect","mapquest","look for","comb","skim","nose","explore","glance over","look","cruise","poke","hunt","scan","candle","drag","seek","angle","browse","take stock", "x-ray","autopsy","fumble","want","cast around","quest after","rake","size up","examine","strip-search","divine","frisk","inspect","gather","horn in","beat about","run down","rifle","cast about","fish","google","dredge","raid","intrude","go","grope","rummage","scour","ransack","probe","scrutinise","survey","pry","scrutinize","shop","seek out","auscultate","finger","surf","go after","quest for","feel","leave no stone unturned", };
 		//println(w.getAllSynonyms("search", "v"), true);
 		setEqualMulti(expected, "getAllSynonyms", "search", "v");
+		
+		String[] expected2 = { "pleasure","liveliness","fit","space walk","readying","checkup","post-mortem examination","pursuit","creation","practice","thought","off-line operation","rummage","frisking","procedure","locating","vent","precedency","deciding","worship","count","lookup","sort","bank examination","mensuration","analysis","activating","binary operation","study","tabulation","use","misconduct","follow-up","supporting","recreation","last","actus reus","unary operation","politics","comparison","educational activity","utilization","forage","assistance","supplying","reexamination","support","tally","hiding","pedagogy","grouping","writing","sorting","business","shakedown","foraging","dyadic operation","verbalisation","necropsy","intellection","puncture","audit","fun","attempt","scrutiny","activation","wiretap","medical","disassembly","computer operation","empiricism","scouring","time and motion study","printing operation","variance","concurrent operation","timekeeping","dissipation","creative activity","solo","manhunt","turn","endeavour","variation","once-over","enjoyment","memory access","thought process","boolean operation","conduct","performing","police investigation","survey","waste","perturbation","looking","role","testing","burst","aid","disturbance","committal to writing","rhinoscopy","buzz","control function","delectation","positioning","going-over","knowing","research","effort","postmortem examination","market","instruction","deeds","exercise","asynchronous operation","synchronous operation","post-mortem","hunt","logic operation","assist","grooming","dish","examination","didactics","animation","utilisation","linguistic process","control operation","representation","police work","simultaneous operation","music","hunting","time study","ophthalmoscopy","parallel operation","standardisation","organisation","placement","process","behaviour","usage","tactual exploration","numeration","behavior","training","standardization","obfuscation","employment","looking for","ransacking","precedence","supply","teaching","works","cup of tea","bag","doings","mourning","time-and-motion study","quest","inquiry","palpation","enumeration","leading","medical examination","counting","multiplex operation","reckoning","job","line of work","organization","lamentation","machine operation","fine-toothed comb","threshold operation","medical checkup","enquiry","look-over","play","operation","wastefulness","PM","decision making","binary arithmetic operation","endoscopy","diversion","seeking","access","ceremony","line","mentation","playing","autopsy","exploration","game","precession","continuation","help","keratoscopy","preparation","concealment","laughter","serial operation","emplacement","market place","sensory activity","measuring","tap","scan","consecutive operation","release","pattern","domesticity","sequential operation","comparing","logical operation","dismantlement","language","cerebration","demand","occupation","verbalization","continuance","wrongful conduct","leadership","auxiliary operation","measurement","location","wrongdoing","inspection","endeavor","suggestion","work","motion study","review","calibration","outlet","military operation","mystification","medical exam","monadic operation","frisk","control","health check","update","provision","thinking","concealing","education","negotiation","protection","position","try","fixed-cycle operation","gonioscopy","acting","followup","measure","dismantling","playacting","fine-tooth comb","pursuance","energizing","time-motion study","work study","marketplace","postmortem","service", };
+		println(w.getAllSynonyms("search", "n"), true);
+		setEqualMulti(expected2, "getAllSynonyms", "search", "n");
+		
+		String[] expected3 = {};
+		println(w.getAllSynonyms("search", "r"), true);
+		setEqualMulti(expected3, "getAllSynonyms", "search", "r");
+		
+		String[] expected4 = {};
+		println(w.getAllSynonyms("search", "a"), true);
+		setEqualMulti(expected4, "getAllSynonyms", "search", "a");
+		
+		String[] expected5 = {"contented","euphoric","joyous","elated","cheerful","laughing","felicitous","content","fortunate","willing","golden","glad","halcyon","bright","blissful","joyful","blessed","riant","prosperous","well-chosen", };
+		println(w.getAllSynonyms("happy", "a"), true);
+		setEqualMulti(expected5, "getAllSynonyms", "happy", "a");
+		
+		String[] expected6 = { };
+		println(w.getAllSynonyms("happyyyyyyyy", "a"), true);
+		setEqualMulti(expected6, "getAllSynonyms", "happyyyyyyyy", "a");
+		
+		try{
+			println(w.getAllSynonyms("search", "j"), true);
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+		
+		
 	}
 
 	@Test
@@ -77,6 +171,43 @@ public class RiWordNetTest
 	{
 		String[] expected = { "check","pursue","experiment","re-explore","grub","research","peruse","prospect","mapquest","look for","comb","skim","nose","explore","glance over","look","cruise","poke","hunt","scan","candle","drag","seek","angle","browse","take stock", "x-ray","autopsy","fumble","want","cast around","quest after","rake","size up","examine","strip-search","divine","frisk","inspect","gather","horn in","beat about","run down","rifle","cast about","fish","google","dredge","raid","intrude","go","grope","rummage","scour","ransack","probe","scrutinise","survey","pry","scrutinize","shop","seek out","auscultate","finger","surf","go after","quest for","feel","leave no stone unturned", };
 		setContainsMulti(expected, "getAllSynonyms", "search", "v", 10);
+		
+		String[] expected2 = { "pleasure","liveliness","fit","space walk","readying","checkup","post-mortem examination","pursuit","creation","practice","thought","off-line operation","rummage","frisking","procedure","locating","vent","precedency","deciding","worship","count","lookup","sort","bank examination","mensuration","analysis","activating","binary operation","study","tabulation","use","misconduct","follow-up","supporting","recreation","last","actus reus","unary operation","politics","comparison","educational activity","utilization","forage","assistance","supplying","reexamination","support","tally","hiding","pedagogy","grouping","writing","sorting","business","shakedown","foraging","dyadic operation","verbalisation","necropsy","intellection","puncture","audit","fun","attempt","scrutiny","activation","wiretap","medical","disassembly","computer operation","empiricism","scouring","time and motion study","printing operation","variance","concurrent operation","timekeeping","dissipation","creative activity","solo","manhunt","turn","endeavour","variation","once-over","enjoyment","memory access","thought process","boolean operation","conduct","performing","police investigation","survey","waste","perturbation","looking","role","testing","burst","aid","disturbance","committal to writing","rhinoscopy","buzz","control function","delectation","positioning","going-over","knowing","research","effort","postmortem examination","market","instruction","deeds","exercise","asynchronous operation","synchronous operation","post-mortem","hunt","logic operation","assist","grooming","dish","examination","didactics","animation","utilisation","linguistic process","control operation","representation","police work","simultaneous operation","music","hunting","time study","ophthalmoscopy","parallel operation","standardisation","organisation","placement","process","behaviour","usage","tactual exploration","numeration","behavior","training","standardization","obfuscation","employment","looking for","ransacking","precedence","supply","teaching","works","cup of tea","bag","doings","mourning","time-and-motion study","quest","inquiry","palpation","enumeration","leading","medical examination","counting","multiplex operation","reckoning","job","line of work","organization","lamentation","machine operation","fine-toothed comb","threshold operation","medical checkup","enquiry","look-over","play","operation","wastefulness","PM","decision making","binary arithmetic operation","endoscopy","diversion","seeking","access","ceremony","line","mentation","playing","autopsy","exploration","game","precession","continuation","help","keratoscopy","preparation","concealment","laughter","serial operation","emplacement","market place","sensory activity","measuring","tap","scan","consecutive operation","release","pattern","domesticity","sequential operation","comparing","logical operation","dismantlement","language","cerebration","demand","occupation","verbalization","continuance","wrongful conduct","leadership","auxiliary operation","measurement","location","wrongdoing","inspection","endeavor","suggestion","work","motion study","review","calibration","outlet","military operation","mystification","medical exam","monadic operation","frisk","control","health check","update","provision","thinking","concealing","education","negotiation","protection","position","try","fixed-cycle operation","gonioscopy","acting","followup","measure","dismantling","playacting","fine-tooth comb","pursuance","energizing","time-motion study","work study","marketplace","postmortem","service", };
+		println(w.getAllSynonyms("search", "n"), true);
+		setContainsMulti(expected2, "getAllSynonyms", "search", "n",5);
+		
+		String[] expected3 = {};
+		println(w.getAllSynonyms("search", "r"), true);
+		setContainsMulti(expected3, "getAllSynonyms", "search", "r",5);
+		
+		String[] expected4 = {};
+		println(w.getAllSynonyms("search", "a"), true);
+		setContainsMulti(expected4, "getAllSynonyms", "search", "a",9);
+		
+		String[] expected5 = {"contented","euphoric","joyous","elated","cheerful","laughing","felicitous","content","fortunate","willing","golden","glad","halcyon","bright","blissful","joyful","blessed","riant","prosperous","well-chosen", };
+		println(w.getAllSynonyms("happy", "a"), true);
+		setContainsMulti(expected5, "getAllSynonyms", "happy", "a",1);
+		
+		String[] expected6 = { };
+		println(w.getAllSynonyms("happyyyyyyyy", "a"), true);
+		setContainsMulti(expected6, "getAllSynonyms", "happyyyyyyyy", "a",4);
+		
+		try{
+			println(w.getAllSynonyms("search", "j",6), true);
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+		
+		try{
+			println(w.getAllSynonyms("search", "v",-1), true);
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+		
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +257,7 @@ public class RiWordNetTest
 	}
 
 	@Test
-	public void testGetSenseIdsStringString() //TODO More pos
+	public void testGetSenseIdsStringString() 
 	{
 
 		//TODO cannot use setEqualMulti as it is int[]
@@ -135,10 +266,31 @@ public class RiWordNetTest
 		int[] expected = { 92124272, 910172934, 99919605, 93614083, 92989061, 92986962, 92130460, 9903174 };
 		int[] result = w.getSenseIds("cat", "n");
 		deepEqual(expected, result);
-
+		
 		int[] expected1 = { 913367788 };
 		int[] result1 = w.getSenseIds("health insurance", "n");
+//		println(result1);
 		deepEqual(expected1, result1);
+		
+		int[] expected13 = { 81414524, 876153};
+		int[] result13 = w.getSenseIds("cat", "v");
+//		println(result13);
+		deepEqual(expected13, result13);
+		
+		int[] expected3 = {  };
+		int[] result3 = w.getSenseIds("health insurance", "v");
+//		println(result3);
+		deepEqual(expected3, result3);
+		
+		int[] expected4 = {  };
+		int[] result4 = w.getSenseIds("health insurance", "a");
+//		println(result4);
+		deepEqual(expected3, result4);
+		
+		int[] expected5 = {  };
+		int[] result5 = w.getSenseIds("health insurance", "r");
+//		println(result5);
+		deepEqual(expected5, result5);
 
 		int[] expected2 = { };
 		int[] result2 = w.getSenseIds("caz", "n");
@@ -155,17 +307,37 @@ public class RiWordNetTest
 		w.ignoreCompoundWords(true);
 		w.ignoreUpperCaseWords(true);
 		
-		int[] expected3 = { 92124272, 910172934, 99919605, 93614083, 92989061, 92986962, 92130460, 9903174 };
-		int[] result3 = w.getSenseIds("cat", "n");
-		deepEqual(expected3, result3);
+		int[] expected6 = { 92124272, 910172934, 99919605, 93614083, 92989061, 92986962, 92130460, 9903174 };
+		int[] result6 = w.getSenseIds("cat", "n");
+		deepEqual(expected6, result6);
 
-		int[] expected4 = { 913367788 };
-		int[] result4 = w.getSenseIds("health insurance", "n");
-		deepEqual(expected4, result4);
+		int[] expected7 = { 913367788 };
+		int[] result7 = w.getSenseIds("health insurance", "n");
+		deepEqual(expected7, result7);
+		
+		int[] expected12 = { 81414524, 876153};
+		int[] result12 = w.getSenseIds("cat", "v");
+//		println(result12);
+		deepEqual(expected12, result12);
 
-		int[] expected5 = { };
-		int[] result5 = w.getSenseIds("caz", "n");
-		deepEqual(expected5, result5);
+		int[] expected9 = {  };
+		int[] result9 = w.getSenseIds("health insurance", "v");
+//		println(result9);
+		deepEqual(expected9, result9);
+		
+		int[] expected10 = {  };
+		int[] result10 = w.getSenseIds("health insurance", "a");
+//		println(result10);
+		deepEqual(expected10, result10);
+		
+		int[] expected11 = {  };
+		int[] result11 = w.getSenseIds("health insurance", "r");
+//		println(result11);
+		deepEqual(expected11, result11);
+
+		int[] expected8 = { };
+		int[] result8 = w.getSenseIds("caz", "n");
+		deepEqual(expected8, result8);
 
 		try{
 			w.getSenseIds("cat", "u");
@@ -177,27 +349,32 @@ public class RiWordNetTest
 	}
 
 	@Test
-	public void testGetHypernymsStringString() //TODO More pos
+	public void testGetHypernymsStringString()
 	{
 
 		String[] expected = { "root" };
 		setEqualMulti(expected,"getHypernyms","carrot","n");
 
-		String[] expected2 = { "canid" ,"canine"};    
+		String[] expected2 = { "domestic animal", "domesticated animal", "canid", "canine" };
 		setEqualMulti(expected2,"getHypernyms","dog","n");
 
 		String[] expected3 = { "bush" ,"shrub"};
 		setEqualMulti(expected3,"getHypernyms","rose","n");
 
+		String[] expected4 = { "plant organ"};
+		setEqualMulti(expected4,"getHypernyms","root","n");
 
-		String[] expected4 = { };
-		String[] result4 = w.getHypernyms("root", "n");
-		//println(result4);
-		setEqual(expected4, result4);
+		String[] expected7 = {"grow" };
+		setEqualMulti(expected7,"getHypernyms","root","v");
+		
+		String[] expected8 = {};
+		setEqualMulti(expected8,"getHypernyms","root","r");
+		
+		String[] expected9 = {};
+		setEqualMulti(expected9,"getHypernyms","root","a");
 
 		String[] expected5 = { };
-		String[] result5 = w.getHypernyms("rootttt", "n");
-		setEqual(expected5, result5);
+		setEqualMulti(expected5,"getHypernyms","rootttt","n");
 
 		try{
 			String[] result6 = w.getHypernyms("root", "j");
