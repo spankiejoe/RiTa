@@ -310,7 +310,8 @@ public class RiTa implements Constants
   }
   
   public static String pluralize(String noun) { 
-    return Pluralizer.getInstance().pluralize(noun); 
+    
+    return Pluralizer.pluralize(noun); 
   }
 
   /**
