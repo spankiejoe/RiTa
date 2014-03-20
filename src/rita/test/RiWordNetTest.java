@@ -35,15 +35,15 @@ public class RiWordNetTest
 		String[] expected = { "scour","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
 		//printArr( w.getSynonyms(81318273));
 		setEqualMulti(expected, "getSynonyms", 81318273); 
-		
+
 		String[] expected2 = { "paterfamilias", "old man", "clotheshorse", "widower", "father-figure", "greybeard", "fellow", "Esq", "shaver", "stiff", "stud", "he-man", "divorced man", "ironside", "unmarried man", "old boy", "beau", "gallant", "iron man", "bull", "ponce", "boyfriend", "bachelor", "Samson", "signor", "ex-husband", "bey", "young buck", "Methuselah", "Esquire", "sir", "ex-boyfriend", "strapper", "dandy", "galoot", "posseman", "boy", "buster", "Herr", "ex", "signore", "sheik", "sod", "Peter Pan", "philanderer", "wonder boy", "ironman", "bozo", "grass widower", "dude", "eunuch", "Monsieur", "gentleman", "father surrogate", "hunk", "signior", "ejaculator", "swell", "Tarzan", "babu", "bruiser", "geezer", "golden boy", "father figure", "middle-aged man", "womaniser", "womanizer", "fop", "Senhor", "patriarch", "macho-man", "widowman", "swain", "inamorato", "graybeard", "hombre", "cat", "fashion plate", "housefather", "adonis", "guy", "Hooray Henry", "baboo", "young man", "castrate", "white man" };
 		//printArr( w.getSynonyms(910172934));
 		setEqualMulti(expected2, "getSynonyms", 910172934); 
-		
+
 		String[] expected3 = {};
 		printArr( w.getSynonyms(9101729));
 		setEqualMulti(expected3, "getSynonyms", 9101729); 
-		
+
 	}
 
 	@Test
@@ -51,10 +51,10 @@ public class RiWordNetTest
 	{
 		String[] expected = { "scour","grub","antique","comparison-shop","hunt","drag","shop","dowse","browse","seek","scrabble","quest after","search","fish","pursue","angle","shell","want","surf","seek out","window-shop","look for","divine","grope","leave no stone unturned","go after","gather","grope for","quest for","feel","fumble","dredge","finger" };
 		setContainsMulti(expected, "getSynonyms", 81318273, 4);
-		
+
 		String[] expected2 = { "paterfamilias", "old man", "clotheshorse", "widower", "father-figure", "greybeard", "fellow", "Esq", "shaver", "stiff", "stud", "he-man", "divorced man", "ironside", "unmarried man", "old boy", "beau", "gallant", "iron man", "bull", "ponce", "boyfriend", "bachelor", "Samson", "signor", "ex-husband", "bey", "young buck", "Methuselah", "Esquire", "sir", "ex-boyfriend", "strapper", "dandy", "galoot", "posseman", "boy", "buster", "Herr", "ex", "signore", "sheik", "sod", "Peter Pan", "philanderer", "wonder boy", "ironman", "bozo", "grass widower", "dude", "eunuch", "Monsieur", "gentleman", "father surrogate", "hunk", "signior", "ejaculator", "swell", "Tarzan", "babu", "bruiser", "geezer", "golden boy", "father figure", "middle-aged man", "womaniser", "womanizer", "fop", "Senhor", "patriarch", "macho-man", "widowman", "swain", "inamorato", "graybeard", "hombre", "cat", "fashion plate", "housefather", "adonis", "guy", "Hooray Henry", "baboo", "young man", "castrate", "white man" };
 		setContainsMulti(expected2, "getSynonyms", 910172934, 4); 
-		
+
 		String[] expected3 = {};
 		printArr( w.getSynonyms(9101729));
 		setContainsMulti(expected3, "getSynonyms", 9101729,2); 
@@ -66,27 +66,27 @@ public class RiWordNetTest
 		String[] expected = { "shop","grope","seek","want","fumble","scour","grub","gather","seek out","leave no stone unturned","divine","hunt","quest after","feel","angle","go after","fish","browse","quest for","finger","dredge","look for","surf","drag","pursue", };
 		//println(w.getSynonyms("search", "v"), true);
 		setEqualMulti(expected, "getSynonyms", "search", "v");
-		
+
 		String[] expected2 = { "endeavor","variation","concealing","protection","utilisation","mourning","works","wastefulness","ceremony","seeking","instruction","continuance","buzz","provision","control","misconduct","practice","measuring","acting","variance","market","space walk","deeds","playacting","didactics","wrongdoing","precedency","forage","line","occupation","assist","creative activity","demand","pedagogy","animation","help","disassembly","use","ransacking","burst","market place","supporting","laughter","standardization","organization","leading","playing","procedure","wrongful conduct","activation","puncture","leadership","measurement","recreation","frisking","conduct","music","perturbation","grouping","activating","line of work","calibration","operation","attempt","try","measure","update","job","dish","education","representation","sensory activity","concealment","foraging","locating","training","service","teaching","process","performing","military operation","exploration","turn","cup of tea","standardisation","disturbance","release","outlet","last","assistance","looking for","negotiation","supply","support","emplacement","scouring","marketplace","liveliness","hunt","readying","energizing","work","enjoyment","supplying","doings","solo","employment","mystification","play","followup","mensuration","quest","precedence","placement","location","fun","manhunt","organisation","continuation","dismantlement","fit","obfuscation","pattern","preparation","verbalization","delectation","utilization","timekeeping","politics","dismantling","diversion","position","vent","bag","aid","creation","hiding","positioning","looking","pleasure","behaviour","effort","grooming","exercise","committal to writing","worship","game","precession","shakedown","writing","domesticity","rummage","endeavour","follow-up","role","hunting","lamentation","frisk","actus reus","business","usage","waste","behavior","verbalisation","educational activity","dissipation", };
 		println(w.getSynonyms("search", "n"), true);
 		setEqualMulti(expected2, "getSynonyms", "search", "n");
-		
+
 		String[] expected3 = {};
 		println(w.getSynonyms("search", "r"), true);
 		setEqualMulti(expected3, "getSynonyms", "search", "r");
-		
+
 		String[] expected4 = {};
 		println(w.getSynonyms("search", "a"), true);
 		setEqualMulti(expected4, "getSynonyms", "search", "a");
-		
+
 		String[] expected5 = {"contented","content","bright","riant","elated","blissful","joyful","euphoric","cheerful","laughing","golden","joyous","felicitous","halcyon","glad","prosperous","blessed", };
 		println(w.getSynonyms("happy", "a"), true);
 		setEqualMulti(expected5, "getSynonyms", "happy", "a");
-		
+
 		String[] expected6 = { };
 		println(w.getSynonyms("happyyyyyyyy", "a"), true);
 		setEqualMulti(expected6, "getSynonyms", "happyyyyyyyy", "a");
-		
+
 		try{
 			println(w.getSynonyms("search", "j"), true);
 			equal(1,2);
@@ -103,22 +103,22 @@ public class RiWordNetTest
 		String[] expected = { "shop","grope","seek","want","fumble","scour","grub","gather","seek out","leave no stone unturned","divine","hunt","quest after","feel","angle","go after","fish","browse","quest for","finger","dredge","look for","surf","drag","pursue", };
 		//println(w.getSynonyms("search", "v"), true);
 		setContainsMulti(expected, "getSynonyms", "search", "v",5);
-		
+
 		String[] expected2 = { "endeavor","variation","concealing","protection","utilisation","mourning","works","wastefulness","ceremony","seeking","instruction","continuance","buzz","provision","control","misconduct","practice","measuring","acting","variance","market","space walk","deeds","playacting","didactics","wrongdoing","precedency","forage","line","occupation","assist","creative activity","demand","pedagogy","animation","help","disassembly","use","ransacking","burst","market place","supporting","laughter","standardization","organization","leading","playing","procedure","wrongful conduct","activation","puncture","leadership","measurement","recreation","frisking","conduct","music","perturbation","grouping","activating","line of work","calibration","operation","attempt","try","measure","update","job","dish","education","representation","sensory activity","concealment","foraging","locating","training","service","teaching","process","performing","military operation","exploration","turn","cup of tea","standardisation","disturbance","release","outlet","last","assistance","looking for","negotiation","supply","support","emplacement","scouring","marketplace","liveliness","hunt","readying","energizing","work","enjoyment","supplying","doings","solo","employment","mystification","play","followup","mensuration","quest","precedence","placement","location","fun","manhunt","organisation","continuation","dismantlement","fit","obfuscation","pattern","preparation","verbalization","delectation","utilization","timekeeping","politics","dismantling","diversion","position","vent","bag","aid","creation","hiding","positioning","looking","pleasure","behaviour","effort","grooming","exercise","committal to writing","worship","game","precession","shakedown","writing","domesticity","rummage","endeavour","follow-up","role","hunting","lamentation","frisk","actus reus","business","usage","waste","behavior","verbalisation","educational activity","dissipation", };
 		setContainsMulti(expected2, "getSynonyms", "search", "n",20);
-		
+
 		String[] expected3 = {};
 		setContainsMulti(expected3, "getSynonyms", "search", "r",1);
-		
+
 		String[] expected4 = {};
 		setContainsMulti(expected4, "getSynonyms", "search", "a",5);
-		
+
 		String[] expected5 = {"contented","content","bright","riant","elated","blissful","joyful","euphoric","cheerful","laughing","golden","joyous","felicitous","halcyon","glad","prosperous","blessed", };
 		setContainsMulti(expected5, "getSynonyms", "happy", "a",3);
-		
+
 		String[] expected6 = { };
 		setContainsMulti(expected6, "getSynonyms", "happyyyyyyyy", "a",2);
-		
+
 		try{
 			println(w.getSynonyms("search", "j",4), true);
 			equal(1,2);
@@ -134,27 +134,27 @@ public class RiWordNetTest
 		String[] expected = { "check","pursue","experiment","re-explore","grub","research","peruse","prospect","mapquest","look for","comb","skim","nose","explore","glance over","look","cruise","poke","hunt","scan","candle","drag","seek","angle","browse","take stock", "x-ray","autopsy","fumble","want","cast around","quest after","rake","size up","examine","strip-search","divine","frisk","inspect","gather","horn in","beat about","run down","rifle","cast about","fish","google","dredge","raid","intrude","go","grope","rummage","scour","ransack","probe","scrutinise","survey","pry","scrutinize","shop","seek out","auscultate","finger","surf","go after","quest for","feel","leave no stone unturned", };
 		//println(w.getAllSynonyms("search", "v"), true);
 		setEqualMulti(expected, "getAllSynonyms", "search", "v");
-		
+
 		String[] expected2 = { "pleasure","liveliness","fit","space walk","readying","checkup","post-mortem examination","pursuit","creation","practice","thought","off-line operation","rummage","frisking","procedure","locating","vent","precedency","deciding","worship","count","lookup","sort","bank examination","mensuration","analysis","activating","binary operation","study","tabulation","use","misconduct","follow-up","supporting","recreation","last","actus reus","unary operation","politics","comparison","educational activity","utilization","forage","assistance","supplying","reexamination","support","tally","hiding","pedagogy","grouping","writing","sorting","business","shakedown","foraging","dyadic operation","verbalisation","necropsy","intellection","puncture","audit","fun","attempt","scrutiny","activation","wiretap","medical","disassembly","computer operation","empiricism","scouring","time and motion study","printing operation","variance","concurrent operation","timekeeping","dissipation","creative activity","solo","manhunt","turn","endeavour","variation","once-over","enjoyment","memory access","thought process","boolean operation","conduct","performing","police investigation","survey","waste","perturbation","looking","role","testing","burst","aid","disturbance","committal to writing","rhinoscopy","buzz","control function","delectation","positioning","going-over","knowing","research","effort","postmortem examination","market","instruction","deeds","exercise","asynchronous operation","synchronous operation","post-mortem","hunt","logic operation","assist","grooming","dish","examination","didactics","animation","utilisation","linguistic process","control operation","representation","police work","simultaneous operation","music","hunting","time study","ophthalmoscopy","parallel operation","standardisation","organisation","placement","process","behaviour","usage","tactual exploration","numeration","behavior","training","standardization","obfuscation","employment","looking for","ransacking","precedence","supply","teaching","works","cup of tea","bag","doings","mourning","time-and-motion study","quest","inquiry","palpation","enumeration","leading","medical examination","counting","multiplex operation","reckoning","job","line of work","organization","lamentation","machine operation","fine-toothed comb","threshold operation","medical checkup","enquiry","look-over","play","operation","wastefulness","PM","decision making","binary arithmetic operation","endoscopy","diversion","seeking","access","ceremony","line","mentation","playing","autopsy","exploration","game","precession","continuation","help","keratoscopy","preparation","concealment","laughter","serial operation","emplacement","market place","sensory activity","measuring","tap","scan","consecutive operation","release","pattern","domesticity","sequential operation","comparing","logical operation","dismantlement","language","cerebration","demand","occupation","verbalization","continuance","wrongful conduct","leadership","auxiliary operation","measurement","location","wrongdoing","inspection","endeavor","suggestion","work","motion study","review","calibration","outlet","military operation","mystification","medical exam","monadic operation","frisk","control","health check","update","provision","thinking","concealing","education","negotiation","protection","position","try","fixed-cycle operation","gonioscopy","acting","followup","measure","dismantling","playacting","fine-tooth comb","pursuance","energizing","time-motion study","work study","marketplace","postmortem","service", };
 		println(w.getAllSynonyms("search", "n"), true);
 		setEqualMulti(expected2, "getAllSynonyms", "search", "n");
-		
+
 		String[] expected3 = {};
 		println(w.getAllSynonyms("search", "r"), true);
 		setEqualMulti(expected3, "getAllSynonyms", "search", "r");
-		
+
 		String[] expected4 = {};
 		println(w.getAllSynonyms("search", "a"), true);
 		setEqualMulti(expected4, "getAllSynonyms", "search", "a");
-		
+
 		String[] expected5 = {"contented","euphoric","joyous","elated","cheerful","laughing","felicitous","content","fortunate","willing","golden","glad","halcyon","bright","blissful","joyful","blessed","riant","prosperous","well-chosen", };
 		println(w.getAllSynonyms("happy", "a"), true);
 		setEqualMulti(expected5, "getAllSynonyms", "happy", "a");
-		
+
 		String[] expected6 = { };
 		println(w.getAllSynonyms("happyyyyyyyy", "a"), true);
 		setEqualMulti(expected6, "getAllSynonyms", "happyyyyyyyy", "a");
-		
+
 		try{
 			println(w.getAllSynonyms("search", "j"), true);
 			equal(1,2);
@@ -162,8 +162,8 @@ public class RiWordNetTest
 		catch(Exception e){
 			ok(e);
 		}
-		
-		
+
+
 	}
 
 	@Test
@@ -171,27 +171,27 @@ public class RiWordNetTest
 	{
 		String[] expected = { "check","pursue","experiment","re-explore","grub","research","peruse","prospect","mapquest","look for","comb","skim","nose","explore","glance over","look","cruise","poke","hunt","scan","candle","drag","seek","angle","browse","take stock", "x-ray","autopsy","fumble","want","cast around","quest after","rake","size up","examine","strip-search","divine","frisk","inspect","gather","horn in","beat about","run down","rifle","cast about","fish","google","dredge","raid","intrude","go","grope","rummage","scour","ransack","probe","scrutinise","survey","pry","scrutinize","shop","seek out","auscultate","finger","surf","go after","quest for","feel","leave no stone unturned", };
 		setContainsMulti(expected, "getAllSynonyms", "search", "v", 10);
-		
+
 		String[] expected2 = { "pleasure","liveliness","fit","space walk","readying","checkup","post-mortem examination","pursuit","creation","practice","thought","off-line operation","rummage","frisking","procedure","locating","vent","precedency","deciding","worship","count","lookup","sort","bank examination","mensuration","analysis","activating","binary operation","study","tabulation","use","misconduct","follow-up","supporting","recreation","last","actus reus","unary operation","politics","comparison","educational activity","utilization","forage","assistance","supplying","reexamination","support","tally","hiding","pedagogy","grouping","writing","sorting","business","shakedown","foraging","dyadic operation","verbalisation","necropsy","intellection","puncture","audit","fun","attempt","scrutiny","activation","wiretap","medical","disassembly","computer operation","empiricism","scouring","time and motion study","printing operation","variance","concurrent operation","timekeeping","dissipation","creative activity","solo","manhunt","turn","endeavour","variation","once-over","enjoyment","memory access","thought process","boolean operation","conduct","performing","police investigation","survey","waste","perturbation","looking","role","testing","burst","aid","disturbance","committal to writing","rhinoscopy","buzz","control function","delectation","positioning","going-over","knowing","research","effort","postmortem examination","market","instruction","deeds","exercise","asynchronous operation","synchronous operation","post-mortem","hunt","logic operation","assist","grooming","dish","examination","didactics","animation","utilisation","linguistic process","control operation","representation","police work","simultaneous operation","music","hunting","time study","ophthalmoscopy","parallel operation","standardisation","organisation","placement","process","behaviour","usage","tactual exploration","numeration","behavior","training","standardization","obfuscation","employment","looking for","ransacking","precedence","supply","teaching","works","cup of tea","bag","doings","mourning","time-and-motion study","quest","inquiry","palpation","enumeration","leading","medical examination","counting","multiplex operation","reckoning","job","line of work","organization","lamentation","machine operation","fine-toothed comb","threshold operation","medical checkup","enquiry","look-over","play","operation","wastefulness","PM","decision making","binary arithmetic operation","endoscopy","diversion","seeking","access","ceremony","line","mentation","playing","autopsy","exploration","game","precession","continuation","help","keratoscopy","preparation","concealment","laughter","serial operation","emplacement","market place","sensory activity","measuring","tap","scan","consecutive operation","release","pattern","domesticity","sequential operation","comparing","logical operation","dismantlement","language","cerebration","demand","occupation","verbalization","continuance","wrongful conduct","leadership","auxiliary operation","measurement","location","wrongdoing","inspection","endeavor","suggestion","work","motion study","review","calibration","outlet","military operation","mystification","medical exam","monadic operation","frisk","control","health check","update","provision","thinking","concealing","education","negotiation","protection","position","try","fixed-cycle operation","gonioscopy","acting","followup","measure","dismantling","playacting","fine-tooth comb","pursuance","energizing","time-motion study","work study","marketplace","postmortem","service", };
 		println(w.getAllSynonyms("search", "n"), true);
 		setContainsMulti(expected2, "getAllSynonyms", "search", "n",5);
-		
+
 		String[] expected3 = {};
 		println(w.getAllSynonyms("search", "r"), true);
 		setContainsMulti(expected3, "getAllSynonyms", "search", "r",5);
-		
+
 		String[] expected4 = {};
 		println(w.getAllSynonyms("search", "a"), true);
 		setContainsMulti(expected4, "getAllSynonyms", "search", "a",9);
-		
+
 		String[] expected5 = {"contented","euphoric","joyous","elated","cheerful","laughing","felicitous","content","fortunate","willing","golden","glad","halcyon","bright","blissful","joyful","blessed","riant","prosperous","well-chosen", };
 		println(w.getAllSynonyms("happy", "a"), true);
 		setContainsMulti(expected5, "getAllSynonyms", "happy", "a",1);
-		
+
 		String[] expected6 = { };
 		println(w.getAllSynonyms("happyyyyyyyy", "a"), true);
 		setContainsMulti(expected6, "getAllSynonyms", "happyyyyyyyy", "a",4);
-		
+
 		try{
 			println(w.getAllSynonyms("search", "j",6), true);
 			equal(1,2);
@@ -199,7 +199,7 @@ public class RiWordNetTest
 		catch(Exception e){
 			ok(e);
 		}
-		
+
 		try{
 			println(w.getAllSynonyms("search", "v",-1), true);
 			equal(1,2);
@@ -207,7 +207,7 @@ public class RiWordNetTest
 		catch(Exception e){
 			ok(e);
 		}
-		
+
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////
@@ -241,10 +241,10 @@ public class RiWordNetTest
 		ok(!w.exists(""));
 		ok(!w.exists("||"));
 		ok(!w.exists("!@#$%^&*("));
-		
+
 		w.ignoreCompoundWords(true);
 		w.ignoreUpperCaseWords(true);
-		
+
 		ok(!w.exists("healthXXX"));
 		ok(w.exists("health"));
 
@@ -260,7 +260,7 @@ public class RiWordNetTest
 		ok(!w.exists(""));
 		ok(!w.exists("||"));
 		ok(!w.exists("!@#$%^&*("));
-		
+
 	}
 
 	@Test
@@ -273,30 +273,30 @@ public class RiWordNetTest
 		int[] expected = { 92124272, 910172934, 99919605, 93614083, 92989061, 92986962, 92130460, 9903174 };
 		int[] result = w.getSenseIds("cat", "n");
 		deepEqual(expected, result);
-		
+
 		int[] expected1 = { 913367788 };
 		int[] result1 = w.getSenseIds("health insurance", "n");
-//		println(result1);
+		//		println(result1);
 		deepEqual(expected1, result1);
-		
+
 		int[] expected13 = { 81414524, 876153};
 		int[] result13 = w.getSenseIds("cat", "v");
-//		println(result13);
+		//		println(result13);
 		deepEqual(expected13, result13);
-		
+
 		int[] expected3 = {  };
 		int[] result3 = w.getSenseIds("health insurance", "v");
-//		println(result3);
+		//		println(result3);
 		deepEqual(expected3, result3);
-		
+
 		int[] expected4 = {  };
 		int[] result4 = w.getSenseIds("health insurance", "a");
-//		println(result4);
+		//		println(result4);
 		deepEqual(expected3, result4);
-		
+
 		int[] expected5 = {  };
 		int[] result5 = w.getSenseIds("health insurance", "r");
-//		println(result5);
+		//		println(result5);
 		deepEqual(expected5, result5);
 
 		int[] expected2 = { };
@@ -310,10 +310,10 @@ public class RiWordNetTest
 		catch(Exception e){
 			ok(e);
 		}
-		
+
 		w.ignoreCompoundWords(true);
 		w.ignoreUpperCaseWords(true);
-		
+
 		int[] expected6 = { 92124272, 910172934, 99919605, 93614083, 92989061, 92986962, 92130460, 9903174 };
 		int[] result6 = w.getSenseIds("cat", "n");
 		deepEqual(expected6, result6);
@@ -321,25 +321,25 @@ public class RiWordNetTest
 		int[] expected7 = { 913367788 };
 		int[] result7 = w.getSenseIds("health insurance", "n");
 		deepEqual(expected7, result7);
-		
+
 		int[] expected12 = { 81414524, 876153};
 		int[] result12 = w.getSenseIds("cat", "v");
-//		println(result12);
+		//		println(result12);
 		deepEqual(expected12, result12);
 
 		int[] expected9 = {  };
 		int[] result9 = w.getSenseIds("health insurance", "v");
-//		println(result9);
+		//		println(result9);
 		deepEqual(expected9, result9);
-		
+
 		int[] expected10 = {  };
 		int[] result10 = w.getSenseIds("health insurance", "a");
-//		println(result10);
+		//		println(result10);
 		deepEqual(expected10, result10);
-		
+
 		int[] expected11 = {  };
 		int[] result11 = w.getSenseIds("health insurance", "r");
-//		println(result11);
+		//		println(result11);
 		deepEqual(expected11, result11);
 
 		int[] expected8 = { };
@@ -373,10 +373,10 @@ public class RiWordNetTest
 
 		String[] expected7 = {"grow" };
 		setEqualMulti(expected7,"getHypernyms","root","v");
-		
+
 		String[] expected8 = {};
 		setEqualMulti(expected8,"getHypernyms","root","r");
-		
+
 		String[] expected9 = {};
 		setEqualMulti(expected9,"getHypernyms","root","a");
 
@@ -450,26 +450,26 @@ public class RiWordNetTest
 
 		String[] expected4 = {};
 		setEqualMulti(expected4,"getContains","kitxx","n");
-		
+
 		String[] expected5 = { "expostulate", "postpose", "apostatize", "compost", "postdate", "apostrophise", "apostatise", "apostrophize", "signpost", "postmark", "postulate", "hypostatize", "riposte", "postpone", "change posture", "hypostatise", "posture" };
 		setEqualMulti(expected5,"getContains","post","v");
 		//printArr(w.getContains("post","v"));
-		
+
 		String[] expected7 = {};
 		setEqualMulti(expected7,"getContains","brutally","r");
-//		printArr(w.getContains("brutally","r"));
-		
-		
+		//		printArr(w.getContains("brutally","r"));
+
+
 		String[] expected6 = { "indefinite" };;
 		setEqualMulti(expected6,"getContains","definite","a");
-//		printArr(w.getContains("definite","a"));
-		
+		//		printArr(w.getContains("definite","a"));
+
 		setEqualMulti(expected6,"getContains","Definite","a");
-		
+
 		setEqualMulti(expected6,"getContains","DefIniTe","a");
 
 		setEqualMulti(expected6,"getContains","definite ","a");
-		
+
 		setEqualMulti(expected6,"getContains"," definite","a");
 
 		setEqualMulti(expected6,"getContains"," definite ","a");
@@ -624,7 +624,7 @@ public class RiWordNetTest
 		String[] expected = { "wearing", "weary willie", "weariness", "wearing away", "wearer", "wearable", "wearing apparel", "wear and tear" };
 		//printArr(w.getStartsWith("wear", "n"));
 		setEqualMulti(expected, "getStartsWith","wear","n");
-		
+
 		String[] expected2 = { "young girl", "yolk", "young turk", "yob", "yosemite falls", "yogi", "yottabyte", "young man", "youthfulness", "yogacara", "yo-yo", "yosemite", "yobibyte", "youth", "youth subculture", "young carnivore", "yobo", "yoko ono", "yodeling", "yobibit", "young fish", "yorkshire pudding", "yowl", "yorktown", "yogurt", "youth movement", "yore", "yobbo", "york", "young buck", "youngstown", "yottabit", "youngness", "yorkshire fog", "yogi berra", "youngster", "yodel", "yokel", "youth culture", "young mammal", "yoke", "yom kippur war", "young lady", "youth-on-age", "yoghourt", "younker", "young person", "yorkshire", "yodh", "young woman", "yokohama", "yoruba", "yolk sac", "youth gang", "you-drive", "yom kippur", "young", "yosemite toad", "yoga", "yoghurt", "youth hostel", "yosemite national park", "yodeller", "young bird", "young's modulus", "yokuts", "youth crusade", "yorkshire terrier" };
 		//printArr(w.getStartsWith("yo", "n"));
 		setEqualMulti(expected2, "getStartsWith","yo","n");
@@ -803,27 +803,27 @@ public class RiWordNetTest
 	public void testGetSoundsLikeStringString()
 	{
 		String[] expected = { "tubful", "tipple", "tiepolo", "t-bill", "tableau", "tabbouleh", "tea ball", "tube well", "tepal", "tivoli", "tubule", "tuvalu", "tabooli", "tupelo" };
-//		printArr(w.getSoundsLike("table", "n"));
+		//		printArr(w.getSoundsLike("table", "n"));
 		setEqualMulti(expected,"getSoundsLike","table","n");
 
 		String[] expected2 ={ "pep", "pop", "pib", "pappa", "phobia", "pup", "pave", "pob", "pawpaw", "peba", "pupa", "papaya", "peavy", "poof", "peeve", "pub", "paba", "payoff", "papaia", "piaf", "puff", "pipe", "pope", "piaffe", "pouf", "poove", "pouffe", "poop", "poppy", "peep", "papua", "pap", "pooh-bah", "papaw", "pip", "papio", "pipa", "pavo", "peavey", "papa", "phoebe" };
-//		printArr(w.getSoundsLike("puppy", "n"));
+		//		printArr(w.getSoundsLike("puppy", "n"));
 		setEqualMulti(expected2,"getSoundsLike","puppy","n");
 
 		String[] expected3 ={ "peeve", "peep", "pave", "pooh-pooh", "pay up", "pipe", "pip", "pee-pee", "pay off", "pop", "puff", "pup" };
-//		printArr(w.getSoundsLike("puppy", "v"));
+		//		printArr(w.getSoundsLike("puppy", "v"));
 		setEqualMulti(expected3,"getSoundsLike","puppy","v");
 
 		String[] expected5 = { "peppy", "puffy", "pop", "puff" };
-//		printArr(w.getSoundsLike("puppy", "a"));
+		//		printArr(w.getSoundsLike("puppy", "a"));
 		setEqualMulti(expected5,"getSoundsLike","puppy","a");
 
 		String[] expected6 = { "pop" };
-//		printArr(w.getSoundsLike("puppy", "r"));
+		//		printArr(w.getSoundsLike("puppy", "r"));
 		setEqualMulti(expected6,"getSoundsLike","puppy","r");
 
 		String[] expected7 = { };
-//		printArr(w.getSoundsLike("dacszff", "r"));
+		//		printArr(w.getSoundsLike("dacszff", "r"));
 		setEqualMulti(expected7,"getSoundsLike","dacszff","r");
 
 		try{
@@ -836,7 +836,7 @@ public class RiWordNetTest
 	}
 
 	@Test
-	public void testGetWildcardMatchStringStringInt()
+	public void testGetWildcardMatchStringStringInt() //TODO more tests 	w.ignoreCompoundWords() cases
 	{
 		String[] expected = { "tale", "tile"};
 		String[] result = w.getWildcardMatch("t?le", "n", 2); // single-letter
@@ -856,19 +856,56 @@ public class RiWordNetTest
 	public void testGetWildcardMatchStringString()
 	{
 		String[] expected = { "tale", "tile", "tole"};
-		String[] result = w.getWildcardMatch("t?le", "n"); // single-letter
-		setEqual(expected, result);
+		//printArr(w.getWildcardMatch("t?le", "n")); // single-letter
+		setEqualMulti(expected,"getWildcardMatch","t?le", "n");
 
-		String[] expected2 = { "teasdale", "teakettle", "teasle"};  
-		String[] result2 = w.getWildcardMatch("tea*le", "n"); // multiple-letter
-		//println(result2);
-		setEqual(expected2, result2);
+		String[] expected2 = { "teasle", "tea table", "teakettle", "teasdale" }; 
+		//printArr(w.getWildcardMatch("tea*le", "n")); // multiple-letter
+		setEqualMulti(expected2,"getWildcardMatch","tea*le", "n");
 
-		//TODO
+		String[] expected3 = { "din", "min", "win", "yin", "fin", "kin", "sin", "pin", "gin", "tin", "qin", "bin", "lin", "hin" };
+		//printArr(w.getWildcardMatch("?in", "n")); // single-letter
+		setEqualMulti(expected3,"getWildcardMatch","?in", "n");
+
+		String[] expected4 = { "safekeeping", "weather stripping", "stripping", "whipping", "scraping", "gulping", "strip cropping", "keeping", "beekeeping", "minesweeping", "landscaping", "table tipping", "shipping", "outcropping", "stovepiping", "griping", "showjumping", "blood typing", "double stopping", "limping", "cross-country jumping", "camping", "shopping", "overlapping", "dumping", "helping", "press clipping", "clopping", "looping", "stadium jumping", "chipping", "carping", "tapping", "tissue typing", "timekeeping", "piping", "coping", "stopping", "mapping", "leaping", "table rapping", "trapping", "double dipping", "trumping", "equipping", "peiping", "jumping", "hand clapping", "sleeping", "mopping", "thumping", "sweeping", "developing", "flapping", "snipping", "primping", "warping", "taping", "roping", "grouping", "weeping", "shaping", "yelping", "clapping", "pole jumping", "burping", "kidnapping", "bookkeeping", "teng hsiaoping", "ski jumping", "typing", "newspaper clipping", "wrapping", "peacekeeping", "creeping", "dripping", "calf roping", "rasping", "gift wrapping", "deng xiaoping", "grasping", "lapping", "chomping", "steer roping", "gossiping", "chromosome mapping", "supping", "single-entry bookkeeping", "double-entry bookkeeping", "horsewhipping", "weatherstripping", "table tapping", "cupping", "clipping", "teng hsiao-ping", "name-dropping", "stumping", "spirit rapping", "striping", "blacktopping", "touch typing", "topping", "housekeeping", "clumping", "popping", "walloping" };  
+		//		printArr(w.getWildcardMatch("*ping", "n")); // multiple-letter
+		setEqualMulti(expected4,"getWildcardMatch","*ping", "n");
+
+		String[] expected5 = { "din", "fin", "sin", "bin", "pin", "gin", "tin", "win" };
+		//		printArr(w.getWildcardMatch("?in", "v")); // single-letter
+		setEqualMulti(expected5,"getWildcardMatch","?in", "v");
+
+		String[] expected6 = {  };
+		//		printArr(w.getWildcardMatch("*ping", "v")); // multiple-letter
+		setEqualMulti(expected6,"getWildcardMatch","*ping", "v");
+
+		String[] expected7 = { "kin", "ain" };
+		//		printArr(w.getWildcardMatch("?in", "a")); // single-letter
+		setEqualMulti(expected7,"getWildcardMatch","?in", "a");
+
+		String[] expected8 = { "sweeping", "tripping", "thumping", "slipping", "dropping", "drooping", "high-stepping", "rasping", "sloping", "ripping", "whopping", "topping", "walloping", "unsleeping", "outward-developing", "grasping", "napping", "eye-popping", "gaping", "weeping", "enveloping", "groping", "nontelescoping", "developing", "shaping", "sleeping", "gripping", "plumping", "out or keeping", "strapping", "inward-developing", "peacekeeping", "downward-sloping", "whipping", "seeping", "nipping", "stooping" }; 
+		//		printArr(w.getWildcardMatch("*ping", "a")); // multiple-letter
+		setEqualMulti(expected8,"getWildcardMatch","*ping", "a");
+
+		String[] expected9 = {};
+		//		printArr(w.getWildcardMatch("?in", "r")); // single-letter
+		setEqualMulti(expected9,"getWildcardMatch","?in", "r");
+
+		String[] expected10 = { "dripping", "whopping", "piping", "sopping" };
+		//		printArr(w.getWildcardMatch("*ping", "r")); // multiple-letter
+		setEqualMulti(expected10,"getWildcardMatch","*ping", "r");
+
+		try{
+			String[] result = w.getWildcardMatch("*ping", "j");
+			equal(1,2);
+		}catch(Exception e){
+			ok(e);
+		}
+
 	}
 
 	@Test
-	public void testFilterIntStringStringInt()
+	public void testFilterIntStringStringInt()//TODO more tests 	w.ignoreCompoundWords() cases
 	{
 		String[] expected10 = { "tablet" };
 		String[] result10 = w.filter(RiWordNet.WILDCARD_MATCH, "table?", "n", 3);
@@ -944,55 +981,44 @@ public class RiWordNetTest
 	@Test
 	public void testFilterIntStringString()
 	{
-		/*String[] expected = { "tabbouleh", "tableau", "tabooli", "tepal", "tiepolo", "tipple", "tivoli", "tubful", "tubule", "tupelo", "tuvalu" };
-		String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n");
-		//println(result);
-		setEqual(expected, result);
-		 */
-		//setEqualMulti
-		//		setEqual(expected14, result14);
 
+		w.ignoreCompoundWords(false);
+		w.ignoreUpperCaseWords(false);
 
 		String[] expected10 = { "tablet" };
 		String[] result10 = w.filter(RiWordNet.WILDCARD_MATCH, "table?", "n");
 		//printArr(result10);
 		setEqual(expected10, result10);
 
-
 		String[] expected11 = { "table lifting", "constable", "eatable", "inevitable accident", "work table", "vegetable garden", "pool table", "julienne vegetable", "comfortableness", "cruciferous vegetable", "abatable nuisance", "table turning", "solanaceous vegetable", "uncomfortableness", "profitableness", "drawing table", "coffee table", "roundtable", "table salt", "lord's table", "acceptableness", "table-tennis table", "stable gear", "ping-pong table", "water table", "pier table", "stable companion", "inflatable cushion", "console table", "gateleg table", "actuarial table", "tablet-armed chair", "king arthur's round table", "vegetable marrow", "leafy vegetable", "root vegetable", "trestle table", "toilet table", "table mustard", "memorial tablet", "knight of the round table", "livery stable", "timetable", "vegetable sheep", "training table", "portable saw", "portable", "tablefork", "relocatable program", "plane table", "disreputableness", "card table", "charitableness", "raw vegetable", "tableau vivant", "parsons table", "tea table", "sleeping tablet", "vegetable wax", "potable", "vegetable oyster", "table linen", "table of contents", "unsuitableness", "snooker table", "drafting table", "notable", "mutableness", "coffee-table book", "inhospitableness", "conference table", "billiard table", "pedestal table", "italian vegetable marrow", "inevitable", "police constable", "vegetable sponge", "table-tennis bat", "table talk", "kitchen table", "augean stables", "adjustable wrench", "habitableness", "graduated table", "vegetable oil", "unacceptableness", "vegetable patch", "table d'hote", "tablet", "suitableness", "tip table", "collectable", "john constable", "pin table", "table knife", "mortality table", "dressing table", "intractableness", "round-table conference", "pingpong table", "chief constable", "communion table", "tablespoonful", "permutableness", "disreputable person", "tableau", "refectory table", "stablemate", "vegetable soup", "table game", "periodic table", "turntable", "immutableness", "file allocation table", "irritable bowel syndrome", "tableware", "ratables", "excitable area", "table service", "unprofitableness", "adjustable spanner", "stableman", "table napkin", "correlation table", "tablecloth", "operating table", "vegetable silk", "dining-room table", "unpalatableness", "stableness", "table wine", "table-mountain pine", "portable computer", "tip-top table", "tablemate", "cocktail table", "breakfast table", "japanese table pine", "dinner table", "drop-leaf table", "portable circular saw", "vegetable hummingbird", "stable", "table tapping", "stable factor", "council table", "tablespoon", "palatableness", "excitableness", "tilt-top table", "gaming table", "high table", "table-tennis racquet", "vegetable tallow", "worktable", "decision table", "table rapping", "hospitableness", "vegetable ivory", "stableboy", "table tipping", "table tennis", "tabletop", "inevitableness", "dining table", "vegetable", "writing table", "table tilting", "charitable trust", "unstableness", "round table", "vegetable matter", "statistical table", "table lamp", "tractableness", "tableland", "table mat", "table saw" };
 		String[] result11 = w.filter(RiWordNet.WILDCARD_MATCH, "*table*", "n");
 		//printArr(result11);
 		setEqual(expected11, result11);
 
-		w.ignoreCompoundWords(true);
-		String[] expected15 = { "tablespoon", "potable", "inevitable", "suitableness", "constable", "charitableness", "collectable", "worktable", "unstableness", "stableboy", "tablemate", "inhospitableness", "inevitableness", "tableau", "tractableness", "intractableness", "comfortableness", "stable", "hospitableness", "unprofitableness", "tableware", "excitableness", "eatable", "roundtable", "tablefork", "turntable", "immutableness", "stableman", "unpalatableness", "stablemate", "timetable", "stableness", "unsuitableness", "tablespoonful", "tabletop", "vegetable", "habitableness", "tableland", "notable", "mutableness", "permutableness", "palatableness", "acceptableness", "tablecloth", "tablet", "disreputableness", "portable", "ratables", "unacceptableness", "profitableness", "uncomfortableness" };
+		String[] expected15 = { "drawing table", "stableman", "training table", "table game", "constable", "table lifting", "gaming table", "augean stables", "table tilting", "high table", "ping-pong table", "raw vegetable", "disreputableness", "dining table", "hospitableness", "adjustable spanner", "vegetable tallow", "worktable", "communion table", "charitableness", "table linen", "table of contents", "leafy vegetable", "portable computer", "tip table", "table-tennis bat", "root vegetable", "suitableness", "vegetable soup", "vegetable silk", "periodic table", "table service", "table turning", "stable", "vegetable", "police constable", "table tapping", "immutableness", "drafting table", "irritable bowel syndrome", "council table", "decision table", "table tennis", "uncomfortableness", "tableau", "graduated table", "tablefork", "tip-top table", "lord's table", "adjustable wrench", "inevitable accident", "palatableness", "potable", "vegetable sponge", "tilt-top table", "julienne vegetable", "table lamp", "tabletop", "round table", "breakfast table", "correlation table", "tea table", "stablemate", "tableware", "king arthur's round table", "charitable trust", "roundtable", "relocatable program", "pingpong table", "vegetable wax", "table mustard", "coffee-table book", "vegetable oyster", "vegetable hummingbird", "tableau vivant", "sleeping tablet", "statistical table", "profitableness", "collectable", "round-table conference", "mortality table", "coffee table", "permutableness", "pin table", "operating table", "stable companion", "portable", "eatable", "vegetable ivory", "gateleg table", "snooker table", "tablespoonful", "unacceptableness", "inflatable cushion", "cruciferous vegetable", "vegetable matter", "inhospitableness", "stable gear", "table-tennis table", "drop-leaf table", "knight of the round table", "refectory table", "plane table", "tablet", "table tipping", "intractableness", "unsuitableness", "vegetable oil", "table wine", "table-tennis racquet", "table saw", "dining-room table", "file allocation table", "tableland", "cocktail table", "trestle table", "tablemate", "portable circular saw", "stable factor", "actuarial table", "acceptableness", "writing table", "table napkin", "chief constable", "disreputable person", "vegetable patch", "mutableness", "toilet table", "tablet-armed chair", "portable saw", "tablespoon", "habitableness", "solanaceous vegetable", "excitable area", "table knife", "excitableness", "vegetable sheep", "vegetable marrow", "water table", "dinner table", "kitchen table", "work table", "japanese table pine", "table d'hote", "pedestal table", "unprofitableness", "stableness", "comfortableness", "dressing table", "conference table", "card table", "turntable", "table talk", "table rapping", "abatable nuisance", "stableboy", "pier table", "unpalatableness", "parsons table", "vegetable garden", "italian vegetable marrow", "table-mountain pine", "inevitable", "timetable", "tablecloth", "table salt", "pool table", "unstableness", "billiard table", "john constable", "inevitableness", "livery stable", "ratables", "console table", "tractableness", "notable", "memorial tablet", "table mat" };
 		String[] result15 = w.filter(RiWordNet.WILDCARD_MATCH, "*table*", "n");
 		//printArr(result15);
 		setEqual(expected15, result15);
 
-		String[] expected = { "tuvalu", "tabooli", "tableau", "tepal", "tivoli", "tubule", "tipple", "tupelo", "tiepolo", "tabbouleh", "t-bill", "tubful" };
+		String[] expected = { "tube well", "tubful", "tubule", "tea ball", "tipple", "tabbouleh", "tupelo", "t-bill", "tableau", "tabooli", "tivoli", "tiepolo", "tuvalu", "tepal" };
 		String[] result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n");
-		//printArr(result);
+		//		printArr(result);
 		setEqual(expected, result);
 
-
-		String[] expected2 = { "tabletop", "tablecloth", "tablemate", "tablefork", "tablet", "tablespoonful", "tableau", "tableland", "tableware", "tablespoon" };
+		String[] expected2 = { "table wine", "tableland", "table linen", "tableware", "table mat", "tablet", "table-tennis racquet", "table talk", "table-tennis table", "tablespoon", "table-mountain pine", "table knife", "table game", "table mustard", "tablecloth", "table salt", "table lamp", "table napkin", "table-tennis bat", "table d'hote", "tableau vivant", "table turning", "table saw", "tabletop", "tablet-armed chair", "table tilting", "table service", "tablespoonful", "table tennis", "table rapping", "table lifting", "tablemate", "tablefork", "table of contents", "table tipping", "table tapping", "tableau" };
 		String[] result2 = w.filter(RiWordNet.STARTS_WITH, "table", "n");
-		//printArr(result2);
+		//		printArr(result2);
 		setEqual(expected2, result2);
-
 
 		String[] expected3 = { "bleat" };
 		String[] result3 = w.filter(RiWordNet.ANAGRAMS, "table", "n");
-		//printArr(result3);
+		//		printArr(result3);
 		setEqual(expected3, result3);
 
-
-		String[] expected4 = { "unsuitableness", "disreputableness", "tableau", "inevitableness", "notable", "portable", "palatableness", "habitableness", "mutableness", "collectable", "tableware", "roundtable", "acceptableness", "hospitableness", "tableland", "tractableness", "inevitable", "tablemate", "worktable", "tablecloth", "constable", "suitableness", "tablespoon", "stableness", "tablet", "inhospitableness", "uncomfortableness", "timetable", "potable", "ratables", "unprofitableness", "stableboy", "turntable", "intractableness", "stableman", "tabletop", "stablemate", "profitableness", "comfortableness", "tablefork", "charitableness", "stable", "unacceptableness", "unstableness", "unpalatableness", "eatable", "tablespoonful", "permutableness", "immutableness", "vegetable", "excitableness" };
+		String[] expected4 = { "adjustable wrench", "round-table conference", "conference table", "periodic table", "coffee-table book", "table rapping", "trestle table", "portable", "turntable", "writing table", "vegetable matter", "stable companion", "adjustable spanner", "plane table", "table service", "vegetable wax", "charitable trust", "pin table", "dining-room table", "intractableness", "training table", "chief constable", "memorial tablet", "dressing table", "portable saw", "tablefork", "tablespoonful", "japanese table pine", "potable", "vegetable sponge", "worktable", "stable gear", "table of contents", "julienne vegetable", "tablecloth", "table-mountain pine", "knight of the round table", "vegetable tallow", "billiard table", "stable factor", "immutableness", "drawing table", "leafy vegetable", "hospitableness", "stablemate", "water table", "sleeping tablet", "king arthur's round table", "inhospitableness", "round table", "graduated table", "augean stables", "mortality table", "table-tennis table", "constable", "table mat", "work table", "solanaceous vegetable", "unstableness", "pool table", "decision table", "tablespoon", "pingpong table", "kitchen table", "table saw", "excitableness", "card table", "actuarial table", "table turning", "stable", "dining table", "unprofitableness", "operating table", "profitableness", "inflatable cushion", "permutableness", "roundtable", "pedestal table", "table tilting", "john constable", "table mustard", "tableland", "dinner table", "disreputable person", "communion table", "inevitableness", "high table", "table salt", "unpalatableness", "mutableness", "drafting table", "vegetable", "tip table", "tea table", "vegetable hummingbird", "eatable", "table d'hote", "cruciferous vegetable", "notable", "ping-pong table", "tablemate", "table talk", "vegetable marrow", "vegetable ivory", "parsons table", "habitableness", "drop-leaf table", "vegetable patch", "irritable bowel syndrome", "table game", "table linen", "vegetable sheep", "table-tennis racquet", "unsuitableness", "vegetable oyster", "tip-top table", "tablet-armed chair", "breakfast table", "suitableness", "refectory table", "table wine", "vegetable oil", "portable circular saw", "tableware", "uncomfortableness", "vegetable soup", "file allocation table", "timetable", "cocktail table", "tableau vivant", "table tipping", "tilt-top table", "coffee table", "collectable", "inevitable", "lord's table", "excitable area", "pier table", "console table", "table napkin", "relocatable program", "snooker table", "tablet", "police constable", "stableman", "root vegetable", "statistical table", "acceptableness", "gaming table", "stableness", "raw vegetable", "unacceptableness", "inevitable accident", "ratables", "disreputableness", "tractableness", "livery stable", "tabletop", "vegetable silk", "portable computer", "abatable nuisance", "comfortableness", "palatableness", "italian vegetable marrow", "table tapping", "charitableness", "toilet table", "council table", "correlation table", "stableboy", "table lifting", "table lamp", "table knife", "vegetable garden", "tableau", "table-tennis bat", "table tennis", "gateleg table" };
 		String[] result4 = w.filter(RiWordNet.CONTAINS, "table", "n");
-		//printArr(result4);
+		//		printArr(result4);
 		setEqual(expected4, result4);
-
 
 		String[] expected5 = {};
 		String[] result5 = w.filter(RiWordNet.CONTAINS, "tableauu", "n");
@@ -1004,24 +1030,24 @@ public class RiWordNetTest
 		//printArr(result6);
 		setEqual(expected6, result6);
 
-		String[] expected8 = { "stable", "notable", "turntable", "potable", "table", "roundtable", "constable", "portable", "eatable", "worktable", "inevitable", "collectable", "vegetable", "timetable" };
+		String[] expected8 = { "constable", "dinner table", "chief constable", "john constable", "notable", "breakfast table", "tip table", "parsons table", "trestle table", "drafting table", "council table", "plane table", "coffee table", "portable", "lord's table", "card table", "turntable", "raw vegetable", "file allocation table", "writing table", "cruciferous vegetable", "conference table", "work table", "communion table", "table", "dressing table", "tea table", "roundtable", "root vegetable", "pin table", "toilet table", "timetable", "cocktail table", "collectable", "periodic table", "knight of the round table", "kitchen table", "police constable", "pier table", "correlation table", "gateleg table", "dining table", "solanaceous vegetable", "graduated table", "training table", "dining-room table", "tilt-top table", "round table", "pool table", "gaming table", "operating table", "console table", "king arthur's round table", "billiard table", "decision table", "eatable", "table-tennis table", "leafy vegetable", "refectory table", "snooker table", "ping-pong table", "livery stable", "pingpong table", "water table", "statistical table", "julienne vegetable", "tip-top table", "vegetable", "actuarial table", "mortality table", "high table", "pedestal table", "inevitable", "worktable", "drop-leaf table", "drawing table", "potable", "stable" };
 		String[] result8 = w.filter(RiWordNet.REGEX_MATCH, ".*table", "n");
-		//printArr(result8);
+		//		printArr(result8);
 		setEqual(expected8, result8);
 
-		String[] expected9 ={ "vegetable", "conductance", "comestible", "constable", "collectivism", "reflectance", "connective", "colette", "collapse", "telltale", "college", "collotype", "clientele", "eatable", "portable", "mollycoddle", "volleyball", "collage", "conjecture", "follicle", "sociable", "collectible", "worktable", "notable", "collet", "collect", "collembola", "vocable", "collywobbles", "roundtable", "molecule", "combustible", "collocalia", "collectivist", "collecting", "collective", "collegian", "syllable", "decolletage", "folktale", "colpocele", "corrective", "potable", "clientage", "collector", "collection", "timetable", "colleague", "conventicle", "spectacle", "convertible" };
+		String[] expected9 ={ "volleyball", "clientele", "comestible", "convertible", "collage", "cape sable", "corbie gable", "eatable", "folk tale", "clientage", "coffee table", "colpocele", "plane table", "roundtable", "folktale", "pool table", "college", "vocable", "conventicle", "conjecture", "colleague", "collembola", "work table", "college boy", "telltale", "console table", "collectivism", "portable", "collocalia", "vegetable", "collect call", "pollen tube", "follicle", "tall tale", "collywobbles", "mollycoddle", "notable", "syllable", "collect", "conductance", "decolletage", "reflectance", "toll call", "collet", "corrective", "collecting", "colette", "round table", "collectible", "collegian", "connective", "potable", "collapse", "color tube", "combustible", "coax cable", "toilet table", "sociable", "spectacle", "collectivist", "collotype", "collective", "collector", "roll call", "molecule", "collection", "timetable", "bell gable", "constable", "worktable", "card table" };
 		String[] result9 = w.filter(RiWordNet.SIMILAR_TO, "collectable", "n");
-		//printArr(result9);
+		//		printArr(result9);
 		setEqual(expected9, result9);
 
-		String[] expected12 = { };
+		String[] expected12 = {  };
 		String[] result12 = w.filter(RiWordNet.CONTAINS, "nahsuchword", "n");
-		//printArr(result12);
+		//		printArr(result12);
 		setEqual(expected12, result12);
 
-		String[] expected14 = { "notable", "intractableness", "charitableness", "tableland", "disreputableness", "immutableness", "excitableness", "timetable", "mutableness", "stablemate", "stableness", "palatableness", "collectable", "permutableness", "tablespoon", "stableboy", "tablemate", "inevitable", "stableman", "uncomfortableness", "unacceptableness", "tablefork", "tableware", "acceptableness", "unpalatableness", "stable", "turntable", "portable", "inevitableness", "tablecloth", "constable", "worktable", "comfortableness", "tractableness", "profitableness", "tablet", "suitableness", "unprofitableness", "unstableness", "tablespoonful", "vegetable", "hospitableness", "unsuitableness", "potable", "ratables", "roundtable", "tableau", "habitableness", "inhospitableness", "eatable", "tabletop" };
+		String[] expected14 = { "table rapping", "habitableness", "unstableness", "work table", "stableman", "tractableness", "tablespoon", "timetable", "table salt", "excitableness", "table mustard", "intractableness", "pingpong table", "drop-leaf table", "disreputable person", "table tilting", "vegetable matter", "pier table", "japanese table pine", "vegetable marrow", "portable saw", "graduated table", "table-tennis bat", "vegetable oyster", "breakfast table", "suitableness", "ratables", "drafting table", "periodic table", "correlation table", "sleeping tablet", "constable", "augean stables", "table-tennis racquet", "palatableness", "abatable nuisance", "actuarial table", "tableau", "tip table", "console table", "operating table", "unprofitableness", "round table", "table talk", "vegetable sponge", "disreputableness", "toilet table", "adjustable spanner", "plane table", "drawing table", "pool table", "billiard table", "inhospitableness", "notable", "irritable bowel syndrome", "vegetable soup", "table turning", "inevitable accident", "stable factor", "lord's table", "trestle table", "solanaceous vegetable", "coffee table", "portable", "tip-top table", "dinner table", "tablecloth", "unsuitableness", "writing table", "vegetable oil", "portable computer", "knight of the round table", "kitchen table", "stable", "council table", "tablemate", "tea table", "tableland", "tableware", "vegetable wax", "vegetable", "parsons table", "table saw", "gateleg table", "worktable", "vegetable sheep", "high table", "stable gear", "table linen", "turntable", "tablet-armed chair", "water table", "table d'hote", "table lamp", "dining table", "immutableness", "gaming table", "table wine", "collectable", "comfortableness", "vegetable tallow", "vegetable garden", "leafy vegetable", "pedestal table", "italian vegetable marrow", "police constable", "portable circular saw", "hospitableness", "table napkin", "unpalatableness", "table service", "refectory table", "relocatable program", "table knife", "mutableness", "mortality table", "cocktail table", "round-table conference", "tilt-top table", "statistical table", "training table", "tabletop", "conference table", "table mat", "charitableness", "stable companion", "vegetable hummingbird", "king arthur's round table", "tablefork", "tableau vivant", "cruciferous vegetable", "memorial tablet", "communion table", "eatable", "stableboy", "card table", "inflatable cushion", "table tipping", "table-tennis table", "dining-room table", "julienne vegetable", "livery stable", "root vegetable", "table tennis", "table game", "potable", "vegetable silk", "pin table", "stablemate", "tablespoonful", "acceptableness", "john constable", "table of contents", "permutableness", "vegetable ivory", "snooker table", "ping-pong table", "raw vegetable", "roundtable", "charitable trust", "uncomfortableness", "coffee-table book", "unacceptableness", "adjustable wrench", "inevitable", "table lifting", "profitableness", "dressing table", "vegetable patch", "inevitableness", "excitable area", "tablet", "file allocation table", "table tapping", "chief constable", "decision table", "stableness", "table-mountain pine" };
 		String[] result14 = w.filter(RiWordNet.CONTAINS, "table", "n");
-		//printArr(result14);
+		//		printArr(result14);
 		setEqual(expected14, result14);
 
 		try{
@@ -1033,11 +1059,94 @@ public class RiWordNetTest
 			ok(e);
 		}
 
+
+		w.ignoreCompoundWords(true);
+		w.ignoreUpperCaseWords(true);
+
+		expected10 = new String[]{ "tablet" };
+		result10 = w.filter(RiWordNet.WILDCARD_MATCH, "table?", "n");
+		//printArr(result10);
+		setEqual(expected10, result10);
+
+		expected11 = new String[]{ "inevitable", "mutableness", "portable", "tablespoonful", "profitableness", "tableau", "potable", "tablespoon", "eatable", "tablefork", "tablemate", "disreputableness", "turntable", "unpalatableness", "stable", "uncomfortableness", "worktable", "tabletop", "immutableness", "acceptableness", "stableman", "constable", "unsuitableness", "hospitableness", "tablecloth", "roundtable", "stablemate", "tablet", "ratables", "timetable", "stableboy", "unacceptableness", "tableland", "unstableness", "tableware", "collectable", "suitableness", "notable", "unprofitableness", "stableness", "inhospitableness", "permutableness", "charitableness", "comfortableness", "intractableness", "habitableness", "inevitableness", "excitableness", "tractableness", "vegetable", "palatableness" };
+		result11 = w.filter(RiWordNet.WILDCARD_MATCH, "*table*", "n");
+		//		printArr(result11);
+		setEqual(expected11, result11);
+
+		expected15 = new String[]{ "vegetable", "acceptableness", "tablemate", "timetable", "potable", "portable", "permutableness", "stable", "worktable", "disreputableness", "tablespoon", "constable", "intractableness", "tablespoonful", "unpalatableness", "charitableness", "turntable", "excitableness", "tractableness", "unacceptableness", "inevitableness", "notable", "suitableness", "immutableness", "uncomfortableness", "habitableness", "hospitableness", "tableware", "unsuitableness", "tableland", "stableboy", "collectable", "stableman", "unstableness", "mutableness", "stableness", "profitableness", "unprofitableness", "tablet", "eatable", "comfortableness", "palatableness", "tablefork", "tablecloth", "stablemate", "inevitable", "ratables", "roundtable", "tabletop", "inhospitableness", "tableau" };
+		result15 = w.filter(RiWordNet.WILDCARD_MATCH, "*table*", "n");
+		//		printArr(result15);
+		setEqual(expected15, result15);
+
+		expected = new String[]{ "tubule", "tuvalu", "tabooli", "tiepolo", "tivoli", "t-bill", "tepal", "tipple", "tubful", "tabbouleh", "tableau", "tupelo" };
+		result = w.filter(RiWordNet.SOUNDS_LIKE, "table", "n");
+		//		printArr(result);
+		setEqual(expected, result);
+
+		expected2 = new String[]{ "tableware", "tableland", "tablemate", "tablespoon", "tableau", "tabletop", "tablecloth", "tablefork", "tablet", "tablespoonful" };
+		result2 = w.filter(RiWordNet.STARTS_WITH, "table", "n");
+		//		printArr(result2);
+		setEqual(expected2, result2);
+
+		expected3 = new String[]{ "bleat" };
+		result3 = w.filter(RiWordNet.ANAGRAMS, "table", "n");
+		//		printArr(result3);
+		setEqual(expected3, result3);
+
+		expected4 = new String[]{ "unstableness", "notable", "tablemate", "stableness", "tablespoonful", "tablespoon", "eatable", "timetable", "tractableness", "immutableness", "portable", "stablemate", "tabletop", "unprofitableness", "ratables", "inevitable", "tableau", "potable", "inevitableness", "hospitableness", "vegetable", "stableman", "tableland", "stableboy", "worktable", "stable", "tablet", "excitableness", "tablefork", "unpalatableness", "comfortableness", "unsuitableness", "intractableness", "habitableness", "uncomfortableness", "constable", "tableware", "turntable", "permutableness", "palatableness", "unacceptableness", "acceptableness", "mutableness", "tablecloth", "inhospitableness", "disreputableness", "profitableness", "suitableness", "charitableness", "collectable", "roundtable" };
+		result4 = w.filter(RiWordNet.CONTAINS, "table", "n");
+		//		printArr(result4);
+		setEqual(expected4, result4);
+
+		expected5 = new String[]{};
+		result5 = w.filter(RiWordNet.CONTAINS, "tableauu", "n");
+		//		printArr(result5);
+		setEqual(expected5, result5);
+
+		expected6 = new String[]{"collectable"};
+		result6 = w.filter(RiWordNet.ENDS_WITH, "ctable", "n");
+		//		printArr(result6);
+		setEqual(expected6, result6);
+
+		expected8 = new String[]{ "inevitable", "table", "potable", "stable", "eatable", "vegetable", "turntable", "constable", "notable", "portable", "collectable", "worktable", "timetable", "roundtable" };
+		result8 = w.filter(RiWordNet.REGEX_MATCH, ".*table", "n");
+		//		printArr(result8);
+		setEqual(expected8, result8);
+
+		expected9 = new String[]{ "collectible", "folktale", "syllable", "collecting", "colleague", "collage", "decolletage", "collective", "telltale", "reflectance", "collotype", "worktable", "follicle", "collapse", "eatable", "collembola", "constable", "colpocele", "colette", "collectivist", "portable", "clientele", "collector", "vocable", "combustible", "corrective", "connective", "conductance", "conventicle", "timetable", "collection", "clientage", "sociable", "conjecture", "volleyball", "spectacle", "collect", "molecule", "notable", "college", "potable", "convertible", "vegetable", "collectivism", "collywobbles", "collet", "collocalia", "comestible", "collegian", "roundtable", "mollycoddle" };
+		result9 = w.filter(RiWordNet.SIMILAR_TO, "collectable", "n");
+		//		printArr(result9);
+		setEqual(expected9, result9);
+
+		expected12 = new String[]{ };
+		result12 = w.filter(RiWordNet.CONTAINS, "nahsuchword", "n");
+		//		printArr(result12);
+		setEqual(expected12, result12);
+
+		expected14 = new String[]{ "tableau", "stableness", "unprofitableness", "stableboy", "habitableness", "stableman", "hospitableness", "charitableness", "unpalatableness", "tablemate", "tablecloth", "ratables", "suitableness", "stable", "inevitable", "collectable", "roundtable", "tableland", "mutableness", "constable", "tablefork", "worktable", "unacceptableness", "excitableness", "acceptableness", "intractableness", "potable", "eatable", "notable", "tableware", "unstableness", "immutableness", "comfortableness", "inhospitableness", "vegetable", "stablemate", "disreputableness", "tablet", "inevitableness", "portable", "uncomfortableness", "permutableness", "unsuitableness", "tablespoonful", "tabletop", "tractableness", "turntable", "tablespoon", "timetable", "palatableness", "profitableness" };
+		result14 = w.filter(RiWordNet.CONTAINS, "table", "n");
+		//		printArr(result14);
+		setEqual(expected14, result14);
+
+		try{
+			w.filter(RiWordNet.CONTAINS, "table", "e");
+			ok(false);
+		}
+		catch(Exception e)
+		{
+			ok(e);
+		}
+
+
 	}
 
 	@Test
 	public void testGetGlossStringString()
 	{
+
+		w.ignoreCompoundWords(true);
+		w.ignoreUpperCaseWords(true);
+
 		String expected = "impairment resulting from long use; "+'"'+"the tires showed uneven wear"+'"';
 		String result = w.getGloss("wear", "n");
 		//println(result);
@@ -1084,6 +1193,57 @@ public class RiWordNetTest
 		}
 
 
+		w.ignoreCompoundWords(false);
+		w.ignoreUpperCaseWords(false);
+
+		expected = "impairment resulting from long use; "+'"'+"the tires showed uneven wear"+'"';
+		result = w.getGloss("wear", "n");
+		//println(result);
+		assertEquals(expected, result);
+
+		expected2 = "a sign posted in a public place as an advertisement; "+'"'+"a poster advertised the coming attractions"+'"';
+		result2 = w.getGloss("poster", "n");
+		//println(result2);
+		assertEquals(expected2, result2);
+
+		expected3 = "affix in a public place or for public notice; "+'"'+"post a warning"+'"';
+		result3 = w.getGloss("post", "v");
+		//println(result3);
+		assertEquals(expected3, result3);
+
+		expected4 = null;
+		result4 = w.getGloss("post", "a");
+		//println(result4);
+		assertEquals(expected4, result4);
+
+		expected5 = null;
+		result5 = w.getGloss("post", "r");
+		//println(result5);
+		assertEquals(expected5, result5);
+
+
+		expected6 = "engagingly stimulating or provocative; "+'"'+"a piquant wit"+'"'+"; "+'"'+"salty language"+'"';
+		result6 = w.getGloss("salty", "a");
+		//println(result6);
+		assertEquals(expected6, result6);
+
+		expected7 = "with resolute determination; "+'"'+"we firmly believed it"+'"'+"; "+'"'+"you must stand firm"+'"';
+		result7 = w.getGloss("firmly", "r");
+		//println(result7);
+		assertEquals(expected7, result7);
+
+		try{
+			w.getGloss("post", "u");
+			ok(false);
+		}
+		catch(Exception e)
+		{
+			ok(e);
+		}
+
+
+
+
 	}
 
 	@Test
@@ -1100,23 +1260,23 @@ public class RiWordNetTest
 		String[] result = w.getAllGlosses("wear", "n");
 		//println(result,true);
 		setEqual(expected, result);
-		
+
 		String[] expected3 = { "feeling happy appreciation; \"glad of the fire's warmth\"","cheerful and bright; \"a beaming smile\"; \"a glad May morning\"","eagerly disposed to act or to be of service; \"glad to help\"","showing or causing joy and pleasure; especially made happy; \"glad you are here\"; \"glad that they succeeded\"; \"gave a glad shout\"; \"a glad smile\"; \"heard the glad news\"; \"a glad occasion\"", };
 		String[] result3 = w.getAllGlosses("glad", "a");
 		//println(result3,true);
 		setEqual(expected3, result3);
-		
+
 		String[] expected4 = { "cause to grow or develop; \"He grows vegetables in his backyard\"","come to have or undergo a change of (physical features and attributes); \"He grew a beard\"; \"The patient developed abdominal pains\"; \"I got funny spots all over my body\"; \"Well-developed breasts\"","pass into a condition gradually, take on a specific property or attribute; become; \"The weather turned nasty\"; \"She grew angry\"","cultivate by growing, often involving improvements by means of agricultural techniques; \"The Bordeaux region produces great red wines\"; \"They produce good ham in Parma\"; \"We grow wheat here\"; \"We raise hogs here\"","develop and reach maturity; undergo maturation; \"He matured fast\"; \"The child grew fast\"","become larger, greater, or bigger; expand or gain; \"The problem grew too large for me\"; \"Her business grew fast\"","come into existence; take on form or shape; \"A new religious movement originated in that country\"; \"a love that sprang up from friendship\"; \"the idea for the book grew out of a short story\"; \"An interesting phenomenon uprose\"","grow emotionally or mature; \"The child developed beautifully in her new kindergarten\"; \"When he spent a summer at camp, the boy grew noticeably and no longer showed some of his old adolescent behavior\"","become attached by or as if by the process of growth; \"The tree trunks had grown together\"","increase in size by natural process; \"Corn doesn't grow here\"; \"In these forests, mushrooms grow under the trees\"; \"her hair doesn't grow much anymore\"", };
 		String[] result4 = w.getAllGlosses("grow", "v");
 		//println(result4,true);
 		setEqual(expected4, result4);
-		
+
 		String[] expected12 = { };
 		String[] result12 = w.getAllGlosses("grow", "r");
 		println(result12,true);
 		setEqual(expected12, result12);
-		
-		
+
+
 		String[] expected11 = { };
 		String[] result11 = w.getAllGlosses("growwwwww", "v");
 		//println(result9,true);
@@ -1135,36 +1295,34 @@ public class RiWordNetTest
 		String[] result6 = w.getAllGlosses("wear", "n");
 		//println(result6,true);
 		setEqual(expected6, result6);
-		
+
 		String[] expected7 = { "feeling happy appreciation; \"glad of the fire's warmth\"","cheerful and bright; \"a beaming smile\"; \"a glad May morning\"","eagerly disposed to act or to be of service; \"glad to help\"","showing or causing joy and pleasure; especially made happy; \"glad you are here\"; \"glad that they succeeded\"; \"gave a glad shout\"; \"a glad smile\"; \"heard the glad news\"; \"a glad occasion\"", };
 		String[] result7 = w.getAllGlosses("glad", "a");
 		//println(result7,true);
 		setEqual(expected7, result7);
-		
+
 		String[] expected8 = { "cause to grow or develop; \"He grows vegetables in his backyard\"","come to have or undergo a change of (physical features and attributes); \"He grew a beard\"; \"The patient developed abdominal pains\"; \"I got funny spots all over my body\"; \"Well-developed breasts\"","pass into a condition gradually, take on a specific property or attribute; become; \"The weather turned nasty\"; \"She grew angry\"","cultivate by growing, often involving improvements by means of agricultural techniques; \"The Bordeaux region produces great red wines\"; \"They produce good ham in Parma\"; \"We grow wheat here\"; \"We raise hogs here\"","develop and reach maturity; undergo maturation; \"He matured fast\"; \"The child grew fast\"","become larger, greater, or bigger; expand or gain; \"The problem grew too large for me\"; \"Her business grew fast\"","come into existence; take on form or shape; \"A new religious movement originated in that country\"; \"a love that sprang up from friendship\"; \"the idea for the book grew out of a short story\"; \"An interesting phenomenon uprose\"","grow emotionally or mature; \"The child developed beautifully in her new kindergarten\"; \"When he spent a summer at camp, the boy grew noticeably and no longer showed some of his old adolescent behavior\"","become attached by or as if by the process of growth; \"The tree trunks had grown together\"","increase in size by natural process; \"Corn doesn't grow here\"; \"In these forests, mushrooms grow under the trees\"; \"her hair doesn't grow much anymore\"", };
 		String[] result8 = w.getAllGlosses("grow", "v");
 		//println(result8,true);
 		setEqual(expected8, result8);
-		
+
 		String[] expected9 = { };
 		String[] result9 = w.getAllGlosses("growwwwww", "v");
 		//println(result9,true);
 		setEqual(expected9, result9);
-		
-		
+
 		String[] expected13 = { };
 		String[] result13 = w.getAllGlosses("grow", "r");
-		println(result13,true);
+//		println(result13,true);
 		setEqual(expected13, result13);
-		
-	
+
 		try{
 			String[] result10 = w.getAllGlosses("grow", "j");
 		}
 		catch(Exception e){
 			ok(e);
 		}
-		
+
 		try{
 			String[] result14 = w.getAllGlosses("growwwwwww", "j");
 		}
@@ -1179,6 +1337,7 @@ public class RiWordNetTest
 	{
 		w.ignoreUpperCaseWords(false);
 		w.ignoreCompoundWords(false);
+		
 		String expected = "feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats";
 		String result = w.getGloss(92124272);
 		//println(result);
@@ -1194,21 +1353,31 @@ public class RiWordNetTest
 		//println(result3);
 		assertEquals(expected3, result3);
 
+		try{
+			String result7 = w.getGloss(123213123);
+			ok(false);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+
+		w.ignoreUpperCaseWords(true);
 		w.ignoreCompoundWords(true);
-		String expected4 = "feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats";
-		String result4 = w.getGloss(92124272);
+		
+		 expected = "feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats";
+		 result = w.getGloss(92124272);
 		//println(result);
-		assertEquals(expected4, result4);
+		assertEquals(expected, result);
 
-		String expected5 = "try to locate or discover, or try to establish the existence of; "+'"'+"The police are searching for clues"+'"'+"; "+'"'+"They are searching for the missing man in the entire county"+'"';
-		String result5 = w.getGloss(81318273);
+		 expected2 = "try to locate or discover, or try to establish the existence of; "+'"'+"The police are searching for clues"+'"'+"; "+'"'+"They are searching for the missing man in the entire county"+'"';
+		 result2 = w.getGloss(81318273);
 		//println(result2);
-		assertEquals(expected5, result5);
+		assertEquals(expected2, result2);
 
-		String expected6 = "a whip with nine knotted cords; "+'"'+"British sailors feared the cat"+'"';
-		String result6 = w.getGloss(92989061);
-		//println(result6);
-		assertEquals(expected6, result6);
+		 expected3 = "a whip with nine knotted cords; "+'"'+"British sailors feared the cat"+'"';
+		 result3 = w.getGloss(92989061);
+		//println(result3);
+		assertEquals(expected3, result3);
 
 		try{
 			String result7 = w.getGloss(123213123);
@@ -1218,6 +1387,7 @@ public class RiWordNetTest
 			ok(e);
 		}
 
+		
 	}
 
 	@Test
@@ -1230,7 +1400,6 @@ public class RiWordNetTest
 		//		println(result);
 		assertEquals(expected, result);
 
-
 		String expected2 = "try to locate or discover, or try to establish the existence of";
 		String result2 = w.getDescription(81318273);
 		//		println(result2);
@@ -1240,7 +1409,16 @@ public class RiWordNetTest
 		String result3 = w.getDescription(92989061);
 		//		println(result3);
 		assertEquals(expected3, result3);
+		
+		try{
+			String result7 = w.getDescription(123213123);
+			ok(false);
+		}
+		catch(Exception e){
+			ok(e);
+		}
 
+		w.ignoreUpperCaseWords(true);
 		w.ignoreCompoundWords(true);
 		String expected4 = "feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats";
 		String result4 = w.getDescription(92124272);
@@ -1271,6 +1449,7 @@ public class RiWordNetTest
 	{
 		w.ignoreUpperCaseWords(false);
 		w.ignoreCompoundWords(false);
+		
 		String expected = "feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats";
 		String result = w.getDescription("cat", "n");
 		//		println(result);
@@ -1290,7 +1469,16 @@ public class RiWordNetTest
 		String result4 = w.getDescription("badly", "r");
 		//		println(result4);
 		assertEquals(expected4, result4);
-
+		
+		try{
+			String result10 = w.getDescription("badly", "u");
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+		
+		w.ignoreUpperCaseWords(true);
 		w.ignoreCompoundWords(true);
 
 		String expected5 = "feline mammal usually having thick soft fur and no ability to roar: domestic cats; wildcats";
@@ -1339,7 +1527,7 @@ public class RiWordNetTest
 		String[] expected2 = { "the visit was especially wearing", "an exhausting march" };
 		//printArr(w.getExamples("wearing", "a"));
 		setEqual(expected2,w.getExamples("wearing","a"));
-		
+
 		String[] expected6 = { };
 		//printArr(w.getExamples("wearing", "r"));
 		setEqual(expected6,w.getExamples("wearing","r"));
@@ -1355,7 +1543,7 @@ public class RiWordNetTest
 		String[] expected5 = { };
 		//printArr(w.getExamples("run", "v"));
 		setEqual(expected5,w.getExamples("runununun","v"));
-		
+
 
 		try{
 			w.getExamples("run", "j");
@@ -1375,7 +1563,7 @@ public class RiWordNetTest
 		expected2 = new String[] { "the visit was especially wearing", "an exhausting march" };
 		//printArr(w.getExamples("wearing", "a"));
 		setEqual(expected2,w.getExamples("wearing","a"));
-		
+
 		expected6 = new String[]{ };
 		//printArr(w.getExamples("wearing", "r"));
 		setEqual(expected6,w.getExamples("wearing","r"));
@@ -1387,16 +1575,11 @@ public class RiWordNetTest
 		expected4 = new String[] { "Don't run--you'll be out of breath", "The children ran to the store" };
 		//printArr(w.getExamples("run", "v"));
 		setEqual(expected4, w.getExamples("run","v")); 
-		
+
 		expected5 = new String[] { };
 		//printArr(w.getExamples("run", "v"));
 		setEqual(expected5,w.getExamples("runununun","v"));
 
-		expected4 = new String[] { "Don't run--you'll be out of breath", "The children ran to the store" };
-		//printArr(w.getExamples("run", "v"));
-		setEqual(expected4, w.getExamples("run","v")); 
-
-	
 
 		try{
 			w.getExamples("run", "j");
@@ -1410,6 +1593,9 @@ public class RiWordNetTest
 	@Test
 	public void testGetAnyExample()
 	{
+		w.ignoreCompoundWords(false);
+		w.ignoreUpperCaseWords(false);
+		
 		String[] expected = {"The police are searching for clues", "They are searching for the missing man in the entire county",
 				"the students had to research the history of the Second World War for their history project", "He searched for information on his relatives on the web",
 				"The police searched the suspect", "We searched the whole house for the missing keys"};
@@ -1418,27 +1604,27 @@ public class RiWordNetTest
 		//ssertTrue(Arrays.asList(expected).contains(result));
 		setContains(expected, result);
 		//setEqual(expected, result);
-		
+
 		String[] expected2 = {};
 		String result2 = w.getRandomExample("dude", "n");
 		//println(result2);
 		equal(null, result2);
-				
+
 		String[] expected3 = new String[] {  "he had stupidly bought a one way ticket" };
 		//printArr(w.getRandomExample("stupidly", "r"));
 		setContains(expected3,w.getRandomExample("stupidly","r"));
-		
-		
+
+
 		String[] expected4 = { "Don't run--you'll be out of breath", "The children ran to the store" };  //TODO failed -- the examples are different from getExamples?????
 		//println(w.getRandomExample("run","v"));
 		setContains(expected4, w.getRandomExample("run","v")); 
 
-		
+
 		String[] expected5 = new String[] { "the visit was especially wearing", "an exhausting march" };
 		//printArr(w.getRandomExample("wearing", "a"));
 		setContains(expected5,w.getRandomExample("wearing","a"));
 
-		
+
 		String[] expected6 = {};
 		String result6 = w.getRandomExample("wearing", "r");
 		//println(w.getRandomExample("wearing", "a"));
@@ -1450,11 +1636,57 @@ public class RiWordNetTest
 		}catch(Exception e){
 			ok(e);
 		}
+		
+		
+		w.ignoreCompoundWords(true);
+		w.ignoreUpperCaseWords(true);
+		
+		expected = new String[]{"The police are searching for clues", "They are searching for the missing man in the entire county",
+				"the students had to research the history of the Second World War for their history project", "He searched for information on his relatives on the web",
+				"The police searched the suspect", "We searched the whole house for the missing keys"};
+		result = w.getRandomExample("search", "v");
+		//println(result);
+		//ssertTrue(Arrays.asList(expected).contains(result));
+		setContains(expected, result);
+		//setEqual(expected, result);
+
+		expected2 = new String[]{};
+		result2 = w.getRandomExample("dude", "n");
+		//println(result2);
+		equal(null, result2);
+
+		expected3 = new String[] {  "he had stupidly bought a one way ticket" };
+		//printArr(w.getRandomExample("stupidly", "r"));
+		setContains(expected3,w.getRandomExample("stupidly","r"));
+
+
+		expected4 = new String[]{ "Don't run--you'll be out of breath", "The children ran to the store" };  //TODO failed -- the examples are different from getExamples?????
+		//println(w.getRandomExample("run","v"));
+		setContains(expected4, w.getRandomExample("run","v")); 
+
+
+		expected5 = new String[] { "the visit was especially wearing", "an exhausting march" };
+		//printArr(w.getRandomExample("wearing", "a"));
+		setContains(expected5,w.getRandomExample("wearing","a"));
+
+
+		expected6 = new String[]{};
+		result6 = w.getRandomExample("wearing", "r");
+		//println(w.getRandomExample("wearing", "a"));
+		setContains(null,w.getRandomExample("wearing","r"));  //TODO failed -- should have NO examples
+
+		try{
+			w.getRandomExample("wearing", "j");
+			equal(1,2);
+		}catch(Exception e){
+			ok(e);
+		}
+
 
 	}
 
 	@Test
-	public void testGetExamplesInt()
+	public void testGetExamplesInt()  //TODO
 	{
 		String[] expected = {"the tires showed uneven wear"};
 		String[] result = w.getExamples(914586275);
@@ -1465,53 +1697,56 @@ public class RiWordNetTest
 	@Test
 	public void testGetAllExamples()
 	{
+		w.ignoreCompoundWords(false);
+		w.ignoreUpperCaseWords(false);
+		
 		String[] expected = {"The police are searching for clues", "They are searching for the missing man in the entire county",
 				"the students had to research the history of the Second World War for their history project", "He searched for information on his relatives on the web",
 				"The police searched the suspect", "We searched the whole house for the missing keys"};
 		String[] result = w.getAllExamples("search", "v");
 		//println(result);
 		setEqual(expected, result);
-		
+
 		String[] expected2 = { "the visit was especially wearing" };
 		String[] result2 = w.getAllExamples("wearing", "a");
-//		printArr(result2);
+		//		printArr(result2);
 		setEqual(expected2, result2);
-		
+
 		String[] expected3 = {};
 		String[] result3 = w.getAllExamples("wearing", "r");
-//		printArr(result3);
+		//		printArr(result3);
 		setEqual(expected3, result3);
-		
+
 		String[] expected4 = {};
 		String[] result4 = w.getAllExamples("wearing", "n");
-//		printArr(result4);
+		//		printArr(result4);
 		setEqual(expected4, result4);
-		
+
 		String[] expected5 = {};
 		String[] result5 = w.getAllExamples("wearing", "v");
-//		printArr(result5);
+		//		printArr(result5);
 		setEqual(expected5, result5);
-		
+
 		String[] expected6 = { "What should I wear today?", "He always wears a smile", "wear one's hair in a certain way", "She was wearing yellow that day" };
 		String[] result6 = w.getAllExamples("wear", "v");
-//		printArr(result6);
+		//		printArr(result6);
 		setEqual(expected6, result6);
-		
+
 		String[] expected7 = { "they shouted happily", "happily he was not injured" };
 		String[] result7 = w.getAllExamples("happily", "r");
-//		printArr(result7);
+		//		printArr(result7);
 		setEqual(expected7, result7);
-		
+
 		String[] expected8 = { "a fat land", "fatty food", "he hadn't remembered how fat she was", "fat tissue", "a nice fat job", "a fat rope" };
 		String[] result8 = w.getAllExamples("fat", "a");
-//		printArr(result8);
+		//		printArr(result8);
 		setEqual(expected8, result8);
-		
+
 		String[] expected9 = {};
 		String[] result9 = w.getAllExamples("fatttttt", "a");
-//		printArr(result9);
+		//		printArr(result9);
 		setEqual(expected9, result9);
-		
+
 		try{
 			w.getAllExamples("fatttttt", "u");
 			equal(1,2);
@@ -1520,65 +1755,123 @@ public class RiWordNetTest
 			ok(e);
 		}
 		
+		w.ignoreCompoundWords(true);
+		w.ignoreUpperCaseWords(true);
+		
+		expected = new String[]{"The police are searching for clues", "They are searching for the missing man in the entire county",
+				"the students had to research the history of the Second World War for their history project", "He searched for information on his relatives on the web",
+				"The police searched the suspect", "We searched the whole house for the missing keys"};
+		result = w.getAllExamples("search", "v");
+		//println(result);
+		setEqual(expected, result);
+
+		expected2 = new String[]{ "the visit was especially wearing" };
+		result2 = w.getAllExamples("wearing", "a");
+		//		printArr(result2);
+		setEqual(expected2, result2);
+
+		expected3 = new String[]{};
+		result3 = w.getAllExamples("wearing", "r");
+		//		printArr(result3);
+		setEqual(expected3, result3);
+
+		expected4 = new String[]{};
+		result4 = w.getAllExamples("wearing", "n");
+		//		printArr(result4);
+		setEqual(expected4, result4);
+
+		expected5 = new String[]{};
+		result5 = w.getAllExamples("wearing", "v");
+		//		printArr(result5);
+		setEqual(expected5, result5);
+
+		expected6 = new String[]{ "What should I wear today?", "He always wears a smile", "wear one's hair in a certain way", "She was wearing yellow that day" };
+		result6 = w.getAllExamples("wear", "v");
+		//		printArr(result6);
+		setEqual(expected6, result6);
+
+		expected7 = new String[]{ "they shouted happily", "happily he was not injured" };
+		result7 = w.getAllExamples("happily", "r");
+		//		printArr(result7);
+		setEqual(expected7, result7);
+
+		expected8 = new String[]{ "a fat land", "fatty food", "he hadn't remembered how fat she was", "fat tissue", "a nice fat job", "a fat rope" };
+		result8 = w.getAllExamples("fat", "a");
+		//		printArr(result8);
+		setEqual(expected8, result8);
+
+		expected9 = new String[]{};
+		result9 = w.getAllExamples("fatttttt", "a");
+		//		printArr(result9);
+		setEqual(expected9, result9);
+
+		try{
+			w.getAllExamples("fatttttt", "u");
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+
 	}
 
 	@Test
-	public void testGetCommonParents() {
+	public void testGetCommonParents() { //TODO stopped here
 
 		String[] expected = { "wear", "habiliment", "vesture", "wearable", "article of clothing", "clothing" };
 		String[] result = w.getCommonParents("activewear", "beachwear", "n");
 		printArr(result);
 		setEqual(expected, result);
-		
+
 		String[] expected2 = { "hymenopterous insect", "hymenopter", "hymenopteron", "hymenopteran" };
 		String[] result2 = w.getCommonParents("bee", "ant", "n");
 		printArr(result2);
 		//setEqual(expected2, result2);
-		
+
 		String[] expected3 = { "physical entity" };
 		String[] result3 = w.getCommonParents("bee", "wood", "n");
 		printArr(result3);
-		
+
 		String[] expected4 = { "entity" };
 		String[] result4 = w.getCommonParents("bee", "run", "n");
 		printArr(result4);
-		
+
 		String[] expected5 = { };
 		String[] result5 = w.getCommonParents("beeesdasd", "run", "n");
 		printArr(result5);
-		
+
 		String[] expected6 = { };
 		String[] result6 = w.getCommonParents("beeesdasd", "runasdasdasd", "n");
 		printArr(result6);
-		
+
 		String[] expected7 = { };
 		String[] result7 = w.getCommonParents("flower", "runasdasdasd", "n");
 		printArr(result7);
-		
+
 		String[] expected8 = { };
 		String[] result8 = w.getCommonParents("flower", "happily", "v");
 		printArr(result8);
-		
+
 		String[] expected9 = { };
 		String[] result9 = w.getCommonParents("flower", "happily", "r");
 		printArr(result9);
-		
+
 		String[] expected10 = { };
 		String[] result10 = w.getCommonParents("flower", "happily", "a");
 		printArr(result10);
-		
+
 		String[] expected11 = { };
 		String[] result11 = w.getCommonParents("sadly", "happily", "r");
 		printArr(result11);
-		
+
 		String[] expected12 = { };
 		String[] result12 = w.getCommonParents("fat", "thin", "a");
 		printArr(result12);
-		
+
 		String[] expected13 = { };
 		String[] result13 = w.getCommonParents("go", "run", "v");
 		printArr(result13);
-		
+
 		try{
 			w.getCommonParents("fatttttt", "sad","j");
 			equal(1,2);
@@ -1675,7 +1968,7 @@ public class RiWordNetTest
 
 		setEqual(w.getAntonyms("smoothly", "r"), new String[]{});
 		setEqual(w.getAntonyms("", "r"), new String[]{});
-		
+
 		setEqual(w.getAntonyms("smoothlyyyyyyyyyyyy", "r"), new String[]{});
 		try{
 			w.getAntonyms("smoothlyyyyyyyyyyyy", "u");
@@ -1852,11 +2145,11 @@ public class RiWordNetTest
 		equal(true, w.exists("abc"));
 		equal(true, w.exists("wait"));
 		equal(false, w.exists("tesxx"));
-		
+
 		equal(false, w.exists("123"));
 		equal(false, w.exists("#$%^&*()"));
 		equal(false, w.exists("tes$%^"));
-		
+
 	}
 
 	@Test
