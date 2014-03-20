@@ -223,6 +223,13 @@ public class RiWordNetTest
 		ok(w.exists("health"));
 
 		ok(w.exists("medicare"));
+		ok(w.exists("Medicare")); //TODO these pass on online wordnet search
+		ok(w.exists("MedIcare"));
+		ok(w.exists("medicare "));
+		ok(w.exists(" medicare"));
+		ok(w.exists(" medicare "));
+		ok(w.exists("medicare	"));
+		ok(w.exists("	medicare"));
 		ok(w.exists("health insurance"));
 		ok(!w.exists("health ignorance"));
 		ok(!w.exists("health XXX"));
@@ -434,20 +441,39 @@ public class RiWordNetTest
 	@Test
 	public void testGetContainsStringString()
 	{
-		String[] expected = { "activeness", "activewear", "attractiveness", "inactiveness", "refractiveness", "unattractiveness" };
-		String[] result = w.getContains("active", "n");
-		//printArr(result);
-		setEqual(expected, result);
+		String[] expected = { "reactive depression", "highly active antiretroviral therapy", "active immunity", "primary subtractive colour for light", "attractive feature", "radioactive iodine excretion test", "c-reactive protein", "radioactive dust", "radioactive decay", "radioactive dating", "active agent", "reactive schizophrenia", "active transport", "radioactive iodine uptake test", "active birth", "surface-active agent", "unattractiveness", "inactiveness", "psychoactive substance", "interactive multimedia system", "psychoactive drug", "attractive force", "activewear", "interactive multimedia", "low-level radioactive waste", "active trust", "active citizen", "radioactive material", "active site", "radioactive waste", "refractive index", "activeness", "attractiveness", "active placebo", "refractiveness", "primary subtractive color for light", "radioactive iodine test", "active voice", "high-level radioactive waste", "active air defense", "active matrix screen", "active application", "attractive nuisance", "benefactive role" };
+		setEqualMulti(expected,"getContains","active","n");
 
-		String[] expected2 = { "avalokiteshvara", "avalokitesvara", "blatherskite", "greenockite", "kitembilla", "melkite", "samarskite", "hell-kite" };
-		String[] result2 = w.getContains("kite", "n");
-		//println(result2);
-		setEqual(expected2, result2);
+		String[] expected2 = { "hell-kite", "melkite", "kitembilla", "blatherskite", "box kite", "stunt kite", "sport kite", "kite balloon", "greenockite", "kite tail", "swallow-tailed kite", "black kite", "white-tailed kite", "avalokiteshvara", "avalokitesvara", "samarskite" };
+		//printArr(result2);
+		setEqualMulti(expected2,"getContains","kite","n");
 
 		String[] expected4 = {};
-		String[] result4 = w.getContains("kitxx", "n");
-		//println(result4);
-		setEqual(expected4, result4);
+		setEqualMulti(expected4,"getContains","kitxx","n");
+		
+		String[] expected5 = { "expostulate", "postpose", "apostatize", "compost", "postdate", "apostrophise", "apostatise", "apostrophize", "signpost", "postmark", "postulate", "hypostatize", "riposte", "postpone", "change posture", "hypostatise", "posture" };
+		setEqualMulti(expected5,"getContains","post","v");
+		//printArr(w.getContains("post","v"));
+		
+		String[] expected7 = {};
+		setEqualMulti(expected7,"getContains","brutally","r");
+//		printArr(w.getContains("brutally","r"));
+		
+		
+		String[] expected6 = { "indefinite" };;
+		setEqualMulti(expected6,"getContains","definite","a");
+//		printArr(w.getContains("definite","a"));
+		
+		setEqualMulti(expected6,"getContains","Definite","a");
+		
+		setEqualMulti(expected6,"getContains","DefIniTe","a");
+
+		setEqualMulti(expected6,"getContains","definite ","a");
+		
+		setEqualMulti(expected6,"getContains"," definite","a");
+
+		setEqualMulti(expected6,"getContains"," definite ","a");
+
 
 		try{
 			String[] result3 = w.getContains("kite", "j");
@@ -467,42 +493,32 @@ public class RiWordNetTest
 	}
 
 	@Test
-	public void testGetEndsWithStringStringInt()
+	public void testGetEndsWithStringStringInt()  // TODO setContainsMulti not working	
 	{
-		String[] expected = { "collectable", "constable", "eatable", "inevitable"};
-		String[] result = w.getEndsWith("table", "n", 4);
-		//println(result);
-		setEqual(expected, result);
+		String[] expected = { "actuarial table", "graduated table", "inevitable", "pool table", "writing table", "conference table", "livery stable", "timetable", "billiard table", "gaming table", "turntable", "drawing table", "round table", "communion table", "refectory table", "tilt-top table", "cruciferous vegetable", "statistical table", "portable", "leafy vegetable", "training table", "console table", "snooker table", "king arthur's round table", "dining-room table", "pingpong table", "gateleg table", "pin table", "drafting table", "john constable", "dining table", "water table", "operating table", "worktable", "high table", "card table", "tip table", "plane table", "stable", "tip-top table", "collectable", "raw vegetable", "lord's table", "pedestal table", "coffee table", "parsons table", "knight of the round table", "pier table", "dressing table", "dinner table", "toilet table", "periodic table", "mortality table", "notable", "solanaceous vegetable", "roundtable", "drop-leaf table", "chief constable", "table-tennis table", "ping-pong table", "correlation table", "root vegetable", "work table", "decision table", "tea table", "breakfast table", "police constable", "cocktail table", "trestle table", "potable", "file allocation table", "constable", "julienne vegetable", "eatable", "kitchen table", "council table", "vegetable" };
+		//printArr(w.getEndsWith("table", "n"));
+		setContainsMulti(expected,"getEndsWith","table","n",5);
+		setContainsMulti(expected,"getEndsWith","table","n",1500);
 
-		String[] expected2 = { "agriocharis", "capparis", "baccharis", "ascaris"};
-		String[] result2 = w.getEndsWith("aris", "n", 4);
-		//println(result2);
-		setEqual(expected2, result2);
+		String[] expected2 = { "naris", "genus liparis", "vena maxillaris", "sutura intermaxillaris", "dracunculus vulgaris", "rubus flagellaris", "calluna vulgaris", "nervus ulnaris", "syringa vulgaris", "chorizagrotis auxiliaris", "aspalathus linearis", "genus baccharis", "arteria maxillaris", "genus phalaris", "lupus vulgaris", "hydrangea petiolaris", "certhia familiaris", "arteria ciliaris", "vena ulnaris", "carlina vulgaris", "iliamna ruvularis", "carassius vulgaris", "arteria angularis", "phaseolus angularis", "cenchrus ciliaris", "vena supratrochlearis", "homarus vulgaris", "vena testicularis", "genus agriocharis", "herb paris", "pyorrhea alveolaris", "genus capparis", "thymus vulgaris", "ascaris", "canis familiaris", "arteria ulnaris", "capparis", "sciurus vulgaris", "lysimachia vulgaris", "truncus atrioventricularis", "botaurus stellaris", "ratibida columnaris", "turdus pilaris", "keratosis follicularis", "primula vulgaris", "trochlearis", "prunella modularis", "petasites vulgaris", "genus paris", "alstonia scholaris", "nervus vestibulocochlearis", "university of paris", "lens culinaris", "posterior naris", "eleocharis", "genus eleocharis", "polistes annularis", "enterobius vermicularis", "silene vulgaris", "pylodictus olivaris", "keratosis pilaris", "vena auricularis", "vena angularis", "alectis ciliaris", "sistrurus miliaris", "genus hydrocharis", "passiflora ligularis", "idria columnaris", "vigna angularis", "berberis vulgaris", "arteria axillaris", "prunella vulgaris", "vena retromandibularis", "vena jugularis", "helianthus petiolaris", "ixodes scapularis", "liparis", "chamaecyparis", "petunia axillaris", "linosyris vulgaris", "barbarea vulgaris", "artemisia vulgaris", "articulatio temporomandibularis", "linaria vulgaris", "vena axillaris", "lepas fascicularis", "haastia pulvinaris", "acne vulgaris", "arteria basilaris", "genus ascaris", "polygala vulgaris", "phalaris", "arteria appendicularis", "merluccius bilinearis", "bambusa vulgaris", "passiflora quadrangularis", "baccharis pilularis", "senecio vulgaris", "agriocharis", "eleocharis acicularis", "vena appendicularis", "alnus vulgaris", "vena vestibularis", "saxifraga stellaris", "araucaria columnaris", "clematis verticillaris", "paris", "arteria auricularis", "lygus lineolaris", "chilopsis linearis", "triturus vulgaris", "arteria testicularis", "sabbatia stellaris", "cephalotus follicularis", "noctiluca miliaris", "colaptes caper collaris", "genus chamaecyparis", "nierembergia rivularis", "beta vulgaris vulgaris", "liparis liparis", "plaster of paris", "arctonyx collaris", "baccharis", "pulsatilla vulgaris", "pomoxis annularis", "ochotona collaris", "cyathea medullaris", "phaseolus vulgaris", "fouquieria columnaris", "senecio triangularis", "sabbatia angularis", "solea lascaris", "jacquinia armillaris", "vespula vulgaris", "beta vulgaris", "anterior naris", "polaris", "citrullus vulgaris", "aquilegia vulgaris", "sturnus vulgaris", "hydrocharis", "satureja vulgaris", "arteria alveolaris" };
+		//printArr(w.getEndsWith("aris", "n"));
+		setContainsMulti(expected2,"getEndsWith","aris","n",4);
+		setContainsMulti(expected,"getEndsWith","aris","n",4); //TODO this should be failed
 
-		String[] expected3 = { "cling", "fling", "ding", "bring"};
-		String[] result3 = w.getEndsWith("ing", "v", 4);
-		//println(result3);
-		setEqual(expected3, result3);
+		String[] expected3 = { "bring", "get moving", "get rolling", "keep going", "sight-sing", "hamstring", "sing", "hit the ceiling", "string", "sling", "fling", "get going", "cling", "get weaving", "unstring", "sting", "ping", "swing", "ding", "get cracking", "come into being", "ting", "have it coming", "sightsing", "send packing", "practice bundling", "ring", "spring", "wring", "wing" };
+		//printArr(w.getEndsWith("ing", "v"));
+		setContainsMulti(expected3,"getEndsWith","ing","v",5);
 
-		String[] expected4 = { "isosceles", "intraspecies", "interspecies", "behind-the-scenes"};
-		String[] result4 = w.getEndsWith("es", "a", 4);
-		//println(result4);
-		setEqual(expected4, result4);
+		String[] expected4 = { "interspecies", "behind-the-scenes", "intra vires", "ultra vires", "offsides", "dressed to the nines", "isosceles", "in small stages", "in straitened circumstances", "in series", "intraspecies", "too big for one's breeches" };
+		//printArr(w.getEndsWith("es", "a"));
+		setContainsMulti(expected4,"getEndsWith","es","a",5);
 
-		String[] expected5 = { "oftentimes", "betimes", "besides", "ofttimes"};
-		String[] result5 = w.getEndsWith("es", "r", 4);
-		//println(result5);
-		setEqual(expected5, result5);
+		String[] expected5 = { "under the circumstances", "when the time comes", "four times", "thousand times", "at times", "three times", "betimes", "two times", "in large quantities", "unawares", "besides", "six times", "for all practical purposes", "a million times", "as the crow flies", "ofttimes", "ultra vires", "a hundred times", "in spades", "for all intents and purposes", "oftentimes", "by small degrees", "in stages", "to all intents and purposes", "sometimes", "nine times", "by inches", "in circles" };
+		printArr(w.getEndsWith("es", "r"));
+		setContainsMulti(expected5,"getEndsWith","es","r",5);
 
 		String[] expected6 = {};
-		String[] result6 = w.getEndsWith("qwes", "r", 4);
-		//println(result5);
-		setEqual(expected6, result6);
-
-		String[] expected7 = {"brazil"};
-		String[] result7 = w.getEndsWith("razil", "n", 40);
-		//println(result7);
-		setEqual(expected7, result7);
+		setContainsMulti(expected6,"getEndsWith","qwes","r",10);
 
 		try{
 			String[] result8 = w.getEndsWith("razilll", "j", 40);
@@ -518,37 +534,28 @@ public class RiWordNetTest
 	@Test
 	public void testGetEndsWithStringString()
 	{
-		String[] expected = { "collectable", "constable", "eatable", "inevitable", "notable", "portable", "potable", "roundtable", "stable", "timetable", "turntable", "vegetable", "worktable" };
-		String[] result = w.getEndsWith("table", "n");
-		//println(result);
-		setEqual(expected, result);
+		String[] expected = { "actuarial table", "graduated table", "inevitable", "pool table", "writing table", "conference table", "livery stable", "timetable", "billiard table", "gaming table", "turntable", "drawing table", "round table", "communion table", "refectory table", "tilt-top table", "cruciferous vegetable", "statistical table", "portable", "leafy vegetable", "training table", "console table", "snooker table", "king arthur's round table", "dining-room table", "pingpong table", "gateleg table", "pin table", "drafting table", "john constable", "dining table", "water table", "operating table", "worktable", "high table", "card table", "tip table", "plane table", "stable", "tip-top table", "collectable", "raw vegetable", "lord's table", "pedestal table", "coffee table", "parsons table", "knight of the round table", "pier table", "dressing table", "dinner table", "toilet table", "periodic table", "mortality table", "notable", "solanaceous vegetable", "roundtable", "drop-leaf table", "chief constable", "table-tennis table", "ping-pong table", "correlation table", "root vegetable", "work table", "decision table", "tea table", "breakfast table", "police constable", "cocktail table", "trestle table", "potable", "file allocation table", "constable", "julienne vegetable", "eatable", "kitchen table", "council table", "vegetable" };
+		//printArr(w.getEndsWith("table", "n"));
+		setEqualMulti(expected,"getEndsWith","table","n");
 
+		String[] expected2 = { "naris", "genus liparis", "vena maxillaris", "sutura intermaxillaris", "dracunculus vulgaris", "rubus flagellaris", "calluna vulgaris", "nervus ulnaris", "syringa vulgaris", "chorizagrotis auxiliaris", "aspalathus linearis", "genus baccharis", "arteria maxillaris", "genus phalaris", "lupus vulgaris", "hydrangea petiolaris", "certhia familiaris", "arteria ciliaris", "vena ulnaris", "carlina vulgaris", "iliamna ruvularis", "carassius vulgaris", "arteria angularis", "phaseolus angularis", "cenchrus ciliaris", "vena supratrochlearis", "homarus vulgaris", "vena testicularis", "genus agriocharis", "herb paris", "pyorrhea alveolaris", "genus capparis", "thymus vulgaris", "ascaris", "canis familiaris", "arteria ulnaris", "capparis", "sciurus vulgaris", "lysimachia vulgaris", "truncus atrioventricularis", "botaurus stellaris", "ratibida columnaris", "turdus pilaris", "keratosis follicularis", "primula vulgaris", "trochlearis", "prunella modularis", "petasites vulgaris", "genus paris", "alstonia scholaris", "nervus vestibulocochlearis", "university of paris", "lens culinaris", "posterior naris", "eleocharis", "genus eleocharis", "polistes annularis", "enterobius vermicularis", "silene vulgaris", "pylodictus olivaris", "keratosis pilaris", "vena auricularis", "vena angularis", "alectis ciliaris", "sistrurus miliaris", "genus hydrocharis", "passiflora ligularis", "idria columnaris", "vigna angularis", "berberis vulgaris", "arteria axillaris", "prunella vulgaris", "vena retromandibularis", "vena jugularis", "helianthus petiolaris", "ixodes scapularis", "liparis", "chamaecyparis", "petunia axillaris", "linosyris vulgaris", "barbarea vulgaris", "artemisia vulgaris", "articulatio temporomandibularis", "linaria vulgaris", "vena axillaris", "lepas fascicularis", "haastia pulvinaris", "acne vulgaris", "arteria basilaris", "genus ascaris", "polygala vulgaris", "phalaris", "arteria appendicularis", "merluccius bilinearis", "bambusa vulgaris", "passiflora quadrangularis", "baccharis pilularis", "senecio vulgaris", "agriocharis", "eleocharis acicularis", "vena appendicularis", "alnus vulgaris", "vena vestibularis", "saxifraga stellaris", "araucaria columnaris", "clematis verticillaris", "paris", "arteria auricularis", "lygus lineolaris", "chilopsis linearis", "triturus vulgaris", "arteria testicularis", "sabbatia stellaris", "cephalotus follicularis", "noctiluca miliaris", "colaptes caper collaris", "genus chamaecyparis", "nierembergia rivularis", "beta vulgaris vulgaris", "liparis liparis", "plaster of paris", "arctonyx collaris", "baccharis", "pulsatilla vulgaris", "pomoxis annularis", "ochotona collaris", "cyathea medullaris", "phaseolus vulgaris", "fouquieria columnaris", "senecio triangularis", "sabbatia angularis", "solea lascaris", "jacquinia armillaris", "vespula vulgaris", "beta vulgaris", "anterior naris", "polaris", "citrullus vulgaris", "aquilegia vulgaris", "sturnus vulgaris", "hydrocharis", "satureja vulgaris", "arteria alveolaris" };
+		//printArr(w.getEndsWith("aris", "n"));
+		setEqualMulti(expected2,"getEndsWith","aris","n");
 
-		String[] expected2 = { "liparis", "baccharis", "trochlearis", "ascaris", "chamaecyparis", "agriocharis", "phalaris", "naris", "eleocharis", "hydrocharis", "paris", "polaris", "capparis" };
-		String[] result2 = w.getEndsWith("aris", "n");
-		//printArr(result2);
-		setEqual(expected2, result2);
+		String[] expected3 = { "bring", "get moving", "get rolling", "keep going", "sight-sing", "hamstring", "sing", "hit the ceiling", "string", "sling", "fling", "get going", "cling", "get weaving", "unstring", "sting", "ping", "swing", "ding", "get cracking", "come into being", "ting", "have it coming", "sightsing", "send packing", "practice bundling", "ring", "spring", "wring", "wing" };
+		//printArr(w.getEndsWith("ing", "v"));
+		setEqualMulti(expected3,"getEndsWith","ing","v");
 
-		String[] expected3 = { "sightsing", "ring", "ping", "hamstring", "sling", "ding", "spring", "bring", "string", "wing", "wring", "ting", "sight-sing", "sing", "cling", "unstring", "sting", "swing", "fling" };
-		String[] result3 = w.getEndsWith("ing", "v");
-		//printArr(result3);
-		setEqual(expected3, result3);
+		String[] expected4 = { "interspecies", "behind-the-scenes", "intra vires", "ultra vires", "offsides", "dressed to the nines", "isosceles", "in small stages", "in straitened circumstances", "in series", "intraspecies", "too big for one's breeches" };
+		//printArr(w.getEndsWith("es", "a"));
+		setEqualMulti(expected4,"getEndsWith","es","a");
 
-		String[] expected4 = { "intraspecies", "offsides", "isosceles", "interspecies", "behind-the-scenes"};
-		String[] result4 = w.getEndsWith("es", "a");
-		//printArr(result4);
-		setEqual(expected4, result4);
+		String[] expected5 = { "under the circumstances", "when the time comes", "four times", "thousand times", "at times", "three times", "betimes", "two times", "in large quantities", "unawares", "besides", "six times", "for all practical purposes", "a million times", "as the crow flies", "ofttimes", "ultra vires", "a hundred times", "in spades", "for all intents and purposes", "oftentimes", "by small degrees", "in stages", "to all intents and purposes", "sometimes", "nine times", "by inches", "in circles" };
+		//printArr(w.getEndsWith("es", "r"));
+		setEqualMulti(expected5,"getEndsWith","es","r");
 
-		String[] expected5 = { "besides", "betimes", "ofttimes", "sometimes", "unawares", "oftentimes" };
-		String[] result5 = w.getEndsWith("es", "r");
-		//printArr(result5);
-		setEqual(expected5, result5);
-
-		// it got the previous result
 		String[] expected6 = {};
-		String[] result6 = w.getEndsWith("qwes", "r");
-		//printArr(result5);
-		setEqual(expected6, result6);
+		setEqualMulti(expected6,"getEndsWith","qwes","r");
 
 		try{
 			String[] result8 = w.getEndsWith("razilll", "j");
@@ -562,7 +569,7 @@ public class RiWordNetTest
 	}
 
 	@Test
-	public void testGetStartsWithStringStringInt()
+	public void testGetStartsWithStringStringInt()  //TODO more tests 	w.ignoreCompoundWords() cases
 	{
 		String[] expected = { "turnabout", "turnaround", "turnbuckle", "turncoat", "turncock"};
 		String[] result = w.getStartsWith("turn", "n", 5);
@@ -614,30 +621,25 @@ public class RiWordNetTest
 	@Test
 	public void testGetStartsWithStringString()
 	{
-		String[] expected = { "wearable", "wearer", "weariness", "wearing"};
-		String[] result = w.getStartsWith("wear", "n");
-		//println(result);
-		setEqual(expected, result);
+		String[] expected = { "wearing", "weary willie", "weariness", "wearing away", "wearer", "wearable", "wearing apparel", "wear and tear" };
+		//printArr(w.getStartsWith("wear", "n"));
+		setEqualMulti(expected, "getStartsWith","wear","n");
+		
+		String[] expected2 = { "young girl", "yolk", "young turk", "yob", "yosemite falls", "yogi", "yottabyte", "young man", "youthfulness", "yogacara", "yo-yo", "yosemite", "yobibyte", "youth", "youth subculture", "young carnivore", "yobo", "yoko ono", "yodeling", "yobibit", "young fish", "yorkshire pudding", "yowl", "yorktown", "yogurt", "youth movement", "yore", "yobbo", "york", "young buck", "youngstown", "yottabit", "youngness", "yorkshire fog", "yogi berra", "youngster", "yodel", "yokel", "youth culture", "young mammal", "yoke", "yom kippur war", "young lady", "youth-on-age", "yoghourt", "younker", "young person", "yorkshire", "yodh", "young woman", "yokohama", "yoruba", "yolk sac", "youth gang", "you-drive", "yom kippur", "young", "yosemite toad", "yoga", "yoghurt", "youth hostel", "yosemite national park", "yodeller", "young bird", "young's modulus", "yokuts", "youth crusade", "yorkshire terrier" };
+		//printArr(w.getStartsWith("yo", "n"));
+		setEqualMulti(expected2, "getStartsWith","yo","n");
 
-		String[] expected2 = { "yodeling", "yodeller", "young", "yogacara", "youthfulness", "yolk", "yottabit", "youth", "yoke", "yokohama", "yogurt", "yobo", "yodh", "yodel", "yogi", "yob", "yorkshire", "yoga", "yobbo", "yowl", "younker", "yobibit", "yokel", "yoghurt", "youngness", "yore", "yottabyte", "yoghourt", "yorktown", "youngstown", "youngster", "yosemite", "yoruba", "yokuts", "york", "yobibyte" };
-		String[] result2 = w.getStartsWith("yo", "n");
-		//		printArr(result2);
-		setEqual(expected2, result2);
+		String[] expected3 = { "yodel", "yoke", "yowl" };
+		//printArr(w.getStartsWith("yo", "v"));
+		setEqualMulti(expected3, "getStartsWith","yo","v");
 
-		String[] expected3 = { "yoke", "yowl", "yodel" };
-		String[] result3 = w.getStartsWith("yo", "v");
-		//		printArr(result3);
-		setEqual(expected3, result3);
+		String[] expected4 = { "young-begetting", "yogic", "youthful", "yokelish", "yon", "younger", "yonder", "young-bearing", "youngish", "yokel-like", "young", "yogistic" };
+		//printArr(w.getStartsWith("yo", "a"));
+		setEqualMulti(expected4, "getStartsWith","yo","a");
 
-		String[] expected4 = { "yogic", "young", "yokelish", "yon", "yonder", "yogistic", "younger", "youthful", "youngish" };
-		String[] result4 = w.getStartsWith("yo", "a");
-		//		printArr(result4);
-		setEqual(expected4, result4);
-
-		String[] expected5 = { "yonder", "yon", "youthfully" };
-		String[] result5 = w.getStartsWith("yo", "r");
-		//		printArr(result5);
-		setEqual(expected5, result5);
+		String[] expected5 = { "you bet", "youthfully", "yon", "yonder", "you said it" };
+		//printArr(w.getStartsWith("yo", "r"));
+		setEqualMulti(expected5, "getStartsWith","yo","r");
 
 		try{
 			String[] result6 = w.getStartsWith("yo", "z");
@@ -649,7 +651,7 @@ public class RiWordNetTest
 	}
 
 	@Test
-	public void testGetRegexMatchStringStringInt()
+	public void testGetRegexMatchStringStringInt() //TODO more tests 	w.ignoreCompoundWords() cases
 	{
 		w.ignoreCompoundWords(true);
 		String[] expected = { "collectable", "constable", "eatable", "inevitable"};
@@ -744,7 +746,7 @@ public class RiWordNetTest
 	}
 
 	@Test
-	public void testGetSoundsLikeStringStringInt()
+	public void testGetSoundsLikeStringStringInt() //TODO more tests 	w.ignoreCompoundWords() cases
 	{
 		String[] expected = { "tabbouleh", "tableau", "tabooli"};
 		String[] result = w.getSoundsLike("table", "n", 3);
@@ -800,35 +802,30 @@ public class RiWordNetTest
 	@Test
 	public void testGetSoundsLikeStringString()
 	{
-		String[] expected = { "tabbouleh", "tableau", "tabooli", "tepal", "tiepolo", "tipple", "tivoli", "tubful", "tubule", "tupelo", "tuvalu" };
-		String[] result = w.getSoundsLike("table", "n");
-		//printArr(result);
-		setEqual(expected, result);
+		String[] expected = { "tubful", "tipple", "tiepolo", "t-bill", "tableau", "tabbouleh", "tea ball", "tube well", "tepal", "tivoli", "tubule", "tuvalu", "tabooli", "tupelo" };
+//		printArr(w.getSoundsLike("table", "n"));
+		setEqualMulti(expected,"getSoundsLike","table","n");
 
-		String[] expected2 ={ "pouf", "pep", "papaya", "phoebe", "peeve", "pave", "pavo", "poppy", "pupa", "papa", "peavy", "pipe", "pap", "pib", "paba", "poof", "pipa", "poop", "pob", "piaffe", "poove", "papio", "peavey", "papaw", "pub", "payoff", "puff", "peep", "pope", "papaia", "pip", "pawpaw", "pappa", "papua", "pup", "pouffe", "peba", "phobia", "piaf", "pop" };
-		String[] result2 = w.getSoundsLike("puppy", "n");
-		//		printArr(result2);
-		setEqual(expected2, result2);
+		String[] expected2 ={ "pep", "pop", "pib", "pappa", "phobia", "pup", "pave", "pob", "pawpaw", "peba", "pupa", "papaya", "peavy", "poof", "peeve", "pub", "paba", "payoff", "papaia", "piaf", "puff", "pipe", "pope", "piaffe", "pouf", "poove", "pouffe", "poop", "poppy", "peep", "papua", "pap", "pooh-bah", "papaw", "pip", "papio", "pipa", "pavo", "peavey", "papa", "phoebe" };
+//		printArr(w.getSoundsLike("puppy", "n"));
+		setEqualMulti(expected2,"getSoundsLike","puppy","n");
 
-		String[] expected3 ={ "peeve", "puff", "pipe", "peep", "pup", "pip", "pop", "pave" };
-		String[] result3 = w.getSoundsLike("puppy", "v");
-		//		printArr(result3);
-		setEqual(expected3, result3);
+		String[] expected3 ={ "peeve", "peep", "pave", "pooh-pooh", "pay up", "pipe", "pip", "pee-pee", "pay off", "pop", "puff", "pup" };
+//		printArr(w.getSoundsLike("puppy", "v"));
+		setEqualMulti(expected3,"getSoundsLike","puppy","v");
 
-		String[] expected5 = { "pop", "puff", "puffy", "peppy" };
-		String[] result5 = w.getSoundsLike("puppy", "a");
-		//		printArr(result5);
-		setEqual(expected5, result5);
+		String[] expected5 = { "peppy", "puffy", "pop", "puff" };
+//		printArr(w.getSoundsLike("puppy", "a"));
+		setEqualMulti(expected5,"getSoundsLike","puppy","a");
 
 		String[] expected6 = { "pop" };
-		String[] result6 = w.getSoundsLike("puppy", "r");
-		//		printArr(result6);
-		setEqual(expected6, result6);
+//		printArr(w.getSoundsLike("puppy", "r"));
+		setEqualMulti(expected6,"getSoundsLike","puppy","r");
 
 		String[] expected7 = { };
-		String[] result7 = w.getSoundsLike("dacszff", "r");
-		//		printArr(result7);
-		setEqual(expected7, result7);
+//		printArr(w.getSoundsLike("dacszff", "r"));
+		setEqualMulti(expected7,"getSoundsLike","dacszff","r");
+
 		try{
 			w.getSoundsLike("table", "o");
 			ok(false);
