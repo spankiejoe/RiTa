@@ -1631,6 +1631,7 @@ public class RiWordNetTest
 	public void testIsAdverb()
 	{
 		equal(false, w.isAdverb("mary"));
+    equal(false, w.isVerb("marry"));
 		equal(true, w.isAdverb("slowly"));
 		equal(true, w.isAdverb("quite"));
 		equal(true, w.isAdverb("together"));
@@ -1640,6 +1641,7 @@ public class RiWordNetTest
 	public void testIsVerb()
 	{
 		equal(false, w.isVerb("mary"));
+		equal(true, w.isVerb("marry"));
 		equal(true, w.isVerb("run"));
 		equal(true, w.isVerb("walk"));
 		equal(true, w.isVerb("sing"));

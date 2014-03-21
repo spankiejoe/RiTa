@@ -415,7 +415,7 @@ public class RiTa implements Constants
     return list[rand];
   }
   
-  /** @exclude */
+  /** NIAPI */
   public static final String upperCaseFirst(String value) {
     return Character.toString(value.charAt(0)).toUpperCase() + value.substring(1);
   }
@@ -446,7 +446,6 @@ public class RiTa implements Constants
    */  
   public static boolean isQuestion(String sentence)
   {
-
     for (int i = 0; i < QUESTION_STARTS.length; i++)
       if ((sentence.trim().toUpperCase()).startsWith(QUESTION_STARTS[i].toUpperCase()))
         return true;
