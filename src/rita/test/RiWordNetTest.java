@@ -1816,61 +1816,75 @@ public class RiWordNetTest
 	}
 
 	@Test
-	public void testGetCommonParents() { //TODO stopped here
+	public void testGetCommonParents() { 
 
+		w.ignoreCompoundWords(false);
+		w.ignoreUpperCaseWords(false);
+		
 		String[] expected = { "wear", "habiliment", "vesture", "wearable", "article of clothing", "clothing" };
 		String[] result = w.getCommonParents("activewear", "beachwear", "n");
-		printArr(result);
+//		printArr(result);
 		setEqual(expected, result);
 
 		String[] expected2 = { "hymenopterous insect", "hymenopter", "hymenopteron", "hymenopteran" };
 		String[] result2 = w.getCommonParents("bee", "ant", "n");
-		printArr(result2);
-		//setEqual(expected2, result2);
+//		printArr(result2);
+		setEqual(expected2, result2);
 
 		String[] expected3 = { "physical entity" };
 		String[] result3 = w.getCommonParents("bee", "wood", "n");
-		printArr(result3);
+//		printArr(result3);
+		setEqual(expected3, result3);
 
 		String[] expected4 = { "entity" };
 		String[] result4 = w.getCommonParents("bee", "run", "n");
-		printArr(result4);
+//		printArr(result4);
+		setEqual(expected4, result4);
 
 		String[] expected5 = { };
 		String[] result5 = w.getCommonParents("beeesdasd", "run", "n");
-		printArr(result5);
+//		printArr(result5);
+		setEqual(expected5, result5);
 
 		String[] expected6 = { };
 		String[] result6 = w.getCommonParents("beeesdasd", "runasdasdasd", "n");
-		printArr(result6);
+//		printArr(result6);
+		setEqual(expected6, result6);
 
 		String[] expected7 = { };
 		String[] result7 = w.getCommonParents("flower", "runasdasdasd", "n");
-		printArr(result7);
+//		printArr(result7);
+		setEqual(expected7, result7);
 
 		String[] expected8 = { };
 		String[] result8 = w.getCommonParents("flower", "happily", "v");
-		printArr(result8);
+//		printArr(result8);
+		setEqual(expected8, result8);
 
 		String[] expected9 = { };
 		String[] result9 = w.getCommonParents("flower", "happily", "r");
-		printArr(result9);
+//		printArr(result9);
+		setEqual(expected9, result9);
 
 		String[] expected10 = { };
 		String[] result10 = w.getCommonParents("flower", "happily", "a");
-		printArr(result10);
+//		printArr(result10);
+		setEqual(expected10, result10);
 
 		String[] expected11 = { };
 		String[] result11 = w.getCommonParents("sadly", "happily", "r");
 		printArr(result11);
+		setEqual(expected11, result11);
 
 		String[] expected12 = { };
 		String[] result12 = w.getCommonParents("fat", "thin", "a");
 		printArr(result12);
+		setEqual(expected12, result12);
 
 		String[] expected13 = { };
 		String[] result13 = w.getCommonParents("go", "run", "v");
 		printArr(result13);
+		setEqual(expected13, result13);
 
 		try{
 			w.getCommonParents("fatttttt", "sad","j");
@@ -1879,10 +1893,87 @@ public class RiWordNetTest
 		catch(Exception e){
 			ok(e);
 		}
+		
+		w.ignoreCompoundWords(false);
+		w.ignoreUpperCaseWords(false);
+		
+		expected = new String[]{ "wear", "habiliment", "vesture", "wearable", "article of clothing", "clothing" };
+		result = w.getCommonParents("activewear", "beachwear", "n");
+		printArr(result);
+		setEqual(expected, result);
+
+		expected2 = new String[]{ "hymenopterous insect", "hymenopter", "hymenopteron", "hymenopteran" };
+		result2 = w.getCommonParents("bee", "ant", "n");
+		printArr(result2);
+		setEqual(expected2, result2);
+
+		expected3 = new String[]{ "physical entity" };
+		result3 = w.getCommonParents("bee", "wood", "n");
+		printArr(result3);
+		setEqual(expected3, result3);
+
+		expected4 = new String[]{ "entity" };
+		result4 = w.getCommonParents("bee", "run", "n");
+		printArr(result4);
+		setEqual(expected4, result4);
+
+		expected5 = new String[]{ };
+		result5 = w.getCommonParents("beeesdasd", "run", "n");
+		printArr(result5);
+		setEqual(expected5, result5);
+
+		expected6 = new String[]{ };
+		result6 = w.getCommonParents("beeesdasd", "runasdasdasd", "n");
+		printArr(result6);
+		setEqual(expected6, result6);
+
+		expected7 = new String[]{ };
+		result7 = w.getCommonParents("flower", "runasdasdasd", "n");
+		printArr(result7);
+		setEqual(expected7, result7);
+
+		expected8 = new String[]{ };
+		result8 = w.getCommonParents("flower", "happily", "v");
+		printArr(result8);
+		setEqual(expected8, result8);
+
+		expected9 = new String[]{ };
+		result9 = w.getCommonParents("flower", "happily", "r");
+		printArr(result9);
+		setEqual(expected9, result9);
+
+		expected10 = new String[]{ };
+		result10 = w.getCommonParents("flower", "happily", "a");
+		printArr(result10);
+		setEqual(expected10, result10);
+
+		expected11 = new String[]{ };
+		result11 = w.getCommonParents("sadly", "happily", "r");
+		printArr(result11);
+		setEqual(expected11, result11);
+
+		expected12 = new String[]{ };
+		result12 = w.getCommonParents("fat", "thin", "a");
+		printArr(result12);
+		setEqual(expected12, result12);
+
+		expected13 = new String[]{ };
+		result13 = w.getCommonParents("go", "run", "v");
+		printArr(result13);
+		setEqual(expected13, result13);
+
+		try{
+			w.getCommonParents("fatttttt", "sad","j");
+			equal(1,2);
+		}
+		catch(Exception e){
+			ok(e);
+		}
+		
 	}
 
 	@Test
-	public void testGetCommonParent()
+	public void testGetCommonParent() //TODO
 	{
 		int expected = 93055525;
 		int result = w.getCommonParent(94292941, 92817909);
@@ -1893,22 +1984,66 @@ public class RiWordNetTest
 	@Test
 	public void testGetSynsetStringString()
 	{
-		String[] result = w.getSynset("medicare", "n");
-		//println(result);
-		setEqual(new String[0], result);
 
-		String[] expected = {};
-		result = w.getSynset("health insurance", "n");
-		//println("getSynset:"+result);
-		setEqual(new String[0], result);
+		String[] expected = {"Medicare"};
+//		printArr(w.getSynset("medicare","n"));
+		setEqualMulti(expected, "getSynset","medicare","n");
+		
+		String[] expected4 = {};
+//		printArr(w.getSynset("Medicare","n"));
+		setEqualMulti(expected4, "getSynset","Medicare","n");
+		
+		String[] expected2 = {};
+//		printArr(w.getSynset("health insurance","n"));
+		setEqualMulti(expected2, "getSynset","health insurance","n");
 
 		// assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
-		expected = new String[] { "sportswear" };
-		result = w.getSynset("activewear", "n");
 
-		//println("getSynset:"+Arrays.asList(result));
+		String[] expected3 = { "athletic wear", "sportswear" };
+//		printArr(w.getSynset("activewear", "n"));
+		setEqualMulti(expected3, "getSynset","activewear","n");
+		
+		String[] expected5 = { };
+//		printArr(w.getSynset("activewear", "v"));
+		setEqualMulti(expected5, "getSynset","activewear","v");
+		
+		String[] expected6 = { };
+//		printArr(w.getSynset("activewear", "a"));
+		setEqualMulti(expected6, "getSynset","activewear","a");
+		
+		String[] expected7 = {  };
+//		printArr(w.getSynset("activewear", "r"));
+		setEqualMulti(expected7, "getSynset","activewear","r");
+		
+		String[] expected8 = { };
+//		printArr(w.getSynset("nosuchword", "n"));
+		setEqualMulti(expected8, "getSynset","nosuchword","n");
+		
+		String[] expected9 = { "lope", "jog" };
+//		printArr(w.getSynset("trot", "n"));
+		setEqualMulti(expected9, "getSynset","trot","n");		
+		
+		String[] expected10 = { "ramble on", "ramble" };
+//		printArr(w.getSynset("jog", "v"));
+		setEqualMulti(expected10, "getSynset","jog","v");	
+		
+		String[] expected11 = {};
+//		printArr(w.getSynset("pretty", "a"));
+		setEqualMulti(expected11, "getSynset","pretty","a");
 
-		setEqual(expected, result);
+		String[] expected12 = { "tardily", "easy", "slow" };
+//		printArr(w.getSynset("slowly", "r"));
+		setEqualMulti(expected12, "getSynset","slowly","r");
+
+		try{
+			printArr(w.getSynset("nosuchword", "t"));
+			equal(1,2);
+		}catch(Exception e){
+			ok(e);
+		}
+
+
+
 	}
 
 	@Test
