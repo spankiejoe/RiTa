@@ -1984,8 +1984,10 @@ public class RiWordNetTest
 	@Test
 	public void testGetSynsetStringString()
 	{
-
-		String[] expected = {"Medicare"};
+	/*	medicare = 01090933
+				health insurance =		13367788
+						activewear = 04292941
+		String[] expected = {"Medicare"};*/
 //		printArr(w.getSynset("medicare","n"));
 		setEqualMulti(expected, "getSynset","medicare","n");
 		
@@ -2049,12 +2051,66 @@ public class RiWordNetTest
 	@Test
 	public void testGetSynsetStringStringBoolean()
 	{
-		String[] expected = {"sportswear", "activewear"};
+		w.ignoreCompoundWords(false);
+		w.ignoreUpperCaseWords(false);
+		
+		
+		
+		String[] expected2 = { "sportswear", "athletic wear" };
+		String[] result2 = w.getSynset("activewear", "n", false);
+		printArr(result2);
+		setEqual(expected2, result2);
+		
+		String[] expected = { "activewear", "sportswear", "athletic wear" }; // TODO failed. answer repeated { "activewear", "activewear", "athletic wear", "sportswear" };
 		String[] result = w.getSynset("activewear", "n", true);
 		//println(w.getSenseIds("search", "v"));
-		//println(result);
+		printArr(result);
 		setEqual(expected, result);
 		//assertTrue(Arrays.asList(expected).containsAll(Arrays.asList(result)));
+		
+		String[] expected3 = { "have on" };
+		String[] result3 = w.getSynset("wear", "v", false);
+		printArr(result3);
+		setEqual(expected3, result3);
+		
+		
+		String[] expected7 = { "wear", "have on" };
+		String[] result7 = w.getSynset("wear", "v", true);
+		printArr(result7);
+		setEqual(expected7, result7);
+		
+		String[] expected4 = {  };
+		String[] result4 = w.getSynset("fat", "a", false);
+		printArr(result4);
+		setEqual(expected4, result4);
+		
+		String[] expected8 = { "fat" };
+		String[] result8 = w.getSynset("fat", "a", true);
+		printArr(result8);
+		setEqual(expected8, result8);
+		
+		String[] expected5 ={ "unhappily" };
+		String[] result5 = w.getSynset("sadly", "r", false);
+		printArr(result5);
+		setEqual(expected5, result5);
+		
+		String[] expected9 ={ "sadly", "unhappily" };
+		String[] result9 = w.getSynset("sadly", "r", true);
+		printArr(result9);
+		setEqual(expected9, result9);
+		
+		
+		String[] expected6 = {};
+		String[] result6 = w.getSynset("nusuchword", "v", false);
+		printArr(result6);
+		setEqual(expected6, result6);
+		
+		String[] expected10 = {};
+		String[] result10 = w.getSynset("nusuchword", "v", true);
+		printArr(result10);
+		setEqual(expected10, result10);
+
+
 	}
 
 	@Test
